@@ -2750,23 +2750,25 @@ function makeXlsx(m){
   const re=[cell('A'+rE,'סה״כ שנתי',ST.tot),cell('B'+rE,'',ST.tot),cell(colL(D0)+rE,'פער בין המשמרות: '+m.spread,m.spread>1?ST.bad:ST.ok)];
   SHIFT_NAMES.forEach((n,j)=>re.push(cell(colL(TC+j)+rE,m.tot[n],ST.tot)));
   rows.push(row(rE,re,18));merges.push('A'+rE+':B'+rE);
-  // טבלת חגים: מי סגר כל חג בשנים הקודמות ומי סוגר השנה (כל חג על פני 3 עמודות)
+  // שתי טבלאות הסיכום באותן שורות, כמו בייצוא ל־PDF: טבלת החגים מימין (כל חג על פני 3 עמודות) — מי סגר כל חג בשנים
+  // הקודמות ומי סוגר השנה, ומשמאל לה, אחרי עמודת רווח, טבלת סה״כ המשמרות. כל שנה באותה שורה בשתי הטבלאות.
   const hr0=rE+2,HS=m.tblHols,span=3,hcS=i=>colL(D0+i*span),hcE=i=>colL(D0+i*span+span-1);
-  const hRow=(r,lab,labSt,valFn,ht)=>{const cs=[cell('A'+r,lab,labSt),cell('B'+r,'',labSt)];merges.push('A'+r+':B'+r);
-    HS.forEach((h,i)=>{const[v,st]=valFn(h);for(let k=0;k<span;k++)cs.push(cell(colL(D0+i*span+k)+r,k?'':v,st));merges.push(hcS(i)+r+':'+hcE(i)+r)});rows.push(row(r,cs,ht))};
-  hRow(hr0,'שנה / חג',ST.thR,h=>[h.name+(h.est?' *':''),ST.headFit],18);
-  hRow(hr0+1,'תאריכים '+m.y,ST.type,h=>[fmtDM(h.s)+(h.n>1?'–'+fmtDM(h.e):''),ST.small],15);
-  [m.y-3,m.y-2,m.y-1].forEach((yy,k)=>hRow(hr0+2+k,String(yy),ST.th,h=>[[h.p3,h.p2,h.p1][k]||'—',ST.tdB],16));
-  hRow(hr0+5,m.y+' — השנה',ST.curLab,h=>{const rp=holRepeat(h);return[h.shifts.join('/')||'—',rp==='bad'?ST.curBad:rp==='warn'?ST.curWarn:ST.cur]},18);
-  // טבלת סה״כ משמרות — מי עשתה יום מיותר
-  const tr0=hr0+7,tRow=(r,lab,labSt,vals,st)=>{const cs=[cell('A'+r,lab,labSt),cell('B'+r,'',labSt)];merges.push('A'+r+':B'+r);
-    vals.forEach((v,i)=>{const w=i<3?3:6,c0=D0+i*3;for(let k=0;k<w;k++)cs.push(cell(colL(c0+k)+r,k?'':v[0],v[1]));merges.push(colL(c0)+r+':'+colL(c0+w-1)+r)});rows.push(row(r,cs,16))};
-  tRow(tr0,'סה״כ משמרות',ST.thR,[['א׳',ST.head],['ב׳',ST.head],['ג׳',ST.head]]);
-  const tVals=(t,cur,sum)=>SHIFT_NAMES.map(n=>[t?t[n]:'—',!t?ST.muteC:isExtra(t,n)?(cur?ST.curWarn:sum?ST.ambHead:ST.amb):(cur?ST.cur:sum?ST.tot:ST.tdB)]);
-  m.pastRows.forEach((r,i)=>tRow(tr0+1+i,String(r.y),ST.th,tVals(r.t)));
-  tRow(tr0+4,m.y+' — השנה',ST.curLab,tVals(m.tot,1));
-  rows.push(row(tr0+6,[cell('A'+(tr0+6),'השורה המודגשת — המשמרת שסוגרת את החג השנה · אדום: אותה משמרת כמו בשנה שעברה · כתום: כמו לפני שנתיים · בטבלת סה״כ המשמרות, כתום — המשמרת שעשתה יום מיותר',ST.note)]));
-  rows.push(row(tr0+7,[cell('A'+(tr0+7),'סוף שבוע — רקע זהוב · חג — רקע כתום'+(m.bal.size?' · יום איזון — רקע ירוק (הועבר לשמירת הפרש של יום אחד)':''),ST.note)]));
+  const T0=D0+HS.length*span+1,TL=4,tcS=k=>T0+TL+k*3;   // תווית ברוחב 4 עמודות, 3 עמודות לכל משמרת
+  const hCells=(r,lab,labSt,valFn)=>{const cs=[cell('A'+r,lab,labSt),cell('B'+r,'',labSt)];merges.push('A'+r+':B'+r);
+    HS.forEach((h,i)=>{const[v,st]=valFn(h);for(let k=0;k<span;k++)cs.push(cell(colL(D0+i*span+k)+r,k?'':v,st));merges.push(hcS(i)+r+':'+hcE(i)+r)});return cs};
+  // תאי טבלת הסה״כ בשורה r; n=2 — תא שמשתרע על שתי שורות (השורה השנייה מקבלת תאים ריקים באותו עיצוב, בלי מיזוג נוסף)
+  const tCells=(r,lab,labSt,vals,n,cont)=>{const cs=[],r2=r+(n||1)-1;
+    for(let k=0;k<TL;k++)cs.push(cell(colL(T0+k)+r,k||cont?'':lab,labSt));if(!cont)merges.push(colL(T0)+r+':'+colL(T0+TL-1)+r2);
+    vals.forEach((v,i)=>{for(let k=0;k<3;k++)cs.push(cell(colL(tcS(i)+k)+r,k||cont?'':v[0],v[1]));if(!cont)merges.push(colL(tcS(i))+r+':'+colL(tcS(i)+2)+r2)});return cs};
+  const tVals=(t,cur)=>SHIFT_NAMES.map(n=>[t?t[n]:'—',!t?ST.muteC:isExtra(t,n)?(cur?ST.curWarn:ST.amb):(cur?ST.cur:ST.tdB)]);
+  const tHead=[['א׳',ST.head],['ב׳',ST.head],['ג׳',ST.head]];
+  rows.push(row(hr0,[...hCells(hr0,'שנה / חג',ST.thR,h=>[h.name+(h.est?' *':''),ST.headFit]),...tCells(hr0,'סה״כ משמרות',ST.thR,tHead,2)],18));
+  rows.push(row(hr0+1,[...hCells(hr0+1,'תאריכים '+m.y,ST.type,h=>[fmtDM(h.s)+(h.n>1?'–'+fmtDM(h.e):''),ST.small]),...tCells(hr0+1,'',ST.thR,tHead,1,true)],15));
+  [m.y-3,m.y-2,m.y-1].forEach((yy,k)=>{const r=hr0+2+k,pr=m.pastRows.find(x=>x.y===yy);
+    rows.push(row(r,[...hCells(r,String(yy),ST.th,h=>[[h.p3,h.p2,h.p1][k]||'—',ST.tdB]),...tCells(r,String(yy),ST.th,tVals(pr?pr.t:null))],16))});
+  rows.push(row(hr0+5,[...hCells(hr0+5,m.y+' — השנה',ST.curLab,h=>{const rp=holRepeat(h);return[h.shifts.join('/')||'—',rp==='bad'?ST.curBad:rp==='warn'?ST.curWarn:ST.cur]}),...tCells(hr0+5,m.y+' — השנה',ST.curLab,tVals(m.tot,1))],18));
+  rows.push(row(hr0+7,[cell('A'+(hr0+7),'השורה המודגשת — המשמרת שסוגרת את החג השנה · אדום: אותה משמרת כמו בשנה שעברה · כתום: כמו לפני שנתיים · בטבלת סה״כ המשמרות, כתום — המשמרת שעשתה יום מיותר',ST.note)]));
+  rows.push(row(hr0+8,[cell('A'+(hr0+8),'סוף שבוע — רקע זהוב · חג — רקע כתום'+(m.bal.size?' · יום איזון — רקע ירוק (הועבר לשמירת הפרש של יום אחד)':''),ST.note)]));
   const colsXml='<cols><col min="1" max="1" width="9" customWidth="1"/><col min="2" max="2" width="7" customWidth="1"/><col min="3" max="'+(2+m.cols)+'" width="3.7" customWidth="1"/><col min="'+(3+m.cols)+'" max="'+(5+m.cols)+'" width="5" customWidth="1"/></cols>';
   const ws=(views,cols,data,mg,setup)=>'<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">'
     +(setup?'<sheetPr><pageSetUpPr fitToPage="1"/></sheetPr>':'')+'<sheetViews>'+views+'</sheetViews><sheetFormatPr defaultRowHeight="15"/>'+cols+'<sheetData>'+data.join('')+'</sheetData>'
