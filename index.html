@@ -2538,11 +2538,8 @@ function drawSheet(m){
   const rect=(mx,my,mw,mh,col)=>{x.fillStyle=col;x.fillRect(P(mx),P(my),P(mw),P(mh))};
   // כותרת
   txt('סידור עבודה '+m.y,R,M+3.4,6.2,800,C.ink,'right');
-  txt(m.status+' · הופק '+fmtFull(m.when)+' · משמרות א׳ ב׳ ג׳ · סופי שבוע: א׳ '+m.wk[0]+' · ב׳ '+m.wk[1]+' · ג׳ '+m.wk[2],R,M+9,2.8,600,C.mute,'right');
-  txt('א׳ '+m.tot['א׳']+'  ·  ב׳ '+m.tot['ב׳']+'  ·  ג׳ '+m.tot['ג׳'],M,M+3.4,3.6,800,C.ink,'left');
-  txt('פער בין המשמרות: '+m.spread,M,M+9,2.8,700,m.spread>1?C.bad:C.ok,'left');
   // טבלה
-  const top=M+14,wMon=15,wType=11,wTot=6.5,wD=(297-2*M-wMon-wType-3*wTot)/m.cols;
+  const top=M+10,wMon=15,wType=11,wTot=6.5,wD=(297-2*M-wMon-wType-3*wTot)/m.cols;
   const hHead=5,hDate=3.9,hShift=4.4,hLab=3.0,hMonth=hDate+hShift+hLab,hSum=4.8;
   const xDay=i=>R-wMon-wType-(i+1)*wD,xTot=j=>R-wMon-wType-m.cols*wD-(j+1)*wTot;
   const tblW=wMon+wType+m.cols*wD+3*wTot,tblL=R-tblW;
@@ -2595,13 +2592,9 @@ function drawSheet(m){
   x.moveTo(P(tblL),P(top));x.lineTo(P(R),P(top));x.moveTo(P(tblL),P(yE+hSum));x.lineTo(P(R),P(yE+hSum));
   [R,R-wMon-wType,xTot(0)+wTot,tblL].forEach(v=>{x.moveTo(P(v),P(top));x.lineTo(P(v),P(yE+hSum))});
   x.stroke();
-  // מקרא
-  let ly=yE+hSum+3.4,lx=R;
-  const leg=(col,label,dot)=>{rect(lx-3,ly-1.5,3,3,col);if(dot){x.fillStyle=C.bal;x.beginPath();x.arc(P(lx-1.5),P(ly),P(0.6),0,Math.PI*2);x.fill()}x.strokeStyle=C.strong;x.lineWidth=P(0.12);x.strokeRect(P(lx-3),P(ly-1.5),P(3),P(3));txt(label,lx-4.2,ly+0.1,2.4,600,C.ink,'right');x.font=F(2.4,600);lx-=4.2+x.measureText(label).width/S+6};
-  leg(C.we,'סוף שבוע');leg(C.hol,'חג (בלוק)');if(m.bal.size)leg('#ffffff','יום איזון',true);
   // טבלת חגים: מי סגר כל חג ב־3 השנים הקודמות ומי סוגר אותו השנה
   const totW=52,gapW=6;
-  const hs=m.tblHols,nH=Math.max(1,hs.length),wL=wMon+wType,cw=(297-2*M-totW-gapW-wL)/nH,hH=7,hR=3.9,tW=wL+nH*cw,tL=R-tW,t0=ly+3.2,tH=hH+4*hR;
+  const hs=m.tblHols,nH=Math.max(1,hs.length),wL=wMon+wType,cw=(297-2*M-totW-gapW-wL)/nH,hH=7,hR=3.9,tW=wL+nH*cw,tL=R-tW,t0=yE+hSum+5,tH=hH+4*hR;
   rect(tL,t0,tW,hH,C.head);
   txt('שנה / חג',R-wL/2,t0+hH/2,2.35,800,C.ink);
   hs.forEach((h,i)=>{
@@ -2656,10 +2649,6 @@ function drawSheet(m){
     x.moveTo(P(M),P(t0+hH2+3*rH));x.lineTo(P(sR),P(t0+hH2+3*rH));
     x.stroke();
   }
-  // הסברים
-  const by=t0+tH+3.4;
-  txt('השורה המודגשת — המשמרת שסוגרת את החג השנה · אדום: אותה משמרת כמו בשנה שעברה · כתום: כמו לפני שנתיים',R,by,2.25,600,C.mute,'right');
-  txt('כתום — המשמרת שעשתה יום מיותר',M,by,2.25,600,C.mute,'left');
   return c;
 }
 const b64Bytes=b64=>{const s=atob(b64),u=new Uint8Array(s.length);for(let i=0;i<s.length;i++)u[i]=s.charCodeAt(i);return u};
@@ -2726,7 +2715,6 @@ function makeXlsx(m){
   // גיליון 1 — הסידור
   const D0=2,TC=D0+m.cols,rows=[],merges=[];
   rows.push(row(1,[cell('A1','סידור עבודה '+m.y,ST.title)],24));
-  rows.push(row(2,[cell('A2',m.status+' · הופק '+fmtFull(m.when)+' · א׳ '+m.tot['א׳']+' · ב׳ '+m.tot['ב׳']+' · ג׳ '+m.tot['ג׳']+' · פער '+m.spread+' · סופי שבוע: א׳ '+m.wk[0]+' · ב׳ '+m.wk[1]+' · ג׳ '+m.wk[2],ST.sub)],16));
   const hc=[cell('A3','חודש',ST.head),cell('B3','סוג',ST.head)];
   for(let i=0;i<m.cols;i++)hc.push(cell(colL(D0+i)+'3',DOWL[i%7],i%7>=5?ST.headWe:ST.head));
   SHIFT_NAMES.forEach((n,j)=>hc.push(cell(colL(TC+j)+'3',n,ST.head)));
@@ -2767,8 +2755,6 @@ function makeXlsx(m){
   [m.y-3,m.y-2,m.y-1].forEach((yy,k)=>{const r=hr0+2+k,pr=m.pastRows.find(x=>x.y===yy);
     rows.push(row(r,[...hCells(r,String(yy),ST.th,h=>[[h.p3,h.p2,h.p1][k]||'—',ST.tdB]),...tCells(r,String(yy),ST.th,tVals(pr?pr.t:null))],16))});
   rows.push(row(hr0+5,[...hCells(hr0+5,m.y+' — השנה',ST.curLab,h=>{const rp=holRepeat(h);return[h.shifts.join('/')||'—',rp==='bad'?ST.curBad:rp==='warn'?ST.curWarn:ST.cur]}),...tCells(hr0+5,m.y+' — השנה',ST.curLab,tVals(m.tot,1))],18));
-  rows.push(row(hr0+7,[cell('A'+(hr0+7),'השורה המודגשת — המשמרת שסוגרת את החג השנה · אדום: אותה משמרת כמו בשנה שעברה · כתום: כמו לפני שנתיים · בטבלת סה״כ המשמרות, כתום — המשמרת שעשתה יום מיותר',ST.note)]));
-  rows.push(row(hr0+8,[cell('A'+(hr0+8),'סוף שבוע — רקע זהוב · חג — רקע כתום'+(m.bal.size?' · יום איזון — רקע ירוק (הועבר לשמירת הפרש של יום אחד)':''),ST.note)]));
   const colsXml='<cols><col min="1" max="1" width="9" customWidth="1"/><col min="2" max="2" width="7" customWidth="1"/><col min="3" max="'+(2+m.cols)+'" width="3.7" customWidth="1"/><col min="'+(3+m.cols)+'" max="'+(5+m.cols)+'" width="5" customWidth="1"/></cols>';
   const ws=(views,cols,data,mg,setup)=>'<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">'
     +(setup?'<sheetPr><pageSetUpPr fitToPage="1"/></sheetPr>':'')+'<sheetViews>'+views+'</sheetViews><sheetFormatPr defaultRowHeight="15"/>'+cols+'<sheetData>'+data.join('')+'</sheetData>'
@@ -2790,8 +2776,6 @@ function makeXlsx(m){
   const trow=(lbl,t)=>{r2.push(row(rr,[cell('A'+rr,lbl,ST.td),...SHIFT_NAMES.map((n,i)=>cell(colL(1+i)+rr,t?t[n]:'—',ST.tdB)),cell('E'+rr,t?spreadOf(t):'—',ST.tdB)]));rr++};
   m.pastRows.forEach(x=>trow(String(x.y),x.t));
   trow(String(T),m.tot);
-  rr++;
-  r2.push(row(rr,[cell('A'+rr,'היסטוריה: מי עבד את החג בפועל, כולל תיקונים ידניים. החגים המוסלמיים לא נכללים בבדיקת ההוגנות.',ST.note)]));
   const sheet2=ws('<sheetView rightToLeft="1" workbookViewId="0"/>','<cols><col min="1" max="1" width="16" customWidth="1"/><col min="2" max="3" width="12" customWidth="1"/><col min="4" max="4" width="7" customWidth="1"/><col min="5" max="8" width="9" customWidth="1"/></cols>',r2,[],false);
   const wb='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><bookViews><workbookView/></bookViews><sheets><sheet name="'+xE('סידור '+T)+'" sheetId="1" r:id="rId1"/><sheet name="'+xE('חגים '+T)+'" sheetId="2" r:id="rId2"/></sheets></workbook>';
   const rel='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">';
