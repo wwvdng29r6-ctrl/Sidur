@@ -512,6 +512,7 @@ svg.ic{width:17px;height:17px;flex:none;fill:none;stroke:currentColor;stroke-wid
 .set>div{flex:1;min-width:0}
 .set b{display:block;font-size:13px;font-weight:700}
 .set span{display:block;font-size:11.5px;color:var(--dim);margin-top:2px;line-height:1.4}
+.set .pv-row,.set .pv-row span{display:inline-flex;margin-top:0}.set .pv-row{display:flex;align-items:center}
 .set .btn{flex:none;position:relative;overflow:hidden}
 .set .btn input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:16px}
 .set.danger{border-color:var(--red-border)}
@@ -570,7 +571,27 @@ svg.ic{width:17px;height:17px;flex:none;fill:none;stroke:currentColor;stroke-wid
 .cm.a{align-self:flex-start;background:var(--s3);border:1px solid var(--border2);color:var(--text);border-end-start-radius:6px}
 .cm.err{background:var(--red-dim);border-color:var(--red-border)}
 .cm-t{white-space:pre-wrap}
-.cm-src{display:block;font-size:10.5px;font-weight:800;color:var(--olive-2);margin-bottom:2px}
+.cm-src{display:flex;align-items:center;margin-bottom:5px}
+.pv{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:6px;flex:none;vertical-align:middle;border:1px solid}
+.pv svg{width:12px;height:12px;display:block;fill:currentColor;stroke:none}
+.pv.sm{width:18px;height:18px;border-radius:5px}.pv.sm svg{width:10px;height:10px}
+.pv.lg{width:34px;height:34px;border-radius:10px}.pv.lg svg{width:18px;height:18px}
+.pv-claude{background:var(--amber-dim);border-color:var(--amber-border);color:var(--amber)}
+.pv-openai{background:var(--steel-dim);border-color:var(--steel-border);color:var(--steel)}
+.pv-gemini{background:var(--indigo-dim);border-color:var(--indigo-border);color:var(--indigo)}
+.pv-n{font-size:11.5px;font-weight:800;color:var(--text);line-height:1.1}
+.pv-row{display:inline-flex;align-items:center;gap:5px;flex-wrap:wrap;vertical-align:middle}
+.pv-badge{cursor:pointer}.pv-badge .pv{margin-inline-end:-2px}
+.pv-tabs{display:flex;gap:8px;margin-bottom:12px}
+.pv-tab{position:relative;flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:62px;padding:8px 4px;border-radius:var(--r-md);background:var(--s1);border:1px solid var(--border);transition:border-color .15s,background .15s}
+.pv-tab:hover{border-color:var(--olive-border)}
+.pv-tab.on{border-color:var(--olive);background:var(--olive-dim)}
+.pv-dot{position:absolute;top:7px;inset-inline-start:8px;width:8px;height:8px;border-radius:50%;background:var(--amber)}
+.pv-dot.ok{background:var(--green)}
+.pv-main{font-style:normal;font-size:10px;font-weight:800;color:var(--olive-2);line-height:1}
+.ai-bk{display:flex;align-items:center;gap:9px;margin-top:12px;font-size:12.5px;font-weight:600;color:var(--text);line-height:1.45;cursor:pointer}
+.ai-bk input{width:18px;height:18px;accent-color:var(--olive);flex:none}
+.cm.typing .pv{margin-inline-end:4px}
 .cm-ch{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
 .cm-ch i{font-style:normal;font-size:11.5px;font-weight:700;padding:3px 8px;border-radius:7px;background:var(--s2);border:1px solid var(--border2);color:var(--text)}
 .cm-ch i.x{border-color:var(--olive-border);background:var(--olive-dim)}
@@ -708,6 +729,9 @@ svg.ic{width:17px;height:17px;flex:none;fill:none;stroke:currentColor;stroke-wid
 <body>
 <div class="sbar" aria-hidden="true"></div>
 <svg width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true">
+<symbol id="pv-claude" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/></symbol>
+<symbol id="pv-openai" viewBox="0 0 24 24"><path d="M12 4.2 20.4 19H3.6z"/></symbol>
+<symbol id="pv-gemini" viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14" rx="2.5"/></symbol>
 <symbol id="i-chat" viewBox="0 0 24 24"><path d="M20 15a2 2 0 0 1-2 2H8l-4 4V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2z"/><path d="M8 8.5h8M8 12h5"/></symbol>
 <symbol id="i-send" viewBox="0 0 24 24"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4z"/></symbol>
 <symbol id="i-key" viewBox="0 0 24 24"><circle cx="8" cy="15" r="4.5"/><path d="M11.2 11.8 20 3M16.5 6.5l3 3M14 9l2 2"/></symbol>
@@ -852,7 +876,7 @@ svg.ic{width:17px;height:17px;flex:none;fill:none;stroke:currentColor;stroke-wid
         <button class="th-opt" data-theme-set="paper"><span class="th-sw" style="background:linear-gradient(90deg,#f6f5ef 0 34%,#566f24 34% 67%,#cea030 67%)"></span><span>נייר מפה</span></button>
         <button class="th-opt" data-theme-set="day"><span class="th-sw" style="background:linear-gradient(90deg,#f7f9fb 0 34%,#1f5fbf 34% 67%,#e8b024 67%)"></span><span>יום בהיר</span></button>
       </div><span class="th-n">ההחלפה מיידית ונשמרת במכשיר זה. קבצי הייצוא נשארים בהירים להדפסה.</span></div>
-      <div class="set"><div><b>חיבור הצ׳אט ל־Claude</b><span id="setAiSt">לא מחובר</span></div><button class="btn btn-gh btn-sm" data-act="chat-ai"><svg class="ic"><use href="#i-key"/></svg>הגדרה</button></div>
+      <div class="set"><div><b>חיבור הצ׳אט</b><span id="setAiSt">לא מחובר</span></div><button class="btn btn-gh btn-sm" data-act="chat-ai"><svg class="ic"><use href="#i-key"/></svg>הגדרה</button></div>
       <div class="set"><div><b>גיבוי נתונים</b><span>הורדת קובץ עם כל הנתונים של האפליקציה</span></div><button class="btn btn-gh btn-sm" data-act="backup"><svg class="ic"><use href="#i-download"/></svg>הורדה</button></div>
       <div class="set"><div><b>שחזור מגיבוי</b><span>טעינת קובץ גיבוי שהורד בעבר — מחליף את הנתונים הנוכחיים</span></div><label class="btn btn-gh btn-sm"><svg class="ic"><use href="#i-upload"/></svg>בחירת קובץ<input type="file" id="restoreFile" accept=".json,application/json"></label></div>
       <div class="set danger"><div><b>איפוס כל הנתונים</b><span>מחיקת הטיוטה, האישור, הנעילות והאימונים במכשיר זה</span></div><button class="btn btn-no btn-sm" id="resetAll" data-act="reset-all"><svg class="ic"><use href="#i-trash"/></svg>איפוס</button></div>
@@ -883,7 +907,7 @@ svg.ic{width:17px;height:17px;flex:none;fill:none;stroke:currentColor;stroke-wid
       <div class="ov-ic"><svg class="ic"><use href="#i-chat"/></svg></div>
       <div class="ov-ht"><h2 id="chatTitle">צ׳אט תיקונים</h2><p id="chatSub"></p></div>
       <button class="ov-x" data-act="chat-clear" aria-label="מחיקת השיחה" title="מחיקת השיחה"><svg class="ic"><use href="#i-trash"/></svg></button>
-      <button class="ov-x" data-act="chat-ai" aria-label="חיבור ל־Claude" title="חיבור ל־Claude"><svg class="ic"><use href="#i-key"/></svg></button>
+      <button class="ov-x" data-act="chat-ai" aria-label="חיבור הצ׳אט" title="חיבור הצ׳אט"><svg class="ic"><use href="#i-key"/></svg></button>
       <button class="ov-x" data-close="chatOv" aria-label="סגירה"><svg class="ic"><use href="#i-x"/></svg></button>
     </div>
     <div class="ov-b chat-b" id="chatBody" aria-live="polite"></div>
@@ -897,29 +921,23 @@ svg.ic{width:17px;height:17px;flex:none;fill:none;stroke:currentColor;stroke-wid
   <div class="ov-p">
     <div class="ov-h">
       <div class="ov-ic"><svg class="ic"><use href="#i-key"/></svg></div>
-      <div class="ov-ht"><h2 id="aiTitle">חיבור הצ׳אט ל־Claude</h2><p>כדי שהצ׳אט יבין כל ניסוח חופשי</p></div>
+      <div class="ov-ht"><h2 id="aiTitle">חיבור הצ׳אט</h2><p>כדי שהצ׳אט יבין כל ניסוח חופשי</p></div>
       <button class="ov-x" data-close="aiOv" aria-label="סגירה"><svg class="ic"><use href="#i-x"/></svg></button>
     </div>
     <div class="ov-b">
+      <div class="pv-tabs" id="aiTabs" role="tablist" aria-label="בחירת צ׳אט"></div>
       <div class="ai-st" id="aiState"></div>
       <label class="fl" for="aiKey">מפתח API</label>
       <input class="inp" id="aiKey" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" dir="ltr" placeholder="sk-ant-...">
-      <label class="fl" for="aiWs">מזהה Workspace <span class="fl-o">— רק אם המפתח לא נוצר בתוך Workspace</span></label>
-      <input class="inp" id="aiWs" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" dir="ltr" placeholder="wrkspc_...">
+      <div id="aiWsRow"><label class="fl" for="aiWs">מזהה Workspace <span class="fl-o">— רק אם המפתח לא נוצר בתוך Workspace</span></label>
+      <input class="inp" id="aiWs" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" dir="ltr" placeholder="wrkspc_..."></div>
       <label class="fl" for="aiModel">מודל</label>
       <select class="inp" id="aiModel"></select>
-      <div class="row-btns" style="margin-top:14px"><button class="btn btn-ok" data-act="ai-connect"><svg class="ic"><use href="#i-check"/></svg>חיבור ובדיקה</button><button class="btn btn-no" data-act="ai-del"><svg class="ic"><use href="#i-trash"/></svg>ניתוק ומחיקת המפתח</button></div>
+      <div class="row-btns" style="margin-top:14px"><button class="btn btn-ok" data-act="ai-connect"><svg class="ic"><use href="#i-check"/></svg>חיבור ובדיקה</button><button class="btn btn-gh" id="aiMainBtn" data-act="ai-main" hidden><svg class="ic"><use href="#i-zap"/></svg>שימוש כראשי</button><button class="btn btn-no" data-act="ai-del"><svg class="ic"><use href="#i-trash"/></svg>ניתוק ומחיקת המפתח</button></div>
       <p class="set-note" id="aiNote" role="status"></p>
-      <div class="ai-how"><b>איך משיגים מפתח</b>
-        <ol>
-          <li>נכנסים ל־<span dir="ltr">platform.claude.com</span> ומתחברים, או פותחים חשבון.</li>
-          <li>אם אין קרדיט בחשבון — מוסיפים ב־Billing. התשלום לפי שימוש.</li>
-          <li>בתפריט Settings נכנסים ל־API keys ולוחצים Create key. בשדה Workspace בוחרים Workspace (למשל Default).</li>
-          <li>מעתיקים את המפתח — הוא מוצג פעם אחת בלבד — מדביקים כאן ולוחצים "חיבור ובדיקה".</li>
-        </ol>
-        <a class="link" href="https://platform.claude.com/settings/keys" target="_blank" rel="noopener noreferrer"><svg class="ic"><use href="#i-key"/></svg>פתיחת דף המפתחות</a>
-      </div>
-      <p class="fn">המפתח נשמר רק במכשיר הזה ולא נכלל בגיבוי — בכל מכשיר מחברים פעם אחת. ל־Claude נשלחים רק תאריכים, אותיות משמרות, שמות חגים וסיכומים של הטיוטה, בלי שמות של אנשים.</p>
+      <label class="ai-bk" hidden><input type="checkbox" id="aiBackup" checked><span>גיבוי: אם הצ׳אט הראשי לא עונה, הבקשה עוברת לצ׳אט מחובר אחר</span></label>
+      <div class="ai-how" id="aiHow"></div>
+      <p class="fn">המפתחות נשמרים רק במכשיר הזה ולא נכללים בגיבוי — בכל מכשיר מחברים פעם אחת. לצ׳אט החכם נשלחים רק תאריכים, אותיות משמרות, שמות חגים וסיכומים של הטיוטה, בלי שמות של אנשים.</p>
     </div>
   </div>
 </div>
@@ -2214,7 +2232,7 @@ function renderNext(keep){
     <p class="cp">בוחן ${CAND_COUNT} תרחישים של החלפות מקצב: כל חג עובר למשמרת שלא עבדה אותו הכי הרבה זמן ב־3 השנים האחרונות, וסה״כ הימים נשמר בהפרש של יום אחד לכל היותר — בעזרת ימי איזון כשצריך.</p>
     ${plan.applied?`<div class="note steel">${ico('i-info')}<div><b>תוכנית המנוע פעילה בטיוטה</b><span>${plan.swaps?plan.swaps+' החלפות מקצב מתוכננות':'ללא החלפות מקצב'}</span></div></div>`:''}
     <div class="row-btns"><button class="btn btn-ok" data-act="gen-run">${ico('i-zap')}הפעלת המנוע</button>${plan.applied?`<button class="btn btn-gh" id="planUndo" data-act="plan-undo">${ico('i-undo')}חזרה לסבב הבסיסי</button>`:''}</div></div>`;
-  h+=`<div class="card c-12"><div class="ch"><span class="ibox olive">${ico('i-chat')}</span><h3>תיקון בצ׳אט</h3><div class="end">${aiCfg()?`<span class="badge ok">${ico('i-check')}מחובר ל־Claude</span>`:`<button class="btn btn-gh btn-sm" data-act="chat-ai">${ico('i-key')}חיבור ל־Claude</button>`}</div></div>
+  h+=`<div class="card c-12"><div class="ch"><span class="ibox olive">${ico('i-chat')}</span><h3>תיקון בצ׳אט</h3><div class="end">${aiCfg()?`<button class="badge ok pv-badge" data-act="chat-ai" aria-label="חיבור הצ׳אט — מחובר">${aiChain().map(c=>pvIco(c.prov,'sm')).join('')}מחובר</button>`:`<button class="btn btn-gh btn-sm" data-act="chat-ai">${ico('i-key')}חיבור צ׳אט חכם</button>`}</div></div>
     <button class="chat-open" data-act="chat-open"><span>כתוב מה לא בסדר בסידור — והוא יתוקן אוטומטית</span>${ico('i-send')}</button>
 </div>`;
   // מטריצה לעריכה — תאריך · משמרת · חגים
@@ -2819,13 +2837,26 @@ function doExport(kind,el){
 }
 
 /* ============================================================
-   צ׳אט תיקונים — פקודות מובנות (בלי אינטרנט) + Claude לניסוח חופשי (כשמוגדר מפתח)
+   צ׳אט תיקונים — פקודות מובנות (בלי אינטרנט) + צ׳אט חכם לניסוח חופשי (Claude, ChatGPT או Gemini — כשמוגדר מפתח)
    כל בקשה עוברת דרך אותם כללים של המנוע: ימי החזר סמוכים, בלי רצפי עבודה, עד 4 ימים בשבוע, סה״כ מאוזן.
    השינויים נשמרים מיד בטיוטה, וכל תשובה אפשר לבטל בלחיצה.
    ============================================================ */
 const CHAT_STORE='sidur-avoda-chat',AI_STORE='sidur-avoda-ai';
-const AI_MODELS=[['claude-sonnet-5-5','Sonnet 5.5 — מומלץ'],['claude-haiku-5-5','Haiku 5.5 — מהיר וזול'],['claude-opus-5-5','Opus 5.5 — הכי מדויק']];
-let CHAT={msgs:[],undo:[],seq:1},_chatBusy=false,_turn=null;
+// ---- הצ׳אטים החכמים: Claude, ChatGPT, Gemini — לכל אחד מפתח ומודל משלו, שנשמרים רק במכשיר ----
+// בממשק מוצג לכל צ׳אט אייקון מקורי משלו (צורה וצבע) במקום השם; השם מופיע רק במסך החיבור ולקוראי מסך.
+const AI_PROV={
+  claude:{name:'Claude',site:'platform.claude.com',ph:'sk-ant-...',ws:1,keyUrl:'https://platform.claude.com/settings/keys',
+    models:[['claude-sonnet-5-5','Sonnet 5.5 — מומלץ'],['claude-haiku-5-5','Haiku 5.5 — מהיר וזול'],['claude-opus-5-5','Opus 5.5 — הכי מדויק']],
+    how:['נכנסים ל־<span dir="ltr">platform.claude.com</span> ומתחברים, או פותחים חשבון.','אם אין קרדיט בחשבון — מוסיפים ב־Billing. התשלום לפי שימוש.','בתפריט Settings נכנסים ל־API keys ולוחצים Create key. בשדה Workspace בוחרים Workspace (למשל Default).','מעתיקים את המפתח — הוא מוצג פעם אחת בלבד — מדביקים כאן ולוחצים "חיבור ובדיקה".']},
+  openai:{name:'ChatGPT',site:'platform.openai.com',ph:'sk-...',keyUrl:'https://platform.openai.com/api-keys',
+    models:[['gpt-6.1-sol','Sol — מומלץ'],['gpt-6-luna','Luna — מהיר וזול'],['gpt-6-astra','Astra — הכי מדויק']],
+    how:['נכנסים ל־<span dir="ltr">platform.openai.com</span> ומתחברים, או פותחים חשבון — זה חשבון נפרד מהמנוי לאפליקציה.','אם אין קרדיט בחשבון — מוסיפים ב־Billing. התשלום לפי שימוש.','נכנסים ל־API keys, לוחצים Create new secret key, בוחרים Project ולוחצים Create secret key.','מעתיקים את המפתח — הוא מוצג פעם אחת בלבד — מדביקים כאן ולוחצים "חיבור ובדיקה".']},
+  gemini:{name:'Gemini',site:'aistudio.google.com',ph:'AIza...',keyUrl:'https://aistudio.google.com/apikey',
+    models:[['gemini-3.8-flash','Flash 3.8 — מומלץ'],['gemini-3.5-flash-lite','Flash-Lite — הכי מהיר'],['gemini-4-argon','Argon — הכי מדויק']],
+    how:['נכנסים לדף המפתחות (הקישור למטה) עם חשבון Google. למשתמש חדש כבר נוצר שם מפתח; אפשר גם ללחוץ Create API key.','במסלול החינמי המכסה היומית קטנה — במיוחד ב־Flash 3.8. ל־Flash-Lite המכסה גדולה יותר. Argon עובד רק אחרי הפעלת חיוב (Billing) בפרויקט.','מעתיקים את המפתח, מדביקים כאן ולוחצים "חיבור ובדיקה".']}
+};
+const AI_ORDER=['claude','openai','gemini'];
+let CHAT={msgs:[],undo:[],seq:1},_chatBusy=false,_chatPv=null,_turn=null,_aiTab='claude';
 function chatLoad(){
   try{const o=JSON.parse(localStorage.getItem(CHAT_STORE)||'null');
     if(o&&Array.isArray(o.msgs))CHAT={msgs:o.msgs.filter(m=>m&&(m.r==='u'||m.r==='a')&&typeof m.t==='string').slice(-80),undo:Array.isArray(o.undo)?o.undo.filter(u=>u&&Array.isArray(u.diff)).slice(-30):[],seq:Math.max(1,+o.seq||1)};
@@ -2833,12 +2864,29 @@ function chatLoad(){
 }
 function chatSave(){try{localStorage.setItem(CHAT_STORE,JSON.stringify({msgs:CHAT.msgs.slice(-80),undo:CHAT.undo.slice(-30),seq:CHAT.seq}))}catch(e){}}
 function chatPush(m){m.id=CHAT.seq++;m.y=TARGET_YEAR;CHAT.msgs.push(m);if(CHAT.msgs.length>80)CHAT.msgs=CHAT.msgs.slice(-80);chatSave();return m}
-function aiCfg(){
-  try{const o=JSON.parse(localStorage.getItem(AI_STORE)||'null');
-    if(o&&typeof o.key==='string'&&o.key.trim())return{key:o.key.trim(),model:AI_MODELS.some(m=>m[0]===o.model)?o.model:AI_MODELS[0][0],ws:typeof o.ws==='string'?o.ws.trim():'',ok:+o.ok||0};
-  }catch(e){}
-  return null;
+// שמירה: {v:2, act:הצ׳אט הראשי, bk:גיבוי, p:{claude:{key,ws,model,ok}, openai:{…}, gemini:{…}}}
+// הגרסה הקודמת ({key,ws,model,ok} של Claude בלבד) נקראת כאילו Claude הוא הראשי
+function aiLoad(){
+  let o=null;try{o=JSON.parse(localStorage.getItem(AI_STORE)||'null')}catch(e){}
+  const out={act:'claude',bk:1,p:{}};
+  const put=(k,c)=>{const key=c&&typeof c.key==='string'?c.key.trim():'';if(key)out.p[k]={key,ws:k==='claude'&&typeof c.ws==='string'?c.ws.trim():'',model:typeof c.model==='string'&&c.model?c.model:AI_PROV[k].models[0][0],ok:+c.ok||0}};
+  if(o&&typeof o==='object'){
+    if(typeof o.key==='string')put('claude',o);
+    else if(o.p&&typeof o.p==='object'){AI_ORDER.forEach(k=>put(k,o.p[k]));if(AI_PROV[o.act])out.act=o.act;out.bk=o.bk===0?0:1}
+  }
+  if(!out.p[out.act]){const f=AI_ORDER.find(k=>out.p[k]);if(f)out.act=f}
+  return out;
 }
+function aiSave(o){try{localStorage.setItem(AI_STORE,JSON.stringify({v:2,act:o.act,bk:o.bk?1:0,p:o.p}));return true}catch(e){return false}}
+const aiPv=(o,k)=>{const c=o.p[k];return c?{prov:k,key:c.key,ws:c.ws,model:c.model,ok:c.ok}:null};
+// הצ׳אט הראשי — null כשאין אף מפתח שמור
+function aiCfg(){const o=aiLoad();return aiPv(o,o.act)}
+// סדר הניסיון: הראשי, ואחריו (כשהגיבוי פעיל) שאר הצ׳אטים שיש להם מפתח
+function aiChain(){const o=aiLoad(),f=aiPv(o,o.act);return f?[f,...(o.bk?AI_ORDER.filter(k=>k!==o.act&&o.p[k]).map(k=>aiPv(o,k)):[])]:[]}
+function aiMarkOk(k,model){const o=aiLoad();if(!o.p[k])return;o.p[k].ok=Date.now();if(model)o.p[k].model=model;aiSave(o)}
+const aiModelName=(k,id)=>{const m=AI_PROV[k].models.find(x=>x[0]===id);return m?m[1].split(' — ')[0]:id};
+// האיקון של הצ׳אט — מקורי, בלי טעינה מבחוץ (עובד גם בלי אינטרנט)
+const pvIco=(k,sz)=>{const q=AI_PROV[k]?k:'claude';return `<span class="pv pv-${q}${sz?' '+sz:''}" role="img" aria-label="${AI_PROV[q].name}" title="${AI_PROV[q].name}"><svg aria-hidden="true"><use href="#pv-${q}"/></svg></span>`};
 
 // ---- תאריכים ומשמרות ----
 function shIdx(s){s=String(s==null?'':s).trim().replace(/^משמרת\s*/,'').replace(/['׳`’‘]/g,'');const v={'א':0,'אלף':0,'ב':1,'בית':1,'ג':2,'גימל':2}[s];return v===undefined?-1:v}
@@ -3218,7 +3266,7 @@ const CHAT_HELP='אני מתקן את טיוטת השנה הבאה לפי מה �
 function chatRun(p){
   const a=p.args||{},y=TARGET_YEAR;
   switch(p.intent){
-    case 'help':return{t:CHAT_HELP+(aiCfg()?'':'\nלניסוח חופשי לגמרי אפשר לחבר את Claude בכפתור "חיבור".')};
+    case 'help':return{t:CHAT_HELP+(aiCfg()?'':'\nלניסוח חופשי לגמרי אפשר לחבר צ׳אט חכם בכפתור "חיבור".')};
     case 'err':return{err:1,t:a.e==='year'?'הצ׳אט מתקן רק את טיוטת '+y+' — כתוב תאריכים של '+y+'.':'לא הצלחתי לקרוא את התאריך. כותבים יום.חודש, למשל 12.3.'};
     case 'undo':return chatUndo(0,true);
     case 'diag':return chatDiag();
@@ -3336,39 +3384,56 @@ function aiTool(name,inp){
     return(r.err?'נכשל: ':'בוצע: ')+r.t+' מצב: '+chatStatus()+'.';
   }catch(e){return 'שגיאה: '+e.message}
 }
-async function aiCall(cfg,body,ver){
-  const ctl=typeof AbortController!=='undefined'?new AbortController():null,tm=setTimeout(()=>{if(ctl)ctl.abort()},60000);
+// בקשה לשירות חיצוני עם הגבלת זמן. שגיאה מחזירה status וקוד (לזיהוי מפתח לא תקין, מכסה, מודל לא קיים וכו׳)
+async function aiFetch(url,opt,ms){
+  const ctl=typeof AbortController!=='undefined'?new AbortController():null,tm=setTimeout(()=>{if(ctl)ctl.abort()},ms||60000);
   try{
-    const H={'content-type':'application/json','x-api-key':cfg.key,'anthropic-version':ver||'2026-10-21','anthropic-dangerous-direct-browser-access':'true'};
-    if(cfg.ws)H['anthropic-workspace-id']=cfg.ws;   // מפתח שלא נוצר בתוך Workspace מחייב את המזהה בכל בקשה
-    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',signal:ctl?ctl.signal:undefined,headers:H,body:JSON.stringify(body)});
+    const r=await fetch(url,Object.assign({},opt,{signal:ctl?ctl.signal:undefined}));
     let j=null;try{j=await r.json()}catch(e){}
     if(!r.ok){
-      const msg=(j&&j.error&&j.error.message)||('HTTP '+r.status);
-      if(!ver&&r.status===400&&/anthropic-version/i.test(msg))return aiCall(cfg,body,'2023-06-01');
-      const e=new Error(msg);e.status=r.status;throw e;
+      const er=j&&j.error,e=new Error((er&&(er.message||er.status))||('HTTP '+r.status));e.status=r.status;
+      e.code=[er&&er.code,er&&er.status,er&&er.type,...(er&&Array.isArray(er.details)?er.details.map(d=>d&&d.reason):[])].filter(Boolean).join(' ');
+      throw e;
     }
     return j||{};
   }finally{clearTimeout(tm)}
 }
-function aiErr(e){
-  const s=e&&e.status,m=String(e&&e.message||'');
+// Claude
+async function aiCall(cfg,body,ver){
+  const H={'content-type':'application/json','x-api-key':cfg.key,'anthropic-version':ver||'2026-10-21','anthropic-dangerous-direct-browser-access':'true'};
+  if(cfg.ws)H['anthropic-workspace-id']=cfg.ws;   // מפתח שלא נוצר בתוך Workspace מחייב את המזהה בכל בקשה
+  try{return await aiFetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:H,body:JSON.stringify(body)})}
+  catch(e){if(!ver&&e.status===400&&/anthropic-version/i.test(e.message))return aiCall(cfg,body,'2023-06-01');throw e}
+}
+// ChatGPT (Responses API) ו־Gemini (generateContent)
+const aiOpenAI=(cfg,body)=>aiFetch('https://api.openai.com/v1/responses',{method:'POST',headers:{'content-type':'application/json','authorization':'Bearer '+cfg.key},body:JSON.stringify(body)});
+const aiGemini=(cfg,body)=>aiFetch('https://generativelanguage.googleapis.com/v1beta/models/'+encodeURIComponent(cfg.model)+':generateContent',{method:'POST',headers:{'content-type':'application/json','x-goog-api-key':cfg.key},body:JSON.stringify(body)});
+// הודעות שגיאה — בלי שם השירות (האיקון שלו מופיע ליד ההודעה)
+function aiErr(e,k){
+  const s=e&&e.status,m=String(e&&e.message||''),mc=m+' '+String(e&&e.code||''),site=(AI_PROV[k]||AI_PROV.claude).site;
   if(/not scoped to a workspace/i.test(m))return 'המפתח לא נוצר בתוך Workspace. צריך להדביק בחיבור את מזהה ה־Workspace (מתחיל ב־wrkspc_), או ליצור מפתח חדש ולבחור בו Workspace.';
   if(/workspace/i.test(m)&&(s===400||s===404))return 'מזהה ה־Workspace לא תקין או לא נמצא בחשבון — כדאי לבדוק אותו בהגדרות החיבור.';
-  if(/credit balance|billing/i.test(m))return 'אין מספיק קרדיט בחשבון ה־API. מוסיפים קרדיט ב־Billing באתר platform.claude.com.';
-  if(s===401)return 'המפתח של Claude לא תקין. אפשר לעדכן אותו בכפתור "חיבור".';
-  if(s===403)return 'למפתח הזה אין הרשאה להשתמש ב־Claude.';
-  if(s===404&&/model/i.test(m))return 'המודל שנבחר לא זמין בחשבון. אפשר לבחור מודל אחר בהגדרות החיבור.';
-  if(s===429)return 'נשלחו יותר מדי בקשות ל־Claude. כדאי לנסות שוב בעוד דקה.';
-  if(s===400||s===404)return 'Claude דחה את הבקשה: '+m.slice(0,160);
-  if(s>=500)return 'Claude עמוס או לא זמין כרגע. כדאי לנסות שוב בעוד רגע.';
-  return 'לא הצלחתי להתחבר ל־Claude. כדאי לבדוק את החיבור לאינטרנט — ברשת של העבודה ייתכן שהגישה חסומה.';
+  if(/credit balance|billing|insufficient_quota/i.test(mc)||(k!=='gemini'&&/exceeded your current quota/i.test(m)))return 'אין מספיק קרדיט בחשבון ה־API. מוסיפים קרדיט ב־Billing באתר '+site+'.';
+  if(s===401||/API_KEY_INVALID|API key not valid|invalid_api_key|incorrect api key/i.test(mc))return 'המפתח לא תקין. אפשר לעדכן אותו בכפתור "חיבור".';
+  if(k==='gemini'&&(s===429||/RESOURCE_EXHAUSTED/i.test(mc)))return 'נגמרה המכסה היומית של המפתח. במסלול החינמי היא קטנה, במיוחד ב־Flash 3.8 — אפשר לעבור ל־Flash-Lite בהגדרות החיבור, לנסות שוב מחר, או להפעיל חיוב באתר '+site+'.';
+  if(s===403)return 'למפתח הזה אין הרשאה לשירות.';
+  if((s===404&&/model/i.test(m))||/model_not_found|does not exist|not found for API version|not supported for generateContent/i.test(mc))return 'המודל שנבחר לא זמין בחשבון. אפשר לבחור מודל אחר בהגדרות החיבור.';
+  if(s===429)return 'נשלחו יותר מדי בקשות. כדאי לנסות שוב בעוד דקה.';
+  if(s===400||s===404)return 'הבקשה נדחתה: '+m.slice(0,160);
+  if(s>=500)return 'השירות עמוס או לא זמין כרגע. כדאי לנסות שוב בעוד רגע.';
+  return 'לא הצלחתי להתחבר. כדאי לבדוק את החיבור לאינטרנט — ברשת של העבודה ייתכן שהגישה חסומה.';
 }
-async function aiTurn(cfg,text){
+// ההיסטוריה של השיחה (עד 12 הודעות אחרונות, בלי השגיאות), מתחילה תמיד בהודעה של המשתמש
+function aiHist(){
   const hist=[];
-  CHAT.msgs.slice(-13,-1).forEach(m=>{if(m.err||m.y!==TARGET_YEAR)return;const role=m.r==='u'?'user':'assistant',last=hist[hist.length-1];if(last&&last.role===role)last.content+='\n'+m.t;else hist.push({role,content:m.t})});
+  CHAT.msgs.slice(-13,-1).forEach(m=>{if(m.err||m.y!==TARGET_YEAR)return;const role=m.r==='u'?'user':'assistant',last=hist[hist.length-1];if(last&&last.role===role)last.text+='\n'+m.t;else hist.push({role,text:m.t})});
   while(hist.length&&hist[0].role!=='user')hist.shift();
-  const msgs=[...hist,{role:'user',content:text}];
+  return hist;
+}
+// תור אחד מול הצ׳אט החכם: עד 6 סבבים של כלים. st.tools — כמה כלים הופעלו (אחרי שינוי לא עוברים לגיבוי)
+function aiTurn(cfg,text,st){st=st||{tools:0};const h=aiHist();return cfg.prov==='openai'?aiTurnOpenAI(cfg,text,h,st):cfg.prov==='gemini'?aiTurnGemini(cfg,text,h,st):aiTurnClaude(cfg,text,h,st)}
+async function aiTurnClaude(cfg,text,hist,st){
+  const msgs=[...hist.map(h=>({role:h.role,content:h.text})),{role:'user',content:text}];
   let final='';
   for(let step=0;step<6;step++){
     const res=await aiCall(cfg,{model:cfg.model,max_tokens:1024,tools:aiTools(),messages:msgs,
@@ -3377,10 +3442,84 @@ async function aiTurn(cfg,text){
     const uses=content.filter(b=>b&&b.type==='tool_use'),txt=content.filter(b=>b&&b.type==='text').map(b=>b.text).join('\n').trim();
     if(!uses.length){final=txt;break}
     msgs.push({role:'assistant',content});
-    msgs.push({role:'user',content:uses.map(u=>({type:'tool_result',tool_use_id:u.id,content:aiTool(u.name,u.input)}))});
+    msgs.push({role:'user',content:uses.map(u=>{st.tools++;return{type:'tool_result',tool_use_id:u.id,content:aiTool(u.name,u.input)}})});
     final=txt;
   }
   return final;
+}
+async function aiTurnOpenAI(cfg,text,hist,st){
+  const tools=aiTools().map(t=>({type:'function',name:t.name,description:t.description,parameters:t.input_schema,strict:false}));
+  const instructions=aiSystemFixed()+'\n\n'+aiSystemState();
+  let input=[...hist.map(h=>({role:h.role,content:h.text})),{role:'user',content:text}],prev=null,final='';
+  for(let step=0;step<6;step++){
+    const body={model:cfg.model,instructions,input,tools,max_output_tokens:4096};
+    if(prev)body.previous_response_id=prev;
+    const res=await aiOpenAI(cfg,body);
+    const out=Array.isArray(res.output)?res.output:[];
+    const calls=out.filter(o=>o&&o.type==='function_call');
+    const txt=out.filter(o=>o&&o.type==='message').map(o=>(Array.isArray(o.content)?o.content:[]).filter(c=>c&&typeof c.text==='string').map(c=>c.text).join('')).join('\n').trim();
+    if(!calls.length){final=txt;break}
+    prev=res.id;
+    input=calls.map(c=>{let a={};try{a=JSON.parse(c.arguments||'{}')}catch(x){}st.tools++;return{type:'function_call_output',call_id:c.call_id,output:aiTool(c.name,a)}});
+    final=txt;
+  }
+  return final;
+}
+// סכמת הכלים בפורמט של Gemini (סוגים באותיות גדולות)
+function gemSchema(x){
+  if(!x||typeof x!=='object')return x;
+  const o={};
+  if(x.type)o.type=String(x.type).toUpperCase();
+  if(x.description)o.description=x.description;
+  if(Array.isArray(x.enum))o.enum=x.enum.slice();
+  if(x.properties){o.properties={};for(const k in x.properties)o.properties[k]=gemSchema(x.properties[k])}
+  if(Array.isArray(x.required)&&x.required.length)o.required=x.required.slice();
+  if(x.items)o.items=gemSchema(x.items);
+  return o;
+}
+async function aiTurnGemini(cfg,text,hist,st){
+  const fd=aiTools().map(t=>{const d={name:t.name,description:t.description},ps=t.input_schema;if(ps&&ps.properties&&Object.keys(ps.properties).length)d.parameters=gemSchema(ps);return d});
+  const sys={parts:[{text:aiSystemFixed()+'\n\n'+aiSystemState()}]};
+  const contents=[...hist.map(h=>({role:h.role==='assistant'?'model':'user',parts:[{text:h.text}]})),{role:'user',parts:[{text}]}];
+  let final='';
+  for(let step=0;step<6;step++){
+    const res=await aiGemini(cfg,{systemInstruction:sys,contents,tools:[{functionDeclarations:fd}],generationConfig:{maxOutputTokens:4096}});
+    const cand=(Array.isArray(res.candidates)?res.candidates:[])[0],content=cand&&cand.content,parts=content&&Array.isArray(content.parts)?content.parts:[];
+    if(!cand&&res.promptFeedback&&res.promptFeedback.blockReason){const e=new Error('blocked: '+res.promptFeedback.blockReason);e.status=400;throw e}
+    const calls=parts.filter(q=>q&&q.functionCall),txt=parts.filter(q=>q&&typeof q.text==='string'&&!q.thought).map(q=>q.text).join('').trim();
+    if(!calls.length){final=txt;break}
+    contents.push(Object.assign({role:'model'},content));   // כמו שהתקבל — כולל החתימות שהמודל מצרף לקריאות לכלים
+    contents.push({role:'user',parts:calls.map(q=>{const fc=q.functionCall;st.tools++;const r={name:fc.name,response:{result:aiTool(fc.name,fc.args||{})}};if(fc.id)r.id=fc.id;return{functionResponse:r}})});
+    final=txt;
+  }
+  return final;
+}
+// מודל לשימוש: זה שנבחר אם הוא זמין במפתח, אחרת הראשון מהרשימה שזמין, אחרת הגרסה הכללית הכי חדשה בחשבון
+function aiPickModel(k,want,ids){
+  if(!ids||!ids.length)return want;
+  if(ids.includes(want))return want;
+  const c=AI_PROV[k].models.map(m=>m[0]).find(id=>ids.includes(id));if(c)return c;
+  const re=k==='openai'?/^gpt-(\d+(?:\.\d+)?)(?:-([a-z]+))?$/:k==='gemini'?/^gemini-(\d+(?:\.\d+)?)-([a-z]+)$/:null;
+  if(!re)return null;
+  const bad=/audio|realtime|image|tts|transcribe|search|live|embed|robot|lite|nano|mini|preview|custom/;
+  const L=ids.filter(id=>re.test(id)&&!bad.test(id)).sort((a,b)=>parseFloat(b.match(re)[1])-parseFloat(a.match(re)[1]));
+  return L[0]||null;
+}
+// בדיקת חיבור: המפתח תקין והמודל זמין. מחזיר את המודל לשימוש (ייתכן שאחר מזה שנבחר)
+async function aiCheck(k,cfg){
+  if(k==='claude'){await aiCall(cfg,{model:cfg.model,max_tokens:16,messages:[{role:'user',content:'ping'}]});return cfg.model}
+  let ids=null;
+  if(k==='openai'){
+    try{const j=await aiFetch('https://api.openai.com/v1/models',{headers:{'authorization':'Bearer '+cfg.key}},20000);ids=(Array.isArray(j.data)?j.data:[]).map(x=>x&&x.id).filter(Boolean)}
+    catch(e){if(e.status===401||!e.status)throw e}   // מפתח עם הרשאות מצומצמות — בודקים בבקשה קטנה
+  }else{
+    const j=await aiFetch('https://generativelanguage.googleapis.com/v1beta/models?pageSize=1000',{headers:{'x-goog-api-key':cfg.key}},20000);
+    ids=(Array.isArray(j.models)?j.models:[]).filter(x=>x&&(x.supportedGenerationMethods||[]).includes('generateContent')).map(x=>String(x.name||'').replace(/^models\//,''));
+  }
+  const m=aiPickModel(k,cfg.model,ids&&ids.length?ids:null);
+  if(!m){const e=new Error('model_not_found');e.status=404;throw e}
+  if(k==='openai'&&!ids)await aiOpenAI(cfg,{model:m,input:'ping',max_output_tokens:16});
+  return m;
 }
 
 // ---- תור של שיחה: כל השינויים של תשובה אחת = ביטול אחד ----
@@ -3408,27 +3547,42 @@ async function chatSend(raw){
   if(!text||_chatBusy)return;
   chatPush({r:'u',t:text});
   const inp=$('#chatInput');if(inp){inp.value='';chatGrow(inp)}
-  const cfg=aiCfg(),p=chatParse(text);
-  // מחובר ל־Claude: כל בקשה עוברת אליו (חוץ מביטול ועזרה). לא מחובר: הפקודות המובנות
-  if(p.intent&&(!cfg||p.intent==='undo'||p.intent==='help')){chatLocal(p);return}
-  if(!cfg){chatPush({r:'a',src:'r',t:'לא הבנתי את הבקשה. אפשר לנסח עם תאריך ומשמרת — או לחבר את Claude, והוא יבין כל ניסוח.'});chatRender();return}
-  if(typeof fetch!=='function'){chatPush({r:'a',err:1,t:'הדפדפן הזה לא תומך בחיבור ל־Claude.'});chatRender();return}
-  _chatBusy=true;chatRender();turnStart();
-  try{const t=await aiTurn(cfg,text),tu=turnEnd();chatPush(Object.assign({r:'a',src:'c',t:t||(tu?'בוצע.':'לא שיניתי דבר.')},tu||{}));if(!cfg.ok){try{localStorage.setItem(AI_STORE,JSON.stringify({key:cfg.key,ws:cfg.ws,model:cfg.model,ok:Date.now()}))}catch(x){}}}
-  catch(e){
-    const tu=turnEnd();
-    if(!tu&&!(e&&e.status)&&p.intent&&p.conf==='high')chatLocal(p,'אין כרגע חיבור ל־Claude, אז ביצעתי לפי הפקודות המובנות: ');
-    else chatPush(Object.assign({r:'a',src:'c',err:1,t:aiErr(e)+(p.intent?' בינתיים אפשר לנסח את הבקשה בפשטות, עם תאריך ומשמרת.':'')},tu||{}));
+  const chain=aiChain(),p=chatParse(text);
+  // מחובר לצ׳אט חכם: כל בקשה עוברת אליו (חוץ מביטול ועזרה). לא מחובר: הפקודות המובנות
+  if(p.intent&&(!chain.length||p.intent==='undo'||p.intent==='help')){chatLocal(p);return}
+  if(!chain.length){chatPush({r:'a',src:'r',t:'לא הבנתי את הבקשה. אפשר לנסח עם תאריך ומשמרת — או לחבר צ׳אט חכם בכפתור "חיבור", והוא יבין כל ניסוח.'});chatRender();return}
+  if(typeof fetch!=='function'){chatPush({r:'a',err:1,t:'הדפדפן הזה לא תומך בחיבור לצ׳אט חכם.'});chatRender();return}
+  _chatBusy=true;turnStart();
+  let lastErr=null,lastPv=chain[0].prov,fell=0;
+  try{
+    // הראשי, ואם הוא לא עונה (ועוד לא בוצע שינוי) — הגיבוי
+    for(const cfg of chain){
+      const st={tools:0};_chatPv=cfg.prov;chatRender();
+      try{
+        const t=await aiTurn(cfg,text,st),tu=turnEnd();
+        chatPush(Object.assign({r:'a',src:'c',pv:cfg.prov,fb:fell?1:0,t:t||(tu?'בוצע.':'לא שיניתי דבר.')},tu||{}));
+        if(!cfg.ok)aiMarkOk(cfg.prov);
+        return;
+      }catch(e){
+        lastErr=e;lastPv=cfg.prov;
+        if(st.tools||(_turn&&(_turn.diff.length||_turn.locks1)))break;
+        fell++;
+      }
+    }
+    const tu=turnEnd(),e=lastErr;
+    if(!tu&&!(e&&e.status)&&p.intent&&p.conf==='high')chatLocal(p,'אין כרגע חיבור לצ׳אט החכם, אז ביצעתי לפי הפקודות המובנות: ');
+    else chatPush(Object.assign({r:'a',src:'c',pv:lastPv,err:1,t:aiErr(e,lastPv)+(p.intent?' בינתיים אפשר לנסח את הבקשה בפשטות, עם תאריך ומשמרת.':'')},tu||{}));
   }
-  finally{_chatBusy=false;chatRender();refresh()}
+  finally{_chatBusy=false;_chatPv=null;chatRender();refresh()}
 }
 
 // ---- תצוגה ----
 function chChip(c){const d=pd(c[0]);return DOW_FULL[d.getDay()]+' '+fmtDM(d)+' — '+(c[2]||'ריק')+' במקום '+(c[1]||'ריק')}
 function chatMsgHtml(m){
   if(m.r==='u')return `<div class="cm u">${esc(m.t)}</div>`;
-  let h=`<div class="cm a${m.err?' err':''}">${m.src==='c'?'<span class="cm-src">Claude</span>':''}<div class="cm-t">${esc(m.t)}</div>`;
+  let h=`<div class="cm a${m.err?' err':''}">${m.src==='c'?`<span class="cm-src">${pvIco(m.pv||'claude','sm')}</span>`:''}<div class="cm-t">${esc(m.t)}</div>`;
   if(m.ch&&m.ch.length){const L=m.ch.slice(0,16);h+=`<div class="cm-ch">${L.map(c=>`<i class="${c[3]?'x':''}">${esc(chChip(c))}</i>`).join('')}${m.ch.length>L.length?`<i>ועוד ${m.ch.length-L.length}</i>`:''}</div>`}
+  if(m.fb)h+='<div class="cm-st">הצ׳אט הראשי לא ענה — ענה הגיבוי</div>';
   if(m.st)h+=`<div class="cm-st">${esc(m.st)}</div>`;
   if(m.u){const e=CHAT.undo.find(z=>z.id===m.u);
     if(e&&e.done&&!e.stale)h+='<div class="cm-st">השינוי בוטל</div>';
@@ -3439,12 +3593,12 @@ function chatMsgHtml(m){
 function chatRender(){
   const b=$('#chatBody');if(!b)return;
   const cfg=aiCfg(),sub=$('#chatSub');
-  if(sub)sub.textContent=(cfg?'מחובר ל־Claude':'בקשות פשוטות בלבד')+' · טיוטת '+TARGET_YEAR;
+  if(sub)sub.innerHTML=(cfg?'<span class="pv-row">'+pvIco(cfg.prov,'sm')+'מחובר</span>':'בקשות פשוטות בלבד')+' · טיוטת '+TARGET_YEAR;
   let h='';
-  if(!cfg)h+=`<div class="ai-bar">${ico('i-key')}<span>הצ׳אט לא מחובר ל־Claude — הוא מבין רק בקשות פשוטות עם תאריך ומשמרת.</span><button class="btn btn-ok btn-sm" data-act="chat-ai">חיבור</button></div>`;
+  if(!cfg)h+=`<div class="ai-bar">${ico('i-key')}<span>הצ׳אט מבין עכשיו רק בקשות פשוטות עם תאריך ומשמרת. כדי שיבין כל ניסוח — מחברים צ׳אט חכם.</span><button class="btn btn-ok btn-sm" data-act="chat-ai">חיבור</button></div>`;
   if(!CHAT.msgs.length)h+=`<div class="cm-w"><b>מה לא בסדר בסידור?</b><span>כותבים במלל, והטיוטה מתוקנת מיד לפי כללי המנוע. כל שינוי אפשר לבטל בלחיצה.</span></div>`;
   h+=CHAT.msgs.map(chatMsgHtml).join('');
-  if(_chatBusy)h+='<div class="cm a typing" role="status" aria-label="Claude חושב"><i></i><i></i><i></i></div>';
+  if(_chatBusy)h+=`<div class="cm a typing" role="status" aria-label="חושב">${_chatPv?pvIco(_chatPv,'sm'):''}<i></i><i></i><i></i></div>`;
   b.innerHTML=h;b.scrollTop=b.scrollHeight;
   const bt=$('#chatSendBtn');if(bt)bt.disabled=_chatBusy;
 }
@@ -3456,40 +3610,76 @@ function openChat(prefill){
     let fine=true;try{fine=!matchMedia('(pointer:coarse)').matches}catch(e){}
     if(fine||prefill!=null)setTimeout(()=>{try{i.focus()}catch(e){}},60)}
 }
-const aiState=()=>{const c=aiCfg();return !c?'לא מחובר — הצ׳אט מבין רק בקשות פשוטות':c.ok?'מחובר ל־Claude ('+(AI_MODELS.find(x=>x[0]===c.model)||[0,c.model])[1].split(' — ')[0]+')':'מפתח שמור — החיבור עוד לא נבדק'};
+// מי ראשי ומי גיבוי — איקונים (שורת ההגדרות)
+function aiSumHtml(){
+  const o=aiLoad(),ks=AI_ORDER.filter(k=>o.p[k]);
+  if(!ks.length)return 'לא מחובר — הצ׳אט מבין רק בקשות פשוטות';
+  const rest=ks.filter(k=>k!==o.act),ri=rest.map(k=>pvIco(k,'sm')).join('');
+  return '<span class="pv-row">'+pvIco(o.act,'sm')+'ראשי'+(rest.length?' · '+ri+(o.bk?'גיבוי':'מחובר, בלי גיבוי'):'')+'</span>';
+}
+// מצב הצ׳אט שבלשונית
+function aiTabState(k){
+  const o=aiLoad(),c=o.p[k];
+  if(!c)return{ok:0,t:'לא מחובר'};
+  if(!c.ok)return{ok:0,t:'מפתח שמור — החיבור עוד לא נבדק'};
+  return{ok:1,t:'מחובר ('+aiModelName(k,c.model)+')'+(o.act===k?' · ראשי':o.bk?' · גיבוי':'')};
+}
 function aiRefreshUi(){
-  const st=$('#aiState'),c=aiCfg();if(st){st.className='ai-st'+(c&&c.ok?' ok':'');st.innerHTML=ico(c&&c.ok?'i-check':'i-key')+'<span>'+esc(aiState())+'</span>'}
-  const ss=$('#setAiSt');if(ss)ss.textContent=aiState();
+  const o=aiLoad(),k=_aiTab,P=AI_PROV[k],n=AI_ORDER.filter(q=>o.p[q]).length;
+  const tb=$('#aiTabs');if(tb)tb.innerHTML=AI_ORDER.map(q=>`<button class="pv-tab${q===k?' on':''}" role="tab" aria-selected="${q===k}" data-aiprov="${q}" aria-label="${AI_PROV[q].name}${o.p[q]?(o.p[q].ok?' — מחובר':' — מפתח שמור'):''}${o.act===q&&o.p[q]?' — ראשי':''}">${pvIco(q,'lg')}<span class="pv-n">${AI_PROV[q].name}</span>${o.p[q]?`<i class="pv-dot${o.p[q].ok?' ok':''}"></i>`:''}${o.act===q&&o.p[q]&&n>1?'<em class="pv-main">ראשי</em>':''}</button>`).join('');
+  const st=$('#aiState'),x=aiTabState(k);if(st){st.className='ai-st'+(x.ok?' ok':'');st.innerHTML=ico(x.ok?'i-check':'i-key')+'<span>'+esc(x.t)+'</span>'}
+  const mb=$('#aiMainBtn');if(mb)mb.hidden=!(o.p[k]&&o.act!==k);
+  const bk=$('#aiBackup');if(bk){bk.checked=!!o.bk;const row=bk.closest('.ai-bk');if(row)row.hidden=n<2}
+  const hw=$('#aiHow');if(hw)hw.innerHTML=`<b>איך משיגים מפתח</b><ol>${P.how.map(t=>`<li>${t}</li>`).join('')}</ol><a class="link" href="${P.keyUrl}" target="_blank" rel="noopener noreferrer">${ico('i-key')}פתיחת דף המפתחות</a>`;
+  const ss=$('#setAiSt');if(ss)ss.innerHTML=aiSumHtml();
   chatRender();if(curView==='next')refresh();
 }
-function openAi(){
-  const c=aiCfg(),k=$('#aiKey'),w=$('#aiWs'),m=$('#aiModel'),n=$('#aiNote');
-  if(m&&!m.options.length)m.innerHTML=AI_MODELS.map(x=>`<option value="${x[0]}">${esc(x[1])}</option>`).join('');
-  if(k)k.value=c?c.key:'';if(w)w.value=c?c.ws:'';if(m)m.value=c?c.model:AI_MODELS[0][0];
+// מילוי השדות לפי הצ׳אט שבלשונית
+function aiFill(){
+  const o=aiLoad(),k=_aiTab,P=AI_PROV[k],c=o.p[k],key=$('#aiKey'),w=$('#aiWs'),wr=$('#aiWsRow'),m=$('#aiModel'),n=$('#aiNote');
+  if(key){key.value=c?c.key:'';key.placeholder=P.ph}
+  if(wr)wr.hidden=!P.ws;if(w)w.value=c&&P.ws?c.ws:'';
+  if(m){const cur=c?c.model:P.models[0][0],L=P.models.slice();if(!L.some(z=>z[0]===cur))L.push([cur,cur]);m.innerHTML=L.map(z=>`<option value="${esc(z[0])}">${esc(z[1])}</option>`).join('');m.value=cur}
   if(n)n.textContent='';
-  disarm('ai-del');aiRefreshUi();openModal('aiOv');
+  disarm('ai-del');aiRefreshUi();
 }
+function openAi(){const o=aiLoad();_aiTab=o.p[o.act]?o.act:'claude';aiFill();openModal('aiOv')}
+function aiTab(k){if(!AI_PROV[k]||k===_aiTab)return;_aiTab=k;aiFill()}
 // שמירה + בדיקה בבת אחת. המפתח נשמר גם אם הבדיקה נכשלה (למשל בלי אינטרנט) — אפשר לנסות שוב.
+// הצ׳אט הראשון שמחברים הוא הראשי; אחרים מצטרפים כגיבוי (אפשר להחליף ב"שימוש כראשי")
 async function aiConnect(btn){
-  const key=(($('#aiKey')||{}).value||'').trim(),ws=(($('#aiWs')||{}).value||'').trim(),model=($('#aiModel')||{}).value||AI_MODELS[0][0],n=$('#aiNote');
+  const k=_aiTab,P=AI_PROV[k],key=(($('#aiKey')||{}).value||'').trim(),ws=P.ws?((($('#aiWs')||{}).value||'').trim()):'',model=($('#aiModel')||{}).value||P.models[0][0],n=$('#aiNote');
   if(!key){if(n)n.textContent='צריך להדביק מפתח API.';return}
   if(ws&&!/^wrkspc_[A-Za-z0-9]+$/.test(ws)){if(n)n.textContent='מזהה Workspace מתחיל ב־wrkspc_ — כדאי לבדוק אותו, או להשאיר את השדה ריק.';return}
-  const save=ok=>{try{localStorage.setItem(AI_STORE,JSON.stringify({key,ws,model,ok}));return true}catch(e){return false}};
-  if(!save(0)){if(n)n.textContent='השמירה נכשלה במכשיר הזה.';return}
+  const o=aiLoad(),had=!!o.p[o.act];o.p[k]={key,ws,model,ok:0};if(!had)o.act=k;
+  if(!aiSave(o)){if(n)n.textContent='השמירה נכשלה במכשיר הזה.';return}
   if(btn)btn.disabled=true;if(n)n.textContent='בודק חיבור…';
   try{
-    await aiCall({key,ws,model},{model,max_tokens:16,messages:[{role:'user',content:'ping'}]});
-    save(Date.now());if(n)n.textContent='מחובר. מעכשיו הצ׳אט מבין גם ניסוח חופשי.';toast('הצ׳אט מחובר ל־Claude');
-  }catch(e){if(n)n.textContent=aiErr(e)+(e&&e.status?'':' המפתח נשמר — אפשר לנסות שוב כשיש חיבור.')}
-  finally{if(btn)btn.disabled=false;aiRefreshUi()}
+    const m=await aiCheck(k,{prov:k,key,ws,model});
+    aiMarkOk(k,m);
+    if(n)n.textContent='מחובר. מעכשיו הצ׳אט מבין גם ניסוח חופשי.'+(m!==model?' המודל שנבחר לא זמין במפתח — נבחר במקומו '+aiModelName(k,m)+'.':'')+(aiLoad().act!==k?' הוא מוגדר כגיבוי — אפשר להפוך אותו לראשי.':'');
+    toast('הצ׳אט מחובר');
+  }catch(e){if(n)n.textContent=aiErr(e,k)+(e&&e.status?'':' המפתח נשמר — אפשר לנסות שוב כשיש חיבור.')}
+  finally{
+    if(btn)btn.disabled=false;
+    const mm=$('#aiModel'),c=aiLoad().p[k];
+    if(mm&&c&&mm.value!==c.model){if(![...mm.options].some(z=>z.value===c.model))mm.insertAdjacentHTML('beforeend',`<option value="${esc(c.model)}">${esc(c.model)}</option>`);mm.value=c.model}
+    aiRefreshUi();
+  }
 }
 function aiDel(btn){
-  if(!aiCfg()){const n=$('#aiNote');if(n)n.textContent='אין מפתח שמור.';return}
+  const o=aiLoad(),k=_aiTab,n=$('#aiNote');
+  if(!o.p[k]){if(n)n.textContent='אין מפתח שמור.';return}
   if(!armTap('ai-del',btn,ico('i-alert')+'לחץ שוב לניתוק'))return;
-  try{localStorage.removeItem(AI_STORE)}catch(e){}
-  ['#aiKey','#aiWs'].forEach(s=>{const el=$(s);if(el)el.value=''});const n=$('#aiNote');if(n)n.textContent='המפתח נמחק מהמכשיר — הצ׳אט חזר לבקשות פשוטות.';
+  delete o.p[k];if(o.act===k)o.act=AI_ORDER.find(q=>o.p[q])||'claude';
+  const any=AI_ORDER.some(q=>o.p[q]);
+  if(any)aiSave(o);else{try{localStorage.removeItem(AI_STORE)}catch(e){}}
+  ['#aiKey','#aiWs'].forEach(q=>{const el=$(q);if(el)el.value=''});
+  if(n)n.textContent=any?'המפתח נמחק מהמכשיר.':'המפתח נמחק מהמכשיר — הצ׳אט חזר לבקשות פשוטות.';
   aiRefreshUi();
 }
+function aiMain(){const o=aiLoad();if(!o.p[_aiTab])return;o.act=_aiTab;aiSave(o);const n=$('#aiNote');if(n)n.textContent='';aiRefreshUi();toast('נקבע כצ׳אט הראשי')}
+function aiBackup(on){const o=aiLoad();o.bk=on?1:0;aiSave(o);aiRefreshUi()}
 function chatClear(btn){
   if(!CHAT.msgs.length)return;
   if(!armTap('chat-clear',btn,ico('i-alert')+'לחץ שוב'))return;
@@ -3502,7 +3692,7 @@ function chatClear(btn){
 function openSettings(){
   const n=$('#setNote');
   if(n){const d=_savedAt?new Date(_savedAt):null;n.textContent='הנתונים נשמרים במכשיר זה בלבד'+(d?' · נשמר לאחרונה '+fmtFull(d)+' '+pad(d.getHours())+':'+pad(d.getMinutes()):'')}
-  const a=$('#setAiSt');if(a)a.textContent=aiState();
+  const a=$('#setAiSt');if(a)a.innerHTML=aiSumHtml();
   disarm('reset-all');openModal('setOv');
 }
 function doBackup(){
@@ -3565,7 +3755,8 @@ const ACTIONS={
   'chat-ai':()=>openAi(),
   'chat-clear':el=>chatClear(el),
   'ai-connect':el=>aiConnect(el),
-  'ai-del':el=>aiDel(el)
+  'ai-del':el=>aiDel(el),
+  'ai-main':()=>aiMain()
 };
 document.addEventListener('click',e=>{
   const t=e.target;if(!t||!t.closest)return;
@@ -3577,6 +3768,7 @@ document.addEventListener('click',e=>{
   if((el=t.closest('[data-pick]'))){openPick(el.dataset.pick);return}
   if((el=t.closest('[data-hist]'))){const p=el.dataset.hist.split('|');cycleHist(+p[0],p.slice(1).join('|'));return}
   if((el=t.closest('[data-exp]'))){doExport(el.dataset.exp,el);return}
+  if((el=t.closest('[data-aiprov]'))){aiTab(el.dataset.aiprov);return}
   if((el=t.closest('[data-theme-set]'))){setTheme(el.dataset.themeSet);return}
   if((el=t.closest('[data-draftday]'))){cycleDraftDay(el.dataset.draftday);return}
   if((el=t.closest('[data-preset]'))){const i=$('#trName');if(i)i.value=el.dataset.preset;return}
@@ -3611,6 +3803,7 @@ document.addEventListener('change',e=>{
   if(t.id==='jumpDate'){if(t.value){const d=pd(t.value);t.value='';openDay(isoOf(d))}return}
   if(t.id==='trDate'){_trDate=t.value?isoOf(pd(t.value)):'';renderTrain();return}
   if(t.id==='restoreFile'){const f=t.files&&t.files[0];t.value='';if(f)doRestore(f);return}
+  if(t.id==='aiBackup'){aiBackup(t.checked);return}
   if(t.matches&&t.matches('[data-tot]')){const p=t.dataset.tot.split('|');setTot(+p[0],p[1],t.value)}
 });
 document.addEventListener('input',e=>{const t=e.target;if(t&&t.id==='chatInput')chatGrow(t)});
