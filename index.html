@@ -41,6 +41,8 @@
   --sb-w:240px;
   /* חגים — צהוב בולט, שונה מגוון סופי השבוע. hol-ink: טקסט על צהוב מלא · hol-tx: טקסט צהוב על רקע הכרטיס */
   --hol-rgb:250,204,21;--hol:rgb(var(--hol-rgb));--hol-ink:#1a1500;--hol-tx:#fde047;
+  /* סופי שבוע (שישי ושבת) — כתום. wkd-tx: טקסט כתום על הרקע */
+  --wkd-rgb:249,115,22;--wkd-tx:#fdba74;
   color-scheme:dark;
 }
 /* ערכות צבעים — כל הצירופים עברו בדיקת ניגודיות (WCAG AA, לפחות 4.5:1 לטקסט)
@@ -62,7 +64,7 @@
   --text:#16202c;--muted:#46515f;--dim:#58636f;--olive:#1f5fbf;--olive-2:#1b52a6;--olive-rgb:31,95,191;--olive2-rgb:27,82,166;--on-acc:#ffffff;
   --gold-rgb:112,75,0;--amber-rgb:147,60,0;--red-rgb:180,42,37;--green-rgb:20,106,59;--steel-rgb:29,91,107;--indigo-rgb:91,69,194;--we-rgb:232,176,36;--sbar:#18212e}
 :root[data-tone="light"]{--border:rgba(28,34,24,.10);--border2:rgba(28,34,24,.17);--grid:rgba(28,34,24,.045);--shadow:0 16px 40px rgba(28,34,24,.18);color-scheme:light;
-  --hol-rgb:250,204,21;--hol-ink:#241c00;--hol-tx:#5c4600}
+  --hol-rgb:250,204,21;--hol-ink:#241c00;--hol-tx:#5c4600;--wkd-tx:#9a3412}
 *,*::before,*::after{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 body{
@@ -218,11 +220,11 @@ svg.ic{width:17px;height:17px;flex:none;fill:none;stroke:currentColor;stroke-wid
 .wk{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px}
 .wk-d{display:flex;flex-direction:column;align-items:center;gap:5px;padding:12px 4px 10px;border-radius:var(--r-md);background:var(--s1);border:1px solid var(--border);min-width:0;position:relative;transition:border-color .15s,transform .15s}
 .wk-d:hover{border-color:var(--olive-border);transform:translateY(-1px)}
-.wk-d.we{background:linear-gradient(170deg,rgba(var(--we-rgb),.15),var(--s1) 75%)}
+.wk-d.we{background:linear-gradient(170deg,rgba(var(--wkd-rgb),.32),rgba(var(--wkd-rgb),.10) 85%),var(--s1)}
 .wk-d.today{border-color:var(--olive);box-shadow:0 0 0 1px var(--olive),0 0 18px rgba(var(--olive-rgb),.22)}
 .wk-dn{font-size:10.5px;font-weight:700;color:var(--dim)}
 .wk-dn .s{display:none}
-.wk-d.we .wk-dn{color:var(--gold)}
+.wk-d.we .wk-dn{color:var(--wkd-tx)}
 .wk-d.hol{background:linear-gradient(170deg,rgba(var(--hol-rgb),.22),var(--s1) 75%);border-color:rgba(var(--hol-rgb),.55)}
 .wk-d.hol.today{border-color:var(--olive)}
 .wk-d.hol .wk-sh{background:var(--hol);border-color:var(--hol);color:var(--hol-ink)}
@@ -307,10 +309,11 @@ svg.ic{width:17px;height:17px;flex:none;fill:none;stroke:currentColor;stroke-wid
 .mcard{padding:14px}
 .mgrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:7px}
 .mdow{text-align:center;font-size:11px;font-weight:800;color:var(--dim);padding:0 0 4px}
-.mdow.we{color:var(--gold)}
+.mdow.we{color:var(--wkd-tx)}
 .mday{min-width:0;min-height:92px;display:flex;flex-direction:column;gap:5px;padding:8px;border-radius:12px;background:var(--s1);border:1px solid var(--border);position:relative;overflow:hidden;transition:border-color .15s,background .15s}
 .mday:hover{border-color:var(--olive-border)}
-.mday.we{background:linear-gradient(165deg,rgba(var(--we-rgb),.14),var(--s1) 70%)}
+.mday.we{background:linear-gradient(165deg,rgba(var(--wkd-rgb),.32),rgba(var(--wkd-rgb),.10) 85%),var(--s1)}
+.mday.we .md-n{color:var(--wkd-tx)}
 .mday.out{opacity:.3}
 .mday.hol{background:linear-gradient(165deg,rgba(var(--hol-rgb),.22),var(--s1) 72%);box-shadow:inset 0 -3px 0 var(--hol)}
 .mday.hol .md-sh{background:var(--hol);border-color:var(--hol);color:var(--hol-ink)}
@@ -343,7 +346,7 @@ svg.ic{width:17px;height:17px;flex:none;fill:none;stroke:currentColor;stroke-wid
 .ym th,.ym td{padding:0;text-align:center;white-space:nowrap;overflow:hidden;font-size:10px;border-inline-end:1px solid var(--border);border-bottom:1px solid var(--border)}
 .ym thead th{height:21px;background:var(--s3);color:var(--muted);font-size:9.5px;font-weight:700}
 .ym th.c-mn{width:50px}.ym th.c-rl{width:38px}.ym th.c-d{width:21px}.ym th.c-t{width:30px}
-.ym thead th.we{background:rgba(var(--we-rgb),.22);color:var(--gold)}
+.ym thead th.we{background:rgba(var(--wkd-rgb),.34);color:var(--wkd-tx)}
 .ym .mn{background:var(--s2);font-size:10.5px;font-weight:800;color:var(--text);border-inline-end:1px solid var(--border2)}
 .ym .rl{background:var(--s1);font-size:10px;font-weight:700;color:var(--dim);border-inline-end:1px solid var(--border2)}
 .ym tr.mt>td,.ym tr.mt>th{border-top:1px solid var(--border2)}
@@ -353,9 +356,9 @@ svg.ic{width:17px;height:17px;flex:none;fill:none;stroke:currentColor;stroke-wid
 .ym .yh.sm{font-size:6.3px}
 .ym .yh.xs{font-size:5.6px;letter-spacing:-.2px}
 .ym .yh.trl{color:var(--indigo)}
-.ym .yd.we{background:rgba(var(--we-rgb),.28);color:var(--gold);font-weight:800}
-.ym .ys.we{background:rgba(var(--we-rgb),.30);color:var(--gold);font-weight:800}
-.ym .yh.we{background:rgba(var(--we-rgb),.17)}
+.ym .yd.we{background:rgba(var(--wkd-rgb),.34);color:var(--wkd-tx);font-weight:800}
+.ym .ys.we{background:rgba(var(--wkd-rgb),.36);color:var(--wkd-tx);font-weight:800}
+.ym .yh.we{background:rgba(var(--wkd-rgb),.22)}
 .ym .ys.hl{background:var(--hol);color:var(--hol-ink)}
 .ym .ys.hlm{background:var(--gold-dim);color:var(--gold)}
 .ym .yd.hl{background:rgba(var(--hol-rgb),.24);color:var(--hol-tx);font-weight:800}
@@ -365,7 +368,7 @@ svg.ic{width:17px;height:17px;flex:none;fill:none;stroke:currentColor;stroke-wid
 .ym .ys.tr{box-shadow:inset 0 0 0 1.5px var(--indigo)}
 .ym .ys.td{box-shadow:inset 0 0 0 2px var(--olive)}
 .ym .em{background:transparent}
-.ym .em.we{background:rgba(var(--we-rgb),.08)}
+.ym .em.we{background:rgba(var(--wkd-rgb),.12)}
 .ym .ys[data-day]{cursor:pointer}
 .ym .ys[data-day]:hover{outline:1.5px solid var(--olive);outline-offset:-1.5px}
 .ym .tt{font-family:var(--mono);font-size:10.5px;font-weight:700;background:var(--s2);color:var(--text)}
@@ -2167,7 +2170,7 @@ function renderMonth(){
     <div class="nav-grp"><button class="nb" data-mnav="-1" ${atMin?'disabled':''} aria-label="החודש הקודם">${ico('i-chevr')}</button><button class="btn btn-gh btn-sm" data-mnav="0">היום</button><button class="nb" data-mnav="1" ${atMax?'disabled':''} aria-label="החודש הבא">${ico('i-chevl')}</button></div></div>
     <div class="card mcard"><div class="mgrid">${g}</div>
     <div class="msum">${SHIFT_NAMES.map(n=>`<span class="tag">משמרת ${n} <b class="num">${cnt[n]}</b></span>`).join('')}</div>
-    <div class="legend"><span><i style="background:rgba(var(--we-rgb),.28)"></i>סוף שבוע</span><span><i style="background:var(--hol);border-color:var(--hol)"></i>חג</span><span><i style="background:rgba(var(--gold-rgb),.45)"></i>מועד</span><span><i style="background:var(--indigo)"></i>אימון</span><span><i style="background:var(--olive-dim);border-color:var(--olive)"></i>היום</span></div></div>`;
+    <div class="legend"><span><i style="background:rgba(var(--wkd-rgb),.5)"></i>סוף שבוע</span><span><i style="background:var(--hol);border-color:var(--hol)"></i>חג</span><span><i style="background:rgba(var(--gold-rgb),.45)"></i>מועד</span><span><i style="background:var(--indigo)"></i>אימון</span><span><i style="background:var(--olive-dim);border-color:var(--olive)"></i>היום</span></div></div>`;
 }
 
 /* ============================================================
@@ -2217,7 +2220,7 @@ function renderYear(){
   v.innerHTML=`<div class="ph"><div><h1>שנת ${y}</h1></div><div class="nav-grp">${badge}<button class="btn btn-gh btn-sm" data-act="export-year">${ico('i-download')}ייצוא</button><button class="nb" data-ynav="-1" ${y<=MIN_YEAR?'disabled':''} aria-label="השנה הקודמת">${ico('i-chevr')}</button><button class="nb" data-ynav="1" ${y>=MAX_YEAR?'disabled':''} aria-label="השנה הבאה">${ico('i-chevl')}</button></div></div>
     <div class="hint">${ico('i-chevr')}<span>החלק לצדדים לכל ימי החודש</span>${ico('i-chevl')}</div>
     <div class="mx"><table class="ym"><thead>${tableHead(cols)}</thead><tbody>${body}</tbody></table></div>
-    <div class="legend"><span><i style="background:rgba(var(--we-rgb),.30)"></i>סוף שבוע</span><span><i style="background:var(--hol);border-color:var(--hol)"></i>חג</span><span><i style="background:var(--gold-dim);border-color:var(--gold)"></i>מועד</span>${balM.size?'<span><i class="lg-bal"></i>יום איזון</span>':''}<span><i style="border-color:var(--indigo)"></i>אימון</span><span><i style="border-color:var(--olive);border-width:2px"></i>היום</span></div>
+    <div class="legend"><span><i style="background:rgba(var(--wkd-rgb),.5)"></i>סוף שבוע</span><span><i style="background:var(--hol);border-color:var(--hol)"></i>חג</span><span><i style="background:var(--gold-dim);border-color:var(--gold)"></i>מועד</span>${balM.size?'<span><i class="lg-bal"></i>יום איזון</span>':''}<span><i style="border-color:var(--indigo)"></i>אימון</span><span><i style="border-color:var(--olive);border-width:2px"></i>היום</span></div>
     <div class="gt"><span>סה״כ ${y}:</span><span>א׳ <b>${tot['א׳']}</b></span><span>ב׳ <b>${tot['ב׳']}</b></span><span>ג׳ <b>${tot['ג׳']}</b></span><span class="${sp>1?'st-bad':'st-ok'}">פער <b>${sp}</b></span><span>סך הכל <b>${sum}</b> ימים</span></div>
     <div class="gt gt2"><span>סופי שבוע ${y}:</span><span>א׳ <b>${wc[0]}</b></span><span>ב׳ <b>${wc[1]}</b></span><span>ג׳ <b>${wc[2]}</b></span><span class="${wsp>1?'st-bad':'st-ok'}">פער <b>${wsp}</b></span><span class="${wn?'st-warn':'st-ok'}"${wn?` title="${esc(wi.consec.map(c=>wkConsecText(y,c)).join(' · '))}"`:''}>${wn?(wn===1?'סוף שבוע אחד ברצף':wn+' סופי שבוע ברצף'):'בלי סוף שבוע ברצף'}</span></div>`;
 }
@@ -2358,7 +2361,7 @@ function renderNext(keep){
   h+=`<div class="card c-12"><div class="ch"><span class="ibox olive">${ico('i-cal')}</span><h3>טיוטת ${TARGET_YEAR}</h3><span class="meta">לחיצה על יום מחליפה משמרת (א׳ ← ב׳ ← ג׳ ← ריק)</span><div class="end"><button class="btn btn-gh btn-sm" data-act="export-draft">${ico('i-download')}ייצוא</button></div></div>
     <div class="hint">${ico('i-chevr')}<span>החלק לצדדים לכל ימי החודש</span>${ico('i-chevl')}</div>
     <div class="mx" id="dwScroll"><table class="ym"><thead>${tableHead(cols)}</thead><tbody>${body}</tbody></table></div>
-    <div class="legend"><span><i style="background:rgba(var(--we-rgb),.30)"></i>סוף שבוע</span><span><i style="background:var(--hol);border-color:var(--hol)"></i>חג</span><span><i class="lg-bal"></i>יום איזון</span><span><i style="border-color:transparent;box-shadow:inset 0 -2px 0 var(--steel)"></i>שונה מהנוסחה</span><span><i style="background:var(--red-dim);border-color:var(--red-border)"></i>ללא משמרת</span></div>
+    <div class="legend"><span><i style="background:rgba(var(--wkd-rgb),.5)"></i>סוף שבוע</span><span><i style="background:var(--hol);border-color:var(--hol)"></i>חג</span><span><i class="lg-bal"></i>יום איזון</span><span><i style="border-color:transparent;box-shadow:inset 0 -2px 0 var(--steel)"></i>שונה מהנוסחה</span><span><i style="background:var(--red-dim);border-color:var(--red-border)"></i>ללא משמרת</span></div>
     <div class="gt"><span>סה״כ טיוטה:</span><span>א׳ <b>${tot['א׳']}</b></span><span>ב׳ <b>${tot['ב׳']}</b></span><span>ג׳ <b>${tot['ג׳']}</b></span><span class="${sp>1?'st-bad':'st-ok'}">פער <b>${sp}</b>${sp>1?' — מעל המותר':''}</span></div></div>`;
   h+=totalsCard(ds);
   h+=`<div class="card c-12"><div class="ch"><span class="ibox gold">${ico('i-flag')}</span><h3>חגים בטיוטה — בדיקת הוגנות</h3><div class="end leg-in"><span class="st-ok">${ico('i-check')}הוגן</span><span class="st-warn">${ico('i-alert')}חזרה אחרי שנתיים</span><span class="st-bad">${ico('i-x')}שנתיים ברצף</span></div></div>
@@ -2645,7 +2648,7 @@ function drawSheet(m){
   const c=document.createElement('canvas');c.width=W;c.height=H;
   const x=c.getContext('2d');
   const F=(mm,wt)=>(wt||400)+' '+(mm*S).toFixed(1)+'px Heebo,"Arial Hebrew",Arial,sans-serif';
-  const C={ink:'#15181b',mute:'#6b7075',line:'#d2d5d8',strong:'#8e9297',we:'#f8edd2',weH:'#ead6a0',hol:'#ffe14d',holT:'#fff3b0',holInk:'#3d3000',weInk:'#7a5c0e',head:'#eceef0',mon:'#f3f4f5',tr:'#3f45a6',bal:'#5b7d22',bad:'#b3261e',ok:'#2e7d32',warn:'#a35f00',cur:'#eef3e2',date:'#262b30'};
+  const C={ink:'#15181b',mute:'#6b7075',line:'#d2d5d8',strong:'#8e9297',we:'#ffc995',weH:'#ffa459',hol:'#ffe14d',holT:'#fff3b0',holInk:'#3d3000',weInk:'#7c2d00',head:'#eceef0',mon:'#f3f4f5',tr:'#3f45a6',bal:'#5b7d22',bad:'#b3261e',ok:'#2e7d32',warn:'#a35f00',cur:'#eef3e2',date:'#262b30'};
   const P=v=>v*S;
   x.fillStyle='#fff';x.fillRect(0,0,W,H);
   x.direction='rtl';x.textBaseline='middle';
@@ -2666,7 +2669,7 @@ function drawSheet(m){
   m.months.forEach((mo,mi)=>{
     const y0=top+hHead+mi*hMonth,yS=y0+hDate,yL=yS+hShift;
     rect(R-wMon-wType,y0,wMon+wType,hMonth,C.mon);
-    for(let i=0;i<m.cols;i++)if(i%7>=5)rect(xDay(i),y0,wD,hMonth,'#fcf7ea');
+    for(let i=0;i<m.cols;i++)if(i%7>=5)rect(xDay(i),y0,wD,hMonth,'#ffe3c7');
     mo.cells.forEach(ce=>{
       const xx=xDay(ce.col),we=ce.w>=5;
       // יום חג: כל העמודה בצהוב בהיר, והמשמרת שעובדת בצהוב מלא
@@ -2819,8 +2822,8 @@ function makeXlsx(m){
   const fill=c=>'<fill><patternFill patternType="solid"><fgColor rgb="FF'+c+'"/><bgColor indexed="64"/></patternFill></fill>';
   const font=(sz,b,col)=>'<font>'+(b?'<b/>':'')+'<sz val="'+sz+'"/>'+(col?'<color rgb="FF'+col+'"/>':'')+'<name val="Arial"/></font>';
   const styles='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">'
-    +'<fonts count="11">'+font(10)+font(10,1)+font(15,1)+font(8,0,'6B7075')+font(8,1,'4F3D06')+font(8,1,'3F45A6')+font(9,1,'262B30')+font(9,1,'7A5C0E')+font(10,1,'B3261E')+font(10,1,'2E7D32')+font(10,1,'A35F00')+'</fonts>'
-    +'<fills count="10"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill>'+fill('F8EDD2')+fill('FFE14D')+fill('ECEEF0')+fill('DCE8C6')+fill('EAD6A0')+fill('F3F4F5')+fill('EEF3E2')+fill('FFF3B0')+'</fills>'
+    +'<fonts count="11">'+font(10)+font(10,1)+font(15,1)+font(8,0,'6B7075')+font(8,1,'4F3D06')+font(8,1,'3F45A6')+font(9,1,'262B30')+font(9,1,'7C2D00')+font(10,1,'B3261E')+font(10,1,'2E7D32')+font(10,1,'A35F00')+'</fonts>'
+    +'<fills count="10"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill>'+fill('FFC995')+fill('FFE14D')+fill('ECEEF0')+fill('DCE8C6')+fill('FFA459')+fill('F3F4F5')+fill('EEF3E2')+fill('FFF3B0')+'</fills>'
     +'<borders count="2"><border><left/><right/><top/><bottom/><diagonal/></border><border><left style="thin"><color rgb="FFD2D5D8"/></left><right style="thin"><color rgb="FFD2D5D8"/></right><top style="thin"><color rgb="FFD2D5D8"/></top><bottom style="thin"><color rgb="FFD2D5D8"/></bottom><diagonal/></border></borders>'
     +'<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>'
     +'<cellXfs count="'+XF.length+'">'+XF.map(([f,l,b,a,sh])=>'<xf numFmtId="0" fontId="'+f+'" fillId="'+l+'" borderId="'+b+'" xfId="0" applyFont="1" applyFill="1" applyBorder="1"'+(a?' applyAlignment="1"><alignment horizontal="'+a+'" vertical="center"'+(sh?' shrinkToFit="1"':'')+'/></xf>':'/>')).join('')+'</cellXfs>'
