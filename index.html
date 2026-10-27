@@ -357,8 +357,8 @@ svg.ic{width:17px;height:17px;flex:none;fill:none;stroke:currentColor;stroke-wid
 .ym .yh.xs{font-size:5.6px;letter-spacing:-.2px}
 .ym .yh.trl{color:var(--indigo)}
 .ym .yd.we{background:rgba(var(--wkd-rgb),.34);color:var(--wkd-tx);font-weight:800}
-.ym .ys.we{background:rgba(var(--wkd-rgb),.36);color:var(--wkd-tx);font-weight:800}
-.ym .yh.we{background:rgba(var(--wkd-rgb),.22)}
+.ym .ys.we{background:rgba(var(--wkd-rgb),.34);color:var(--wkd-tx);font-weight:800}
+.ym .yh.we{background:rgba(var(--wkd-rgb),.28)}
 .ym .ys.hl{background:var(--hol);color:var(--hol-ink)}
 .ym .ys.hlm{background:var(--gold-dim);color:var(--gold)}
 .ym .yd.hl{background:rgba(var(--hol-rgb),.24);color:var(--hol-tx);font-weight:800}
@@ -368,7 +368,7 @@ svg.ic{width:17px;height:17px;flex:none;fill:none;stroke:currentColor;stroke-wid
 .ym .ys.tr{box-shadow:inset 0 0 0 1.5px var(--indigo)}
 .ym .ys.td{box-shadow:inset 0 0 0 2px var(--olive)}
 .ym .em{background:transparent}
-.ym .em.we{background:rgba(var(--wkd-rgb),.12)}
+.ym .em.we{background:rgba(var(--wkd-rgb),.34)}
 .ym .ys[data-day]{cursor:pointer}
 .ym .ys[data-day]:hover{outline:1.5px solid var(--olive);outline-offset:-1.5px}
 .ym .tt{font-family:var(--mono);font-size:10.5px;font-weight:700;background:var(--s2);color:var(--text)}
@@ -2648,7 +2648,7 @@ function drawSheet(m){
   const c=document.createElement('canvas');c.width=W;c.height=H;
   const x=c.getContext('2d');
   const F=(mm,wt)=>(wt||400)+' '+(mm*S).toFixed(1)+'px Heebo,"Arial Hebrew",Arial,sans-serif';
-  const C={ink:'#15181b',mute:'#6b7075',line:'#d2d5d8',strong:'#8e9297',we:'#ffc995',weH:'#ffa459',hol:'#ffe14d',holT:'#fff3b0',holInk:'#3d3000',weInk:'#7c2d00',head:'#eceef0',mon:'#f3f4f5',tr:'#3f45a6',bal:'#5b7d22',bad:'#b3261e',ok:'#2e7d32',warn:'#a35f00',cur:'#eef3e2',date:'#262b30'};
+  const C={ink:'#15181b',mute:'#6b7075',line:'#d2d5d8',strong:'#8e9297',we:'#ffa459',weH:'#ffa459',hol:'#ffe14d',holT:'#fff3b0',holInk:'#3d3000',weInk:'#7c2d00',head:'#eceef0',mon:'#f3f4f5',tr:'#3f45a6',bal:'#5b7d22',bad:'#b3261e',ok:'#2e7d32',warn:'#a35f00',cur:'#eef3e2',date:'#262b30'};
   const P=v=>v*S;
   x.fillStyle='#fff';x.fillRect(0,0,W,H);
   x.direction='rtl';x.textBaseline='middle';
@@ -2669,7 +2669,7 @@ function drawSheet(m){
   m.months.forEach((mo,mi)=>{
     const y0=top+hHead+mi*hMonth,yS=y0+hDate,yL=yS+hShift;
     rect(R-wMon-wType,y0,wMon+wType,hMonth,C.mon);
-    for(let i=0;i<m.cols;i++)if(i%7>=5)rect(xDay(i),y0,wD,hMonth,'#ffe3c7');
+    for(let i=0;i<m.cols;i++)if(i%7>=5)rect(xDay(i),y0,wD,hMonth,C.we);
     mo.cells.forEach(ce=>{
       const xx=xDay(ce.col),we=ce.w>=5;
       // יום חג: כל העמודה בצהוב בהיר, והמשמרת שעובדת בצהוב מלא
@@ -2823,7 +2823,7 @@ function makeXlsx(m){
   const font=(sz,b,col)=>'<font>'+(b?'<b/>':'')+'<sz val="'+sz+'"/>'+(col?'<color rgb="FF'+col+'"/>':'')+'<name val="Arial"/></font>';
   const styles='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">'
     +'<fonts count="11">'+font(10)+font(10,1)+font(15,1)+font(8,0,'6B7075')+font(8,1,'4F3D06')+font(8,1,'3F45A6')+font(9,1,'262B30')+font(9,1,'7C2D00')+font(10,1,'B3261E')+font(10,1,'2E7D32')+font(10,1,'A35F00')+'</fonts>'
-    +'<fills count="10"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill>'+fill('FFC995')+fill('FFE14D')+fill('ECEEF0')+fill('DCE8C6')+fill('FFA459')+fill('F3F4F5')+fill('EEF3E2')+fill('FFF3B0')+'</fills>'
+    +'<fills count="10"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill>'+fill('FFA459')+fill('FFE14D')+fill('ECEEF0')+fill('DCE8C6')+fill('FFA459')+fill('F3F4F5')+fill('EEF3E2')+fill('FFF3B0')+'</fills>'
     +'<borders count="2"><border><left/><right/><top/><bottom/><diagonal/></border><border><left style="thin"><color rgb="FFD2D5D8"/></left><right style="thin"><color rgb="FFD2D5D8"/></right><top style="thin"><color rgb="FFD2D5D8"/></top><bottom style="thin"><color rgb="FFD2D5D8"/></bottom><diagonal/></border></borders>'
     +'<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>'
     +'<cellXfs count="'+XF.length+'">'+XF.map(([f,l,b,a,sh])=>'<xf numFmtId="0" fontId="'+f+'" fillId="'+l+'" borderId="'+b+'" xfId="0" applyFont="1" applyFill="1" applyBorder="1"'+(a?' applyAlignment="1"><alignment horizontal="'+a+'" vertical="center"'+(sh?' shrinkToFit="1"':'')+'/></xf>':'/>')).join('')+'</cellXfs>'
