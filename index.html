@@ -3866,7 +3866,9 @@ function doReset(btn){
 /* ============================================================
    סנכרון בין מכשירים — Firebase Realtime Database (REST + האזנה חיה)
    ============================================================ */
-// כל קבוצת מכשירים שומרת תחת /s/<קוד>: {v, at, dev, rev, json}. הקוד (24 תווים אקראיים) הוא הסוד — מי שיש לו אותו רואה ומשנה.
+// כל קבוצת מכשירים שומרת תחת /s/<מפתח הקוד>: {v, at, dev, rev, json}. הקוד הוא הסוד — מי שיש לו אותו רואה ומשנה.
+// קוד הסנכרון: 10 ספרות ו־2 אותיות באנגלית (כ־5.8 טריליון צירופים), מוצג כ־12345-67890-AB.
+// קוד ישן של 24 תווים (מהגרסה הראשונה) ממשיך לעבוד במכשירים שכבר מחוברים.
 // כל מכשיר נכנס כמשתמש אנונימי (חוקי מסד הנתונים דורשים כניסה). at = זמן השמירה, dev = המכשיר ששמר.
 // שינוי מקומי מסומן "ממתין" ונשלח אחרי שנייה; שינוי ממכשיר אחר מגיע בהאזנה חיה, ובכל חזרה לאפליקציה יש בדיקה מלאה.
 // שינויים בשני המכשירים בלי סנכרון ביניהם: הגרסה החדשה יותר נשארת, והשנייה נשמרת במכשיר לשחזור.
@@ -3874,7 +3876,8 @@ function doReset(btn){
 const FB={key:'AIzaSyCca_WVrRLnLoziFjAwbgNBvpY6TEkrE0E',db:'https://sidur-c7135-default-rtdb.europe-west1.firebasedatabase.app',
   signUp:'https://identitytoolkit.googleapis.com/v1/accounts:signUp',token:'https://securetoken.googleapis.com/v1/token'};
 const SYNC_STORE='sidur-avoda-sync',SYNC_PREV='sidur-avoda-sync-prev',SITE_URL='https://wwvdng29r6-ctrl.github.io/Sidur/';
-const SC_ABC='23456789ABCDEFGHJKMNPQRSTUVWXYZ',SC_LEN=24; // בלי 0/O, 1/I/L — קל להקליד ולהעתיק
+const SC_ABC='23456789ABCDEFGHJKMNPQRSTUVWXYZ',SC_LEN=24; // הקוד הישן ומזהה הפתיחה — בלי 0/O, 1/I/L
+const SC_LET='ABCDEFGHJKLMNPQRSTUVWXYZ'; // אותיות הקוד החדש — בלי I ו־O, שלא יתבלבלו עם 1 ו־0
 // dev — מזהה של הפתיחה הנוכחית (לא נשמר): כל לשונית ופתיחה מתנהגות כמו מכשיר נפרד, כדי ששתי לשוניות פתוחות יתעדכנו זו מזו
 let SYNC={dev:'',code:'',at:0,dirty:0,rt:'',it:'',exp:0};
 let _sst='off',_serr='',_sOld=false,_sErrShown=false,_sPushT=null,_sPushing=false,_sAgain=false,_sChg=0,_sGen=0,_sRetry=0,_sRetryT=null,_sChecking=null,_sJoin=null,_sPre='';
@@ -3887,13 +3890,30 @@ function sRand(n){
   while(s.length<n){const b=c.getRandomValues(new Uint8Array(48));for(let i=0;i<b.length&&s.length<n;i++)if(b[i]<248)s+=SC_ABC[b[i]%31]}
   return s;
 }
-const scOk=c=>typeof c==='string'&&c.length===SC_LEN&&[...c].every(x=>SC_ABC.includes(x));
-const scFmt=c=>String(c).replace(/(.{4})(?=.)/g,'$1-');
-// מוציא את הקוד גם מתוך הודעה או קישור שהודבקו בשלמותם
+// קוד חדש: 10 ספרות ואחריהן 2 אותיות, אקראיים ומאובטחים (בלי הטיה)
+function sNewCode(){
+  const c=typeof crypto!=='undefined'&&crypto&&typeof crypto.getRandomValues==='function'?crypto:null;if(!c)return '';
+  let d='',l='';
+  while(d.length<10){const b=c.getRandomValues(new Uint8Array(32));for(let i=0;i<b.length&&d.length<10;i++)if(b[i]<250)d+=String(b[i]%10)}
+  while(l.length<2){const b=c.getRandomValues(new Uint8Array(16));for(let i=0;i<b.length&&l.length<2;i++)if(b[i]<240)l+=SC_LET[b[i]%24]}
+  return d+l;
+}
+const scShort=c=>typeof c==='string'&&/^[0-9]{10}[A-HJ-NP-Z]{2}$/.test(c);
+const scLegacy=c=>typeof c==='string'&&c.length===SC_LEN&&[...c].every(x=>SC_ABC.includes(x));
+const scOk=c=>scShort(c)||scLegacy(c);
+const scFmt=c=>scShort(c)?c.slice(0,5)+'-'+c.slice(5,10)+'-'+c.slice(10):String(c).replace(/(.{4})(?=.)/g,'$1-');
+// המפתח במסד הנתונים. לקוד הקצר מתווספת קידומת קבועה — חוקי המסד דורשים מפתח של 24 תווים לפחות, כך שאין צורך לשנות אותם
+const scKey=c=>scShort(c)?'sidur-sync-v2-'+c:c;
+// מוציא את הקוד גם מתוך הודעה או קישור שהודבקו בשלמותם, בלי מקפים, באותיות קטנות, ואפילו כשהאותיות הוקלדו לפני הספרות
 function scFrom(s){
   s=String(s==null?'':s).toUpperCase();
-  const m=s.match(/[2-9A-HJ-NP-Z]{4}(?:[\s\-–]*[2-9A-HJ-NP-Z]{4}){5}/);
-  return (m?m[0]:s).replace(/[^0-9A-Z]/g,'');
+  let m=s.match(/[2-9A-HJ-NP-Z]{4}(?:[\s\-–]*[2-9A-HJ-NP-Z]{4}){5}/); // קוד ישן
+  if(m)return m[0].replace(/[^0-9A-Z]/g,'');
+  m=s.match(/(?:^|[^0-9])([0-9]{5}[\s\-–]*[0-9]{5}[\s\-–]*[A-Z]{2})(?![A-Z])/);
+  if(m)return m[1].replace(/[^0-9A-Z]/g,'');
+  m=s.match(/(?:^|[^A-Z])([A-Z]{2})[\s\-–]*([0-9]{5})[\s\-–]*([0-9]{5})(?![0-9])/);
+  if(m)return m[2]+m[3]+m[1];
+  return s.replace(/[^0-9A-Z]/g,'');
 }
 function syncLoad(){
   let o=null;try{o=JSON.parse(localStorage.getItem(SYNC_STORE)||'null')}catch(e){}
@@ -3937,7 +3957,7 @@ function syncToken(force){
   _tokP=p;p.then(()=>{if(_tokP===p)_tokP=null},()=>{if(_tokP===p)_tokP=null});
   return p;
 }
-const fbUrl=(code,sub)=>FB.db+'/s/'+code+(sub?'/'+sub:'')+'.json';
+const fbUrl=(code,sub)=>FB.db+'/s/'+scKey(code)+(sub?'/'+sub:'')+'.json';
 async function fbDb(method,code,sub,body){
   const go=t=>fbFetch(fbUrl(code,sub)+'?auth='+encodeURIComponent(t)+(method==='PUT'?'&print=silent':''),method==='GET'?{}:{method,headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
   try{return await go(await syncToken())}
@@ -4156,7 +4176,7 @@ function syncRender(){
   }else{
     h+=`<div class="sy-step"><b>במכשיר שיש בו את הנתונים</b><span>יוצרים קוד סנכרון, והנתונים של המכשיר הזה עולים אליו.</span><div class="row-btns"><button class="btn btn-ok" data-act="sync-enable">${ico('i-sync')}הפעלת סנכרון</button></div></div>
 <div class="sy-step"><b>במכשיר נוסף</b><span>מדביקים את הקוד מהמכשיר הראשון. הנתונים שבמכשיר הזה יוחלפו בנתונים מהסנכרון.</span><label class="fl" for="syncCodeIn">קוד סנכרון</label>
-<input class="inp sy-in" id="syncCodeIn" dir="ltr" autocomplete="off" autocapitalize="characters" autocorrect="off" spellcheck="false" enterkeyhint="go" placeholder="XXXX-XXXX-XXXX-XXXX-XXXX-XXXX" value="${esc(_sPre?scFmt(_sPre):'')}">
+<input class="inp sy-in" id="syncCodeIn" dir="ltr" autocomplete="off" autocapitalize="characters" autocorrect="off" spellcheck="false" enterkeyhint="go" placeholder="12345-67890-AB" value="${esc(_sPre?scFmt(_sPre):'')}">
 <div class="row-btns" style="margin-top:10px"><button class="btn btn-gh" data-act="sync-join">${ico('i-link')}חיבור לקוד</button></div></div>`;
   }
   const p=syncPrevGet();
@@ -4166,7 +4186,7 @@ function syncRender(){
 // מכשיר ראשון: יוצרים קוד ומעלים את הנתונים
 async function syncEnable(btn){
   if(SYNC.code)return;
-  const n=$('#syncNote'),code=sRand(SC_LEN);
+  const n=$('#syncNote'),code=sNewCode();
   if(!scOk(code)){if(n)n.textContent='הדפדפן הזה לא מאפשר ליצור קוד מאובטח.';return}
   if(btn)btn.disabled=true;if(n)n.textContent='מפעיל סנכרון…';
   try{
@@ -4186,7 +4206,7 @@ async function syncJoin(btn){
   const inp=$('#syncCodeIn'),n=$('#syncNote'),code=scFrom(inp?inp.value:'');
   if(SYNC.code)return;
   if(!code){if(n)n.textContent='צריך להדביק את קוד הסנכרון מהמכשיר הראשון.';return}
-  if(!scOk(code)){if(n)n.textContent=code.length!==SC_LEN?'הקוד צריך להכיל '+SC_LEN+' תווים (בלי המקפים) — כרגע יש '+code.length+'. כדאי להעתיק אותו שוב.':'בקוד יש תו לא תקין — כדאי להעתיק אותו שוב.';return}
+  if(!scOk(code)){if(n)n.innerHTML='הקוד צריך להיות 10 ספרות ואחריהן 2 אותיות באנגלית, למשל <bdi dir="ltr" style="white-space:nowrap">12345-67890-AB</bdi>. כדאי לבדוק אותו שוב.';return}
   if(ARM['sync-join']&&_sJoin&&_sJoin.code===code){disarm('sync-join');syncJoinDo(_sJoin);return}
   disarm('sync-join');_sJoin=null;
   if(btn)btn.disabled=true;if(n)n.textContent='בודק את הקוד…';
