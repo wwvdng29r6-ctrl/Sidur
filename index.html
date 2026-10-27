@@ -39,6 +39,8 @@
   --mono:'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,monospace;
   --shadow:0 18px 44px rgba(0,0,0,.5);
   --sb-w:240px;
+  /* חגים — צהוב בולט, שונה מגוון סופי השבוע. hol-ink: טקסט על צהוב מלא · hol-tx: טקסט צהוב על רקע הכרטיס */
+  --hol-rgb:250,204,21;--hol:rgb(var(--hol-rgb));--hol-ink:#1a1500;--hol-tx:#fde047;
   color-scheme:dark;
 }
 /* ערכות צבעים — כל הצירופים עברו בדיקת ניגודיות (WCAG AA, לפחות 4.5:1 לטקסט)
@@ -59,7 +61,8 @@
 :root[data-theme="day"]{--bg:#eef1f5;--bg2:#e5e9ef;--s1:#ffffff;--s2:#f7f9fb;--s3:#e9edf2;--s4:#dde3ea;--bg-rgb:238,241,245;--s1-rgb:255,255,255;--ov-rgb:16,22,32;
   --text:#16202c;--muted:#46515f;--dim:#58636f;--olive:#1f5fbf;--olive-2:#1b52a6;--olive-rgb:31,95,191;--olive2-rgb:27,82,166;--on-acc:#ffffff;
   --gold-rgb:112,75,0;--amber-rgb:147,60,0;--red-rgb:180,42,37;--green-rgb:20,106,59;--steel-rgb:29,91,107;--indigo-rgb:91,69,194;--we-rgb:232,176,36;--sbar:#18212e}
-:root[data-tone="light"]{--border:rgba(28,34,24,.10);--border2:rgba(28,34,24,.17);--grid:rgba(28,34,24,.045);--shadow:0 16px 40px rgba(28,34,24,.18);color-scheme:light}
+:root[data-tone="light"]{--border:rgba(28,34,24,.10);--border2:rgba(28,34,24,.17);--grid:rgba(28,34,24,.045);--shadow:0 16px 40px rgba(28,34,24,.18);color-scheme:light;
+  --hol-rgb:250,204,21;--hol-ink:#241c00;--hol-tx:#5c4600}
 *,*::before,*::after{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 body{
@@ -200,6 +203,7 @@ svg.ic{width:17px;height:17px;flex:none;fill:none;stroke:currentColor;stroke-wid
 .tag b{color:var(--text)}
 .tag .ic{width:13px;height:13px}
 .tag.gold{background:var(--gold-dim);border-color:var(--gold-border);color:var(--gold)}
+.tag.hol{background:rgba(var(--hol-rgb),.16);border-color:rgba(var(--hol-rgb),.5);color:var(--hol-tx)}
 .tag.amber{background:var(--amber-dim);border-color:var(--amber-border);color:var(--amber)}
 
 /* KPI */
@@ -219,6 +223,10 @@ svg.ic{width:17px;height:17px;flex:none;fill:none;stroke:currentColor;stroke-wid
 .wk-dn{font-size:10.5px;font-weight:700;color:var(--dim)}
 .wk-dn .s{display:none}
 .wk-d.we .wk-dn{color:var(--gold)}
+.wk-d.hol{background:linear-gradient(170deg,rgba(var(--hol-rgb),.22),var(--s1) 75%);border-color:rgba(var(--hol-rgb),.55)}
+.wk-d.hol.today{border-color:var(--olive)}
+.wk-d.hol .wk-sh{background:var(--hol);border-color:var(--hol);color:var(--hol-ink)}
+.wk-d.hol .wk-lb,.wk-d.hol .wk-dn{color:var(--hol-tx)}
 .wk-n{font-family:var(--mono);font-size:17px;font-weight:700}
 .wk-sh{min-width:30px;height:26px;padding:0 8px;border-radius:8px;display:grid;place-items:center;font-size:13px;font-weight:800;background:var(--s3);border:1px solid var(--border2)}
 .wk-lb{font-size:9.5px;font-weight:700;color:var(--gold);max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:0 4px}
@@ -230,6 +238,7 @@ svg.ic{width:17px;height:17px;flex:none;fill:none;stroke:currentColor;stroke-wid
 .ev:hover{background:var(--s3)}
 .ev-b{width:46px;height:46px;flex:none;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--gold-dim);border:1px solid var(--gold-border);color:var(--gold)}
 .ev-b.minor{background:var(--s3);border-color:var(--border2);color:var(--muted)}
+.ev-b.hol{background:rgba(var(--hol-rgb),.16);border-color:rgba(var(--hol-rgb),.5);color:var(--hol-tx)}
 .ev-b b{font-family:var(--mono);font-size:16px;font-weight:700;line-height:1}
 .ev-b span{font-size:9px;font-weight:700;margin-top:3px}
 .ev-t{flex:1;min-width:0}
@@ -303,10 +312,12 @@ svg.ic{width:17px;height:17px;flex:none;fill:none;stroke:currentColor;stroke-wid
 .mday:hover{border-color:var(--olive-border)}
 .mday.we{background:linear-gradient(165deg,rgba(var(--we-rgb),.14),var(--s1) 70%)}
 .mday.out{opacity:.3}
-.mday.hol{box-shadow:inset 0 -3px 0 var(--gold)}
+.mday.hol{background:linear-gradient(165deg,rgba(var(--hol-rgb),.22),var(--s1) 72%);box-shadow:inset 0 -3px 0 var(--hol)}
+.mday.hol .md-sh{background:var(--hol);border-color:var(--hol);color:var(--hol-ink)}
+.mday.hol .md-hl,.mday.hol .md-n{color:var(--hol-tx)}
 .mday.holm{box-shadow:inset 0 -3px 0 rgba(var(--gold-rgb),.45)}
 .mday.today{border-color:var(--olive);box-shadow:0 0 0 1px var(--olive),0 0 20px rgba(var(--olive-rgb),.25)}
-.mday.today.hol{box-shadow:0 0 0 1px var(--olive),0 0 20px rgba(var(--olive-rgb),.25),inset 0 -3px 0 var(--gold)}
+.mday.today.hol{box-shadow:0 0 0 1px var(--olive),0 0 20px rgba(var(--olive-rgb),.25),inset 0 -3px 0 var(--hol)}
 .md-top{display:flex;align-items:center;justify-content:space-between;gap:4px}
 .md-n{font-family:var(--mono);font-size:13.5px;font-weight:700;color:var(--muted)}
 .mday.today .md-n{color:var(--olive-2)}
@@ -345,7 +356,12 @@ svg.ic{width:17px;height:17px;flex:none;fill:none;stroke:currentColor;stroke-wid
 .ym .yd.we{background:rgba(var(--we-rgb),.28);color:var(--gold);font-weight:800}
 .ym .ys.we{background:rgba(var(--we-rgb),.30);color:var(--gold);font-weight:800}
 .ym .yh.we{background:rgba(var(--we-rgb),.17)}
-.ym .ys.hl{background:var(--gold-dim);color:var(--gold)}
+.ym .ys.hl{background:var(--hol);color:var(--hol-ink)}
+.ym .ys.hlm{background:var(--gold-dim);color:var(--gold)}
+.ym .yd.hl{background:rgba(var(--hol-rgb),.24);color:var(--hol-tx);font-weight:800}
+.ym .yh.hl{background:rgba(var(--hol-rgb),.16);color:var(--hol-tx)}
+:root[data-tone="light"] .ym .yd.hl{background:rgba(var(--hol-rgb),.42)}
+:root[data-tone="light"] .ym .yh.hl{background:rgba(var(--hol-rgb),.26)}
 .ym .ys.tr{box-shadow:inset 0 0 0 1.5px var(--indigo)}
 .ym .ys.td{box-shadow:inset 0 0 0 2px var(--olive)}
 .ym .em{background:transparent}
@@ -359,6 +375,7 @@ svg.ic{width:17px;height:17px;flex:none;fill:none;stroke:currentColor;stroke-wid
 .ym .dc.gap{background:var(--red-dim);box-shadow:inset 0 0 0 1px var(--red-border)}
 .ym .dc.em{cursor:default}
 .ym .ys.bal{background-image:radial-gradient(circle,var(--olive-2) 0 2px,transparent 2.6px);background-size:8px 8px;background-position:right 1px top 1px;background-repeat:no-repeat}
+.ym .ys.hl.bal{background-image:radial-gradient(circle,var(--hol-ink) 0 2px,transparent 2.6px)}
 .legend i.lg-bal{background:var(--s3) radial-gradient(circle,var(--olive-2) 0 2.5px,transparent 3px) no-repeat center}
 .ym .dc.em:hover{outline:none}
 .gt{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;margin-top:12px;padding:12px 14px;background:var(--s2);border:1px solid var(--border);border-radius:var(--r-md);font-size:12.5px;font-weight:600;color:var(--muted)}
@@ -441,6 +458,7 @@ svg.ic{width:17px;height:17px;flex:none;fill:none;stroke:currentColor;stroke-wid
 .note span{display:block;color:var(--muted);font-weight:500}
 .note.amber{background:var(--amber-dim);border:1px solid var(--amber-border);color:var(--amber)}
 .note.gold{background:var(--gold-dim);border:1px solid var(--gold-border);color:var(--gold)}
+.note.hol{background:rgba(var(--hol-rgb),.13);border:1px solid rgba(var(--hol-rgb),.5);color:var(--hol-tx)}
 .note.steel{background:var(--steel-dim);border:1px solid var(--steel-border);color:var(--steel)}
 .note.red{background:var(--red-dim);border:1px solid var(--red-border);color:var(--red)}
 /* סה״כ משמרות לפי שנים */
@@ -1104,10 +1122,37 @@ function holidaysOf(g){
   const out=bl.map(b=>({name:b.name,iso:isoOf(b.s),dur:(dayDiff(b.s,b.e)+1)*24}));
   const atz=atzmautOf(g);
   out.push(_rev5?{name:'עצמאות',iso:isoOf(atz),dur:24}:{name:'עצמאות',iso:isoOf(addDays(atz,-1)),dur:48});
-  islamicInYear(g,10,1).forEach(d=>out.push({name:'עיד אל-פיטר',iso:isoOf(d),dur:24,est:true}));
-  islamicInYear(g,12,10).forEach(d=>out.push({name:'עיד אל-אדחא',iso:isoOf(d),dur:24,est:true}));
+  islamicInYear(g,10,1).forEach(d=>out.push({name:'עיד אל-פיטר',iso:isoOf(d),dur:24,est:true,com:'mus'}));
+  islamicInYear(g,12,10).forEach(d=>out.push({name:'עיד אל-אדחא',iso:isoOf(d),dur:24,est:true,com:'both'}));
   out.sort((a,b)=>pd(a.iso)-pd(b.iso));
   return(_holCache[g]=out);
+}
+// חגי העדה הדרוזית והמוסלמית — לפי רשימת ימי החג הרשמית לעובדים. מסומנים בצהוב כמו כל חג,
+// אבל בסבב הם יום עבודה רגיל: הבלוקים, הסידור ובדיקת ההוגנות לא משתנים.
+// היום הראשון של עיד אל-פיטר ועיד אל-אדחא הוא בלוק של 24 שעות (כמו קודם); שאר ימי החג מסומנים בלבד.
+// מוסלמים — לוח טבלאי (משוער, עשוי לזוז ביום) · דרוזים — תאריכים קבועים
+const COM_NAME={dru:'חג העדה הדרוזית',mus:'חג העדה המוסלמית',both:'חג העדה המוסלמית והדרוזית'};
+const _cmCache={};
+function communityHols(g){
+  if(_cmCache[g])return _cmCache[g];
+  const out=[],add=(name,d,days,com,est)=>out.push({name,iso:isoOf(d),days,com,est:!!est});
+  add('אל-ח׳דר',new Date(g,0,25),1,'dru');
+  add('נבי שועייב',new Date(g,3,25),4,'dru');
+  add('נבי סבלאן',new Date(g,8,10),1,'dru');
+  islamicInYear(g,1,1).forEach(d=>add('ראש השנה ההיג׳רי',d,1,'mus',1));
+  islamicInYear(g,3,12).forEach(d=>add('מולד הנביא',d,1,'mus',1));
+  islamicInYear(g,10,1).forEach(d=>add('עיד אל-פיטר',d,3,'mus',1));
+  islamicInYear(g,12,10).forEach(d=>add('עיד אל-אדחא',d,4,'both',1));
+  out.sort((a,b)=>pd(a.iso)-pd(b.iso));
+  return(_cmCache[g]=out);
+}
+// חג שמסומן בצהוב: בלוק חג, או חג עדה (גם כשהוא יום עבודה רגיל). מועדים — לא.
+const isHolDay=hl=>!!hl&&(!hl.minor||!!hl.com);
+// כמה ימים ברצף שייכים לאותו חג, מהיום d (עד max)
+function holRun(d,max){
+  const h=HOL_MAP[holKey(d)];if(!h)return 1;
+  let n=1;while(n<max){const x=HOL_MAP[holKey(addDays(d,n))];if(!x||x.name!==h.name||x.startIso!==h.startIso)break;n++}
+  return n;
 }
 // מועדים — יום עבודה רגיל, מסומנים בלוח
 const _comCache={};
@@ -1147,16 +1192,25 @@ let HOL_MAP={};
 let HOL_LOCKS={};
 function rebuildHolMap(){
   HOL_MAP={};allEvents._c=null;
-  const put=(name,startIso,dur,minor,soft)=>{
+  const put=(name,startIso,dur,minor,soft,com)=>{
     const base=pd(startIso),days=Math.max(1,Math.round(dur/24));
     for(let i=0;i<days;i++){
       const k=holKey(addDays(base,i));
       if((minor||soft)&&HOL_MAP[k])continue; // מועד/חג משוער לא דורס בלוק חג קיים
-      HOL_MAP[k]={name,startIso,dur,first:i===0,minor:!!minor};
+      HOL_MAP[k]={name,startIso,dur,first:i===0,minor:!!minor,com:com||null};
     }
   };
   for(let y=MIN_YEAR;y<=MAX_YEAR;y++)holidaysOf(y).forEach(h=>{if(!h.est)put(h.name,h.iso,h.dur,false,false)});
-  for(let y=MIN_YEAR;y<=MAX_YEAR;y++)holidaysOf(y).forEach(h=>{if(h.est)put(h.name,h.iso,h.dur,false,true)});
+  for(let y=MIN_YEAR;y<=MAX_YEAR;y++)holidaysOf(y).forEach(h=>{if(h.est)put(h.name,h.iso,h.dur,false,true,h.com)});
+  // חגי העדות: ימים שאין בהם בלוק או חג אחר. minor — כדי שהמנוע יתייחס אליהם כיום רגיל; com — לצביעה ולתיאור
+  for(let y=MIN_YEAR;y<=MAX_YEAR;y++)communityHols(y).forEach(c=>{
+    const base=pd(c.iso);let first=true;
+    for(let i=0;i<c.days;i++){
+      const k=holKey(addDays(base,i));
+      if(HOL_MAP[k]){if(HOL_MAP[k].name===c.name)first=false;continue}
+      HOL_MAP[k]={name:c.name,startIso:c.iso,dur:c.days*24,first,minor:true,com:c.com};first=false;
+    }
+  });
   for(let y=MIN_YEAR;y<=MAX_YEAR;y++)commemorations(y).forEach(e=>put(e.name,e.iso,e.dur,true,false));
 }
 // הכללים של גרסאות קודמות (עצמאות 24 שעות, בלי מגבלת 4 ימים בשבוע) — מופעלים רק בזמן מעבר נתונים
@@ -1178,7 +1232,10 @@ function allEvents(){
   if(allEvents._c)return allEvents._c;
   const ev=[];
   for(let y=MIN_YEAR;y<=MAX_YEAR;y++){
-    holidaysOf(y).forEach(h=>ev.push({name:h.name,start:pd(h.iso),dur:h.dur,minor:false,est:!!h.est}));
+    const hy=holidaysOf(y);
+    hy.forEach(h=>ev.push({name:h.name,start:pd(h.iso),dur:h.dur,minor:false,est:!!h.est,com:h.com||null}));
+    // חגי עדות שאינם בלוק (cw — יום עבודה רגיל). עיד אל-פיטר ועיד אל-אדחא כבר ברשימה כבלוק של היום הראשון.
+    communityHols(y).forEach(c=>{if(!hy.some(h=>h.name===c.name&&h.iso===c.iso))ev.push({name:c.name,start:pd(c.iso),dur:c.days*24,minor:false,cw:true,est:c.est,com:c.com})});
     commemorations(y).forEach(e=>ev.push({name:e.name,start:pd(e.iso),dur:e.dur,minor:true}));
   }
   ev.forEach(e=>{e.days=Math.max(1,Math.round(e.dur/24));e.end=addDays(e.start,e.days-1)});
@@ -1983,7 +2040,7 @@ function computeAlerts(){
   const out=[];
   allEvents().filter(e=>e.end>=TODAY&&dayDiff(TODAY,e.start)<=14).forEach(e=>out.push({
     ic:'i-flag',tone:'gold',t:e.name+' — '+(e.start<=TODAY?'בעיצומו':whenTxt(e.start)),
-    s:fmtFull(e.start)+' · משמרת '+(dutyFor(e.start)||'—')+(e.minor?'':' · בלוק '+e.dur+' שעות'),day:isoOf(e.start)}));
+    s:fmtFull(e.start)+' · משמרת '+(dutyFor(e.start)||'—')+(e.minor||e.cw?'':' · בלוק '+e.dur+' שעות')+(e.com?' · '+COM_NAME[e.com]:''),day:isoOf(e.start)}));
   TRAININGS.filter(t=>{const n=dayDiff(TODAY,pd(t.date));return n>=0&&n<=7}).forEach(t=>{
     const d=pd(t.date);out.push({ic:'i-target',tone:'indigo',t:t.name+' — '+whenTxt(d),s:dayName(d)+' · '+fmtFull(d)+' · משמרת '+(dutyFor(d)||'—'),day:t.date})});
   if(!isApproved())out.push({ic:'i-zap',tone:'amber',t:'סידור '+TARGET_YEAR+' טרם אושר',s:'עד לאישור, הלוח מציג את '+TARGET_YEAR+' לפי הנוסחה',nav:'next'});
@@ -2047,7 +2104,7 @@ function renderOverview(){
     <div class="hero-i"><div class="eyebrow"><span class="live"></span>במשמרת עכשיו</div>
       <div class="hero-h">${now?'משמרת '+now:'ללא שיבוץ'}</div>
       <div class="hero-m">${dayName(TODAY)} · ${fmtFull(TODAY)}</div>
-      <div class="tags">${hol?`<span class="tag gold">${ico('i-flag')}${esc(hol.name)}</span>`:''}<span class="tag">מחר: <b>${tom?'משמרת '+tom:'—'}</b></span>${isDraftDate(TODAY)?'<span class="tag amber">טיוטה</span>':''}</div>
+      <div class="tags">${hol?`<span class="tag ${isHolDay(hol)?'hol':'gold'}">${ico('i-flag')}${esc(hol.name)}</span>`:''}<span class="tag">מחר: <b>${tom?'משמרת '+tom:'—'}</b></span>${isDraftDate(TODAY)?'<span class="tag amber">טיוטה</span>':''}</div>
     </div></div>`;
   h+=`<div class="card kpi c-3 click" ${md?`data-day="${isoOf(md)}" role="button" tabindex="0"`:''}><div class="ch"><span class="ibox olive">${ico('i-shield')}</span><h3>המשמרת הבאה שלי</h3></div>
     <div class="kpi-v${md&&mi>1?' num':''}">${!md?'—':mi===0?'היום':mi===1?'מחר':fmtDM(md)}</div>
@@ -2056,15 +2113,15 @@ function renderOverview(){
   h+=`<div class="card kpi c-3${ne?' click':''}" ${ne?`data-day="${isoOf(ne.start)}" role="button" tabindex="0"`:''}><div class="ch"><span class="ibox gold">${ico('i-flag')}</span><h3>${ne&&ne.minor?'המועד הקרוב':'החג הקרוב'}</h3></div>
     <div class="kpi-v">${ne?esc(ne.name):'—'}</div>
     <div class="kpi-l">${ne?fmtFull(ne.start)+' · '+(ne.start<=TODAY?'בעיצומו':whenTxt(ne.start)):'אין חגים בהמשך הלוח'}</div>
-    <div class="kpi-f">${ne?(ne.minor?'יום עבודה רגיל':'בלוק '+ne.dur+' שעות')+' · משמרת '+(dutyFor(ne.start)||'—'):''}</div></div>`;
+    <div class="kpi-f">${ne?(ne.minor||ne.cw?'יום עבודה רגיל':'בלוק '+ne.dur+' שעות')+' · משמרת '+(dutyFor(ne.start)||'—'):''}</div></div>`;
   h+=`<div class="card c-12"><div class="ch"><span class="ibox olive">${ico('i-cal')}</span><h3>השבוע</h3><span class="meta num">${fmtDM(wk0)}–${fmtDM(addDays(wk0,6))}</span><div class="end"><button class="link" data-nav="month">ללוח החודשי${ico('i-chevl')}</button></div></div><div class="wk">`;
   for(let i=0;i<7;i++){
     const d=addDays(wk0,i),k=isoOf(d),nm=dutyFor(d),hl=HOL_MAP[holKey(d)],t=d.getTime()===TODAY.getTime(),tr=trainingsOn(k).length;
-    h+=`<button class="wk-d${i>=5?' we':''}${t?' today':''}" data-day="${k}" aria-label="${dayName(d)} ${fmtDM(d)}, משמרת ${nm||'ללא'}"><span class="wk-dn"><span class="f">${DOW_FULL[i]}</span><span class="s">${DOW_S[i]}</span></span><span class="wk-n">${d.getDate()}</span><span class="wk-sh">${sh1(nm)||'—'}</span>${hl?`<span class="wk-lb">${esc(hl.name)}</span>`:''}${tr?'<i class="wk-tr"></i>':''}</button>`;
+    h+=`<button class="wk-d${i>=5?' we':''}${isHolDay(hl)?' hol':''}${t?' today':''}" data-day="${k}" aria-label="${dayName(d)} ${fmtDM(d)}, משמרת ${nm||'ללא'}${hl?', '+esc(hl.name):''}"><span class="wk-dn"><span class="f">${DOW_FULL[i]}</span><span class="s">${DOW_S[i]}</span></span><span class="wk-n">${d.getDate()}</span><span class="wk-sh">${sh1(nm)||'—'}</span>${hl?`<span class="wk-lb">${esc(hl.name)}</span>`:''}${tr?'<i class="wk-tr"></i>':''}</button>`;
   }
   h+='</div></div>';
   h+=`<div class="card c-6"><div class="ch"><span class="ibox gold">${ico('i-flag')}</span><h3>חגים ומועדים קרובים</h3></div>`;
-  h+=evs.length?evs.map(e=>`<div class="ev" data-day="${isoOf(e.start)}" role="button" tabindex="0"><div class="ev-b${e.minor?' minor':''}"><b>${e.start.getDate()}</b><span>${MON_S[e.start.getMonth()]}</span></div><div class="ev-t"><b>${esc(e.name)}${e.est?' *':''}</b><span>${e.minor?'יום עבודה רגיל':'בלוק '+e.dur+' שעות'+(e.days>1?' · עד '+fmtDM(e.end):'')}</span></div><div class="ev-r"><b>${e.start<=TODAY?'בעיצומו':whenTxt(e.start)}</b><span>משמרת ${dutyFor(e.start)||'—'}${isDraftDate(e.start)?' · טיוטה':''}</span></div></div>`).join(''):'<div class="empty">אין חגים בהמשך הלוח</div>';
+  h+=evs.length?evs.map(e=>`<div class="ev" data-day="${isoOf(e.start)}" role="button" tabindex="0"><div class="ev-b${e.minor?' minor':' hol'}"><b>${e.start.getDate()}</b><span>${MON_S[e.start.getMonth()]}</span></div><div class="ev-t"><b>${esc(e.name)}${e.est?' *':''}</b><span>${e.minor?'יום עבודה רגיל':e.cw?COM_NAME[e.com]+' · יום עבודה רגיל'+(e.days>1?' · עד '+fmtDM(e.end):''):'בלוק '+e.dur+' שעות'+(e.days>1?' · עד '+fmtDM(e.end):'')+(e.com?' · '+COM_NAME[e.com]:'')}</span></div><div class="ev-r"><b>${e.start<=TODAY?'בעיצומו':whenTxt(e.start)}</b><span>משמרת ${dutyFor(e.start)||'—'}${isDraftDate(e.start)?' · טיוטה':''}</span></div></div>`).join(''):'<div class="empty">אין חגים בהמשך הלוח</div>';
   h+='</div>';
   const maxT=Math.max(1,...SHIFT_NAMES.map(n=>ys.st[n].total));
   h+='<div class="c-6 stack">';
@@ -2103,7 +2160,7 @@ function renderMonth(){
     const d=addDays(start,i),k=isoOf(d),out=d.getMonth()!==calM,w=d.getDay(),we=w===5||w===6;
     const nm=dutyFor(d),hl=HOL_MAP[holKey(d)],trs=trainingsOn(k),t=d.getTime()===TODAY.getTime();
     if(!out&&nm&&nm in cnt)cnt[nm]++;
-    let c='mday';if(out)c+=' out';if(we)c+=' we';if(hl)c+=hl.minor?' holm':' hol';if(t)c+=' today';
+    let c='mday';if(out)c+=' out';if(we)c+=' we';if(hl)c+=isHolDay(hl)?' hol':' holm';if(t)c+=' today';
     g+=`<button class="${c}" data-day="${k}" aria-label="${dayName(d)} ${fmtFull(d)}, משמרת ${nm||'ללא'}${hl?', '+esc(hl.name):''}"><span class="md-top"><span class="md-n">${d.getDate()}</span>${nm?`<span class="md-sh">${sh1(nm)}</span>`:''}</span>${hl?`<span class="md-hl${hl.first?'':' cont'}">${esc(hl.name)}</span>`:''}${trs.length?`<span class="md-tr">${ico('i-target')}${esc(trs[0].name)}${trs.length>1?' +'+(trs.length-1):''}</span>`:''}</button>`;
   }
   const draft=calY>2026&&!approvedOf(calY);
@@ -2111,7 +2168,7 @@ function renderMonth(){
     <div class="nav-grp"><button class="nb" data-mnav="-1" ${atMin?'disabled':''} aria-label="החודש הקודם">${ico('i-chevr')}</button><button class="btn btn-gh btn-sm" data-mnav="0">היום</button><button class="nb" data-mnav="1" ${atMax?'disabled':''} aria-label="החודש הבא">${ico('i-chevl')}</button></div></div>
     <div class="card mcard"><div class="mgrid">${g}</div>
     <div class="msum">${SHIFT_NAMES.map(n=>`<span class="tag">משמרת ${n} <b class="num">${cnt[n]}</b></span>`).join('')}</div>
-    <div class="legend"><span><i style="background:rgba(var(--we-rgb),.28)"></i>סוף שבוע</span><span><i style="background:var(--gold)"></i>חג (בלוק)</span><span><i style="background:rgba(var(--gold-rgb),.45)"></i>מועד</span><span><i style="background:var(--indigo)"></i>אימון</span><span><i style="background:var(--olive-dim);border-color:var(--olive)"></i>היום</span></div></div>`;
+    <div class="legend"><span><i style="background:rgba(var(--we-rgb),.28)"></i>סוף שבוע</span><span><i style="background:var(--hol);border-color:var(--hol)"></i>חג</span><span><i style="background:rgba(var(--gold-rgb),.45)"></i>מועד</span><span><i style="background:var(--indigo)"></i>אימון</span><span><i style="background:var(--olive-dim);border-color:var(--olive)"></i>היום</span></div></div>`;
 }
 
 /* ============================================================
@@ -2137,13 +2194,14 @@ function renderYear(){
       if(d<1||d>days){const e=' em'+(wc?' we':'');r1+=`<td class="yd${e}"></td>`;r2+=`<td class="ys${e}"></td>`;r3+=`<td class="yh${e}"></td>`;continue}
       const dt=new Date(y,m,d),k=isoOf(dt),nm=dutyFor(dt),hl=HOL_MAP[holKey(dt)],trs=trainingsOn(k);
       if(nm&&nm in mt){mt[nm]++;tot[nm]++}
-      r1+=`<td class="yd${wc?' we':''}">${d}</td>`;
+      const hd=isHolDay(hl);
+      r1+=`<td class="yd${wc?' we':''}${hd?' hl':''}">${d}</td>`;
       const bl=balM.get(k);
-      let c2='ys';if(hl)c2+=' hl';else if(wc)c2+=' we';if(trs.length)c2+=' tr';if(k===todayK)c2+=' td';if(bl)c2+=' bal';
-      r2+=`<td class="${c2}" data-day="${k}" title="${fmtDM(dt)} · משמרת ${nm||'—'}${hl?' · '+esc(hl.name):''}${bl?' · יום איזון':''}${trs.length?' · '+esc(trs.map(t=>t.name).join(', ')):''}">${sh1(nm)}</td>`;
+      let c2='ys';if(hd)c2+=' hl';else if(hl)c2+=' hlm';else if(wc)c2+=' we';if(trs.length)c2+=' tr';if(k===todayK)c2+=' td';if(bl)c2+=' bal';
+      r2+=`<td class="${c2}" data-day="${k}" title="${fmtDM(dt)} · משמרת ${nm||'—'}${hl?' · '+esc(hl.name)+(hl.com?' ('+COM_NAME[hl.com]+')':''):''}${bl?' · יום איזון':''}${trs.length?' · '+esc(trs.map(t=>t.name).join(', ')):''}">${sh1(nm)}</td>`;
       let lbl='',lc='';
       if(hl&&hl.first&&!HOL_NOLABEL.has(hl.name))lbl=hl.name;else if(trs.length){lbl=trs[0].name;lc=' trl'}
-      r3+=`<td class="yh${yhClass(lbl)}${lc}${wc?' we':''}">${esc(lbl)}</td>`;
+      r3+=`<td class="yh${yhClass(lbl)}${lc}${wc?' we':''}${hd?' hl':''}">${esc(lbl)}</td>`;
     }
     body+=`<tr class="mt"><th class="mn" rowspan="3" scope="row">${MONTHS[m]}</th><td class="rl">תאריך</td>${r1}<td class="tt"></td><td class="tt"></td><td class="tt"></td></tr>`;
     body+=`<tr><td class="rl">משמרת</td>${r2}<td class="tt">${mt['א׳']}</td><td class="tt">${mt['ב׳']}</td><td class="tt">${mt['ג׳']}</td></tr>`;
@@ -2160,7 +2218,7 @@ function renderYear(){
   v.innerHTML=`<div class="ph"><div><h1>שנת ${y}</h1></div><div class="nav-grp">${badge}<button class="btn btn-gh btn-sm" data-act="export-year">${ico('i-download')}ייצוא</button><button class="nb" data-ynav="-1" ${y<=MIN_YEAR?'disabled':''} aria-label="השנה הקודמת">${ico('i-chevr')}</button><button class="nb" data-ynav="1" ${y>=MAX_YEAR?'disabled':''} aria-label="השנה הבאה">${ico('i-chevl')}</button></div></div>
     <div class="hint">${ico('i-chevr')}<span>החלק לצדדים לכל ימי החודש</span>${ico('i-chevl')}</div>
     <div class="mx"><table class="ym"><thead>${tableHead(cols)}</thead><tbody>${body}</tbody></table></div>
-    <div class="legend"><span><i style="background:rgba(var(--we-rgb),.30)"></i>סוף שבוע</span><span><i style="background:var(--gold-dim);border-color:var(--gold)"></i>חג</span>${balM.size?'<span><i class="lg-bal"></i>יום איזון</span>':''}<span><i style="border-color:var(--indigo)"></i>אימון</span><span><i style="border-color:var(--olive);border-width:2px"></i>היום</span></div>
+    <div class="legend"><span><i style="background:rgba(var(--we-rgb),.30)"></i>סוף שבוע</span><span><i style="background:var(--hol);border-color:var(--hol)"></i>חג</span><span><i style="background:var(--gold-dim);border-color:var(--gold)"></i>מועד</span>${balM.size?'<span><i class="lg-bal"></i>יום איזון</span>':''}<span><i style="border-color:var(--indigo)"></i>אימון</span><span><i style="border-color:var(--olive);border-width:2px"></i>היום</span></div>
     <div class="gt"><span>סה״כ ${y}:</span><span>א׳ <b>${tot['א׳']}</b></span><span>ב׳ <b>${tot['ב׳']}</b></span><span>ג׳ <b>${tot['ג׳']}</b></span><span class="${sp>1?'st-bad':'st-ok'}">פער <b>${sp}</b></span><span>סך הכל <b>${sum}</b> ימים</span></div>
     <div class="gt gt2"><span>סופי שבוע ${y}:</span><span>א׳ <b>${wc[0]}</b></span><span>ב׳ <b>${wc[1]}</b></span><span>ג׳ <b>${wc[2]}</b></span><span class="${wsp>1?'st-bad':'st-ok'}">פער <b>${wsp}</b></span><span class="${wn?'st-warn':'st-ok'}"${wn?` title="${esc(wi.consec.map(c=>wkConsecText(y,c)).join(' · '))}"`:''}>${wn?(wn===1?'סוף שבוע אחד ברצף':wn+' סופי שבוע ברצף'):'בלי סוף שבוע ברצף'}</span></div>`;
 }
@@ -2285,12 +2343,13 @@ function renderNext(keep){
       if(d<1||d>days){const e=' em'+(wc?' we':'');r1+=`<td class="yd${e}"></td>`;r2+=`<td class="ys dc${e}"></td>`;r3+=`<td class="yh${e}"></td>`;continue}
       const dt=new Date(TARGET_YEAR,m,d),k=isoOf(dt),hl=HOL_MAP[holKey(dt)],nm=DRAFT_MAP[k]||null,trs=trainingsOn(k),bl=balM.get(k);
       if(nm&&nm in mt){mt[nm]++;tot[nm]++}
-      r1+=`<td class="yd${wc?' we':''}">${d}</td>`;
-      let c2='ys dc';if(hl&&!hl.minor)c2+=' hl';else if(wc)c2+=' we';if(!nm)c2+=' gap';if(nm!==(base[k]||null))c2+=' chg';if(bl)c2+=' bal';
-      r2+=`<td class="${c2}" data-draftday="${k}" title="${fmtDM(dt)} · ${nm?'משמרת '+nm:'ללא משמרת'}${hl?' · '+esc(hl.name):''}${bl?' · יום איזון: ממשמרת '+bl.from+' למשמרת '+bl.to:''}${pkM.has(k)?' · '+esc(pkM.get(k)):''}">${sh1(nm)}</td>`;
+      const hd=isHolDay(hl);
+      r1+=`<td class="yd${wc?' we':''}${hd?' hl':''}">${d}</td>`;
+      let c2='ys dc';if(hd)c2+=' hl';else if(wc)c2+=' we';if(!nm)c2+=' gap';if(nm!==(base[k]||null))c2+=' chg';if(bl)c2+=' bal';
+      r2+=`<td class="${c2}" data-draftday="${k}" title="${fmtDM(dt)} · ${nm?'משמרת '+nm:'ללא משמרת'}${hl?' · '+esc(hl.name)+(hl.com?' ('+COM_NAME[hl.com]+')':''):''}${bl?' · יום איזון: ממשמרת '+bl.from+' למשמרת '+bl.to:''}${pkM.has(k)?' · '+esc(pkM.get(k)):''}">${sh1(nm)}</td>`;
       let lbl='',lc='';
       if(hl&&hl.first&&!HOL_NOLABEL.has(hl.name))lbl=hl.name;else if(trs.length){lbl=trs[0].name;lc=' trl'}
-      r3+=`<td class="yh${yhClass(lbl)}${lc}${wc?' we':''}">${esc(lbl)}</td>`;
+      r3+=`<td class="yh${yhClass(lbl)}${lc}${wc?' we':''}${hd?' hl':''}">${esc(lbl)}</td>`;
     }
     body+=`<tr class="mt"><th class="mn" rowspan="3" scope="row">${MONTHS[m]}</th><td class="rl">תאריך</td>${r1}<td class="tt"></td><td class="tt"></td><td class="tt"></td></tr>`;
     body+=`<tr><td class="rl">משמרת</td>${r2}<td class="tt">${mt['א׳']}</td><td class="tt">${mt['ב׳']}</td><td class="tt">${mt['ג׳']}</td></tr>`;
@@ -2300,7 +2359,7 @@ function renderNext(keep){
   h+=`<div class="card c-12"><div class="ch"><span class="ibox olive">${ico('i-cal')}</span><h3>טיוטת ${TARGET_YEAR}</h3><span class="meta">לחיצה על יום מחליפה משמרת (א׳ ← ב׳ ← ג׳ ← ריק)</span><div class="end"><button class="btn btn-gh btn-sm" data-act="export-draft">${ico('i-download')}ייצוא</button></div></div>
     <div class="hint">${ico('i-chevr')}<span>החלק לצדדים לכל ימי החודש</span>${ico('i-chevl')}</div>
     <div class="mx" id="dwScroll"><table class="ym"><thead>${tableHead(cols)}</thead><tbody>${body}</tbody></table></div>
-    <div class="legend"><span><i style="background:rgba(var(--we-rgb),.30)"></i>סוף שבוע</span><span><i style="background:var(--gold-dim);border-color:var(--gold)"></i>חג</span><span><i class="lg-bal"></i>יום איזון</span><span><i style="border-color:transparent;box-shadow:inset 0 -2px 0 var(--steel)"></i>שונה מהנוסחה</span><span><i style="background:var(--red-dim);border-color:var(--red-border)"></i>ללא משמרת</span></div>
+    <div class="legend"><span><i style="background:rgba(var(--we-rgb),.30)"></i>סוף שבוע</span><span><i style="background:var(--hol);border-color:var(--hol)"></i>חג</span><span><i class="lg-bal"></i>יום איזון</span><span><i style="border-color:transparent;box-shadow:inset 0 -2px 0 var(--steel)"></i>שונה מהנוסחה</span><span><i style="background:var(--red-dim);border-color:var(--red-border)"></i>ללא משמרת</span></div>
     <div class="gt"><span>סה״כ טיוטה:</span><span>א׳ <b>${tot['א׳']}</b></span><span>ב׳ <b>${tot['ב׳']}</b></span><span>ג׳ <b>${tot['ג׳']}</b></span><span class="${sp>1?'st-bad':'st-ok'}">פער <b>${sp}</b>${sp>1?' — מעל המותר':''}</span></div></div>`;
   h+=totalsCard(ds);
   h+=`<div class="card c-12"><div class="ch"><span class="ibox gold">${ico('i-flag')}</span><h3>חגים בטיוטה — בדיקת הוגנות</h3><div class="end leg-in"><span class="st-ok">${ico('i-check')}הוגן</span><span class="st-warn">${ico('i-alert')}חזרה אחרי שנתיים</span><span class="st-bad">${ico('i-x')}שנתיים ברצף</span></div></div>
@@ -2502,15 +2561,20 @@ function renderDay(){
   if(bl)h+=`<div class="note steel">${ico('i-scale')}<div><b>יום איזון</b><span>הועבר ממשמרת ${bl.from} למשמרת ${bl.to} כדי לשמור על הפרש של יום אחד לכל היותר בסה״כ השנתי</span></div></div>`;
   if(hl){
     const s=pd(hl.startIso),n=Math.max(1,Math.round(hl.dur/24)),e=addDays(s,n-1);
-    let tail='';
-    if(hl.minor)tail=' · יום עבודה רגיל';
-    else if(n>1){
-      const sh=[];for(let i=0;i<n;i++)sh.push(dutyFor(addDays(s,i)));
-      tail=sh.every(x=>x===sh[0])?' · כל הבלוק במשמרת '+(sh[0]||'—'):' · '+sh.map((x,i)=>fmtDM(addDays(s,i))+' '+(x||'—')).join(' · ');
+    let tail='',when;
+    if(hl.com&&hl.minor){when=fmtDM(s)+(n>1?'–'+fmtDM(e)+' ('+n+' ימים)':'');tail=' · יום עבודה רגיל'} // חג עדה — לא בלוק
+    else{
+      when=n>1?fmtDM(s)+'–'+fmtDM(e)+' · '+hl.dur+' שעות':fmtDM(s)+' · 24 שעות';
+      if(hl.minor)tail=' · יום עבודה רגיל';
+      else if(n>1){
+        const sh=[];for(let i=0;i<n;i++)sh.push(dutyFor(addDays(s,i)));
+        tail=sh.every(x=>x===sh[0])?' · כל הבלוק במשמרת '+(sh[0]||'—'):' · '+sh.map((x,i)=>fmtDM(addDays(s,i))+' '+(x||'—')).join(' · ');
+      }
+      if(hl.com){const r=holRun(s,7);if(r>1)tail+=' · החג נמשך '+r+' ימים, עד '+fmtDM(addDays(s,r-1))}
     }
     // מועד שחל בתוך בלוק חג (למשל יום הזיכרון בערב עצמאות) — מוצג כאן כי הלוח מסמן את הבלוק
     const also=allEvents().filter(ev=>ev.name!==hl.name&&ev.start<=d&&ev.end>=d).map(ev=>ev.name);
-    h+=`<div class="note gold">${ico('i-flag')}<div><b>${esc(hl.name)}</b><span>${n>1?fmtDM(s)+'–'+fmtDM(e)+' · '+hl.dur+' שעות':fmtDM(s)+' · 24 שעות'}${tail}</span>${also.length?`<span>באותו יום: ${esc(also.join(' · '))}</span>`:''}</div></div>`;
+    h+=`<div class="note ${isHolDay(hl)?'hol':'gold'}">${ico('i-flag')}<div><b>${esc(hl.name)}${hl.com?' · '+COM_NAME[hl.com]:''}</b><span>${when}${tail}</span>${also.length?`<span>באותו יום: ${esc(also.join(' · '))}</span>`:''}</div></div>`;
   }
   h+='<div class="sec">אימונים וכשירויות</div>';
   h+=trs.length?trs.map(t=>`<div class="trl">${ico('i-target')}<b>${esc(t.name)}</b><button class="xb" data-trdel="${t.id}" aria-label="מחיקת ${esc(t.name)}">${ico('i-trash')}</button></div>`).join(''):'<div class="empty">אין אימונים ביום זה</div>';
@@ -2559,10 +2623,10 @@ function exportModel(y,src){
     for(let d=1;d<=n;d++){
       const dt=new Date(y,mo,d),k=isoOf(dt),nm=get(k),hl=HOL_MAP[holKey(dt)],trs=trainingsOn(k);
       if(nm&&nm in mt){mt[nm]++;tot[nm]++}
-      let lbl='',lt='',span=1;
-      if(hl&&hl.first&&!HOL_NOLABEL.has(hl.name)){lbl=hl.name;lt='hol';if(!hl.minor)span=Math.min(Math.max(1,Math.round(hl.dur/24)),n-d+1)}
+      let lbl='',lt='',span=1;const hd=isHolDay(hl);
+      if(hl&&hl.first&&!HOL_NOLABEL.has(hl.name)){lbl=hl.name;lt='hol';if(hd)span=holRun(dt,n-d+1)}
       else if(trs.length){lbl=trs[0].name;lt='tr'}
-      cells.push({d,col:sd+d-1,w:dt.getDay(),k,nm,hol:!!(hl&&!hl.minor),lbl,lt,span,bal:bal.get(k)||null});
+      cells.push({d,col:sd+d-1,w:dt.getDay(),k,nm,hol:hd,lbl,lt,span,bal:bal.get(k)||null});
     }
     months.push({name:MONTHS[mo],cells,mt});
   }
@@ -2583,7 +2647,7 @@ function drawSheet(m){
   const c=document.createElement('canvas');c.width=W;c.height=H;
   const x=c.getContext('2d');
   const F=(mm,wt)=>(wt||400)+' '+(mm*S).toFixed(1)+'px Heebo,"Arial Hebrew",Arial,sans-serif';
-  const C={ink:'#15181b',mute:'#6b7075',line:'#d2d5d8',strong:'#8e9297',we:'#f8edd2',weH:'#ead6a0',hol:'#eccf78',holInk:'#4f3d06',weInk:'#7a5c0e',head:'#eceef0',mon:'#f3f4f5',tr:'#3f45a6',bal:'#5b7d22',bad:'#b3261e',ok:'#2e7d32',warn:'#a35f00',cur:'#eef3e2',date:'#262b30'};
+  const C={ink:'#15181b',mute:'#6b7075',line:'#d2d5d8',strong:'#8e9297',we:'#f8edd2',weH:'#ead6a0',hol:'#ffe14d',holT:'#fff3b0',holInk:'#3d3000',weInk:'#7a5c0e',head:'#eceef0',mon:'#f3f4f5',tr:'#3f45a6',bal:'#5b7d22',bad:'#b3261e',ok:'#2e7d32',warn:'#a35f00',cur:'#eef3e2',date:'#262b30'};
   const P=v=>v*S;
   x.fillStyle='#fff';x.fillRect(0,0,W,H);
   x.direction='rtl';x.textBaseline='middle';
@@ -2607,9 +2671,9 @@ function drawSheet(m){
     for(let i=0;i<m.cols;i++)if(i%7>=5)rect(xDay(i),y0,wD,hMonth,'#fcf7ea');
     mo.cells.forEach(ce=>{
       const xx=xDay(ce.col),we=ce.w>=5;
-      if(we){rect(xx,y0,wD,hMonth,C.we)}
-      if(ce.hol)rect(xx,yS,wD,hShift,C.hol);
-      txt(String(ce.d),xx+wD/2,y0+hDate/2+0.15,2.75,800,we?C.weInk:C.date);
+      // יום חג: כל העמודה בצהוב בהיר, והמשמרת שעובדת בצהוב מלא
+      if(ce.hol){rect(xx,y0,wD,hMonth,C.holT);rect(xx,yS,wD,hShift,C.hol)}else if(we)rect(xx,y0,wD,hMonth,C.we);
+      txt(String(ce.d),xx+wD/2,y0+hDate/2+0.15,2.75,800,ce.hol?C.holInk:we?C.weInk:C.date);
       if(ce.nm)txt(sh1(ce.nm),xx+wD/2,yS+hShift/2+0.15,3.05,800,ce.hol?C.holInk:C.ink);
       if(ce.bal){x.fillStyle=C.bal;x.beginPath();x.arc(P(xx+wD-0.75),P(yS+0.75),P(0.5),0,Math.PI*2);x.fill()}
     });
@@ -2752,13 +2816,13 @@ const xE=s=>String(s).replace(/[<>&"]/g,ch=>({'<':'&lt;','>':'&gt;','&':'&amp;',
 const colL=i=>{let s='';i++;while(i>0){const r=(i-1)%26;s=String.fromCharCode(65+r)+s;i=Math.floor((i-1)/26)}return s};
 function makeXlsx(m){
   // סגנונות: [גופן, מילוי, גבול, יישור]
-  const XF=[[0,0,0,''],[2,0,0,'right'],[3,0,0,'right'],[1,4,1,'center'],[1,6,1,'center'],[6,0,1,'center'],[7,2,1,'center'],[1,0,1,'center'],[1,2,1,'center'],[1,3,1,'center'],[1,5,1,'center'],[4,0,1,'right'],[4,2,1,'right'],[5,0,1,'right'],[5,2,1,'right'],[1,7,1,'center'],[3,7,1,'center'],[1,4,1,'center'],[0,0,1,''],[0,2,1,''],[1,4,1,'right'],[0,0,1,'right'],[1,0,1,'center'],[3,0,0,'right'],[8,0,0,'right'],[9,0,0,'right'],[1,8,1,'center'],[8,8,1,'center'],[10,8,1,'center'],[6,0,1,'center'],[1,8,1,'right'],[1,4,1,'right'],[1,4,1,'center',1],[10,0,1,'center'],[10,4,1,'center'],[0,0,1,'center'],[0,8,1,'center'],[3,0,1,'center'],[8,4,1,'center',1],[10,4,1,'center',1]];
-  const ST={title:1,sub:2,head:3,headWe:4,date:5,dateWe:6,sh:7,shWe:8,shHol:9,shBal:10,lab:11,labWe:12,tr:13,trWe:14,mon:15,type:16,tot:17,empty:18,emptyWe:19,th:20,td:21,tdB:22,note:23,bad:24,ok:25,cur:26,curBad:27,curWarn:28,small:29,curLab:30,thR:31,headFit:32,amb:33,ambHead:34,tdC:35,tdCcur:36,muteC:37,headBad:38,headWarn:39};
+  const XF=[[0,0,0,''],[2,0,0,'right'],[3,0,0,'right'],[1,4,1,'center'],[1,6,1,'center'],[6,0,1,'center'],[7,2,1,'center'],[1,0,1,'center'],[1,2,1,'center'],[1,3,1,'center'],[1,5,1,'center'],[4,0,1,'right'],[4,2,1,'right'],[5,0,1,'right'],[5,2,1,'right'],[1,7,1,'center'],[3,7,1,'center'],[1,4,1,'center'],[0,0,1,''],[0,2,1,''],[1,4,1,'right'],[0,0,1,'right'],[1,0,1,'center'],[3,0,0,'right'],[8,0,0,'right'],[9,0,0,'right'],[1,8,1,'center'],[8,8,1,'center'],[10,8,1,'center'],[6,0,1,'center'],[1,8,1,'right'],[1,4,1,'right'],[1,4,1,'center',1],[10,0,1,'center'],[10,4,1,'center'],[0,0,1,'center'],[0,8,1,'center'],[3,0,1,'center'],[8,4,1,'center',1],[10,4,1,'center',1],[6,9,1,'center'],[4,9,1,'right'],[5,9,1,'right']];
+  const ST={title:1,sub:2,head:3,headWe:4,date:5,dateWe:6,sh:7,shWe:8,shHol:9,shBal:10,lab:11,labWe:12,tr:13,trWe:14,mon:15,type:16,tot:17,empty:18,emptyWe:19,th:20,td:21,tdB:22,note:23,bad:24,ok:25,cur:26,curBad:27,curWarn:28,small:29,curLab:30,thR:31,headFit:32,amb:33,ambHead:34,tdC:35,tdCcur:36,muteC:37,headBad:38,headWarn:39,dateHol:40,labHol:41,trHol:42};
   const fill=c=>'<fill><patternFill patternType="solid"><fgColor rgb="FF'+c+'"/><bgColor indexed="64"/></patternFill></fill>';
   const font=(sz,b,col)=>'<font>'+(b?'<b/>':'')+'<sz val="'+sz+'"/>'+(col?'<color rgb="FF'+col+'"/>':'')+'<name val="Arial"/></font>';
   const styles='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">'
     +'<fonts count="11">'+font(10)+font(10,1)+font(15,1)+font(8,0,'6B7075')+font(8,1,'4F3D06')+font(8,1,'3F45A6')+font(9,1,'262B30')+font(9,1,'7A5C0E')+font(10,1,'B3261E')+font(10,1,'2E7D32')+font(10,1,'A35F00')+'</fonts>'
-    +'<fills count="9"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill>'+fill('F8EDD2')+fill('ECCF78')+fill('ECEEF0')+fill('DCE8C6')+fill('EAD6A0')+fill('F3F4F5')+fill('EEF3E2')+'</fills>'
+    +'<fills count="10"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill>'+fill('F8EDD2')+fill('FFE14D')+fill('ECEEF0')+fill('DCE8C6')+fill('EAD6A0')+fill('F3F4F5')+fill('EEF3E2')+fill('FFF3B0')+'</fills>'
     +'<borders count="2"><border><left/><right/><top/><bottom/><diagonal/></border><border><left style="thin"><color rgb="FFD2D5D8"/></left><right style="thin"><color rgb="FFD2D5D8"/></right><top style="thin"><color rgb="FFD2D5D8"/></top><bottom style="thin"><color rgb="FFD2D5D8"/></bottom><diagonal/></border></borders>'
     +'<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>'
     +'<cellXfs count="'+XF.length+'">'+XF.map(([f,l,b,a,sh])=>'<xf numFmtId="0" fontId="'+f+'" fillId="'+l+'" borderId="'+b+'" xfId="0" applyFont="1" applyFill="1" applyBorder="1"'+(a?' applyAlignment="1"><alignment horizontal="'+a+'" vertical="center"'+(sh?' shrinkToFit="1"':'')+'/></xf>':'/>')).join('')+'</cellXfs>'
@@ -2785,9 +2849,9 @@ function makeXlsx(m){
     for(let i=0;i<m.cols;i++){
       const L=colL(D0+i),we=i%7>=5,ce=byCol[i];
       if(!ce){[r1,r2,r3].forEach((a,q)=>a.push(cell(L+(r+q),'',we?ST.emptyWe:ST.empty)));continue}
-      r1.push(cell(L+r,ce.d,we?ST.dateWe:ST.date));
+      r1.push(cell(L+r,ce.d,ce.hol?ST.dateHol:we?ST.dateWe:ST.date));
       r2.push(cell(L+(r+1),sh1(ce.nm),ce.hol?ST.shHol:ce.bal?ST.shBal:we?ST.shWe:ST.sh));shRef[ce.k]=L+(r+1);
-      r3.push(cell(L+(r+2),ce.lbl||'',ce.lt==='tr'?(we?ST.trWe:ST.tr):(we?ST.labWe:ST.lab)));
+      r3.push(cell(L+(r+2),ce.lbl||'',ce.lt==='tr'?(ce.hol?ST.trHol:we?ST.trWe:ST.tr):(ce.hol?ST.labHol:we?ST.labWe:ST.lab)));
       if(ce.lbl&&ce.span>1)merges.push(L+(r+2)+':'+colL(D0+i+ce.span-1)+(r+2));
     }
     // ימי החודש ברצף בשורת המשמרת — טווח הספירה והרשימה הנפתחת
