@@ -756,6 +756,20 @@ svg.ic{width:17px;height:17px;flex:none;fill:none;stroke:currentColor;stroke-wid
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
 }
+
+/* גרסת המפקדים — חלון המנהל */
+.sh-mail{font-family:var(--mono);font-size:12px!important}
+.sh-link{margin-top:8px;padding:9px 12px;border-radius:var(--r-sm);background:var(--s2);border:1px dashed var(--border2);font-family:var(--mono);font-size:12px;color:var(--muted);word-break:break-all;text-align:left}
+.sh-rules{margin-top:10px}
+.sh-rules summary{cursor:pointer;font-size:12px;font-weight:700;color:var(--olive-2)}
+.sh-rules pre{margin:8px 0 0;padding:10px;border-radius:var(--r-sm);background:var(--bg2);border:1px solid var(--border);font-size:10.5px;line-height:1.45;max-height:220px;overflow:auto;white-space:pre-wrap;word-break:break-all;color:var(--muted);text-align:left}
+.sh-pres{display:flex;flex-direction:column;gap:7px;margin-top:10px}
+.sh-pr{display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:var(--r-sm);background:var(--s2);border:1px solid var(--border)}
+.sh-pr b{font-size:13px;flex:1;min-width:0}
+.sh-pr span:last-child{font-size:11.5px;color:var(--dim)}
+.sh-av{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;flex:none;background:var(--olive-dim);color:var(--olive-2);font-weight:900}
+
+
 </style>
 <script>(function(){try{var t=localStorage.getItem('sidur-avoda-theme');if(!t||!/^(navy|teal|sand|paper|day)$/.test(t))return;var d=document.documentElement;d.setAttribute('data-theme',t);if(t==='paper'||t==='day'){d.setAttribute('data-tone','light');var cs=document.querySelector('meta[name="color-scheme"]');if(cs)cs.setAttribute('content','light')}var mc=document.querySelector('meta[name="theme-color"]');if(mc)mc.setAttribute('content',getComputedStyle(d).getPropertyValue('--bg').trim())}catch(e){}})()</script>
 </head>
@@ -766,6 +780,12 @@ svg.ic{width:17px;height:17px;flex:none;fill:none;stroke:currentColor;stroke-wid
 <symbol id="pv-openai" viewBox="0 0 24 24"><path d="M12 4.2 20.4 19H3.6z"/></symbol>
 <symbol id="pv-gemini" viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14" rx="2.5"/></symbol>
 <symbol id="i-chat" viewBox="0 0 24 24"><path d="M20 15a2 2 0 0 1-2 2H8l-4 4V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2z"/><path d="M8 8.5h8M8 12h5"/></symbol>
+<symbol id="i-note" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2.5"/><path d="M9 8h6M9 12h6M9 16h3.5"/></symbol>
+<symbol id="i-compose" viewBox="0 0 24 24"><path d="M11.5 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5.5"/><path d="M17.6 3.4a2 2 0 0 1 2.9 2.9l-7.9 7.9-3.7.9.9-3.7z"/></symbol>
+<symbol id="i-pin" viewBox="0 0 24 24"><path d="M9.5 3.5h5l-.8 5.2 3.3 3v2H7v-2l3.3-3z"/><path d="M12 13.7V21"/></symbol>
+<symbol id="i-shareup" viewBox="0 0 24 24"><path d="M12 15V3.5"/><path d="m8 7.5 4-4 4 4"/><path d="M7 11H6a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2h-1"/></symbol>
+<symbol id="i-plusbox" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3.5"/><path d="M12 8.5v7M8.5 12h7"/></symbol>
+<symbol id="i-dots" viewBox="0 0 24 24"><circle cx="12" cy="5.5" r="1.3"/><circle cx="12" cy="12" r="1.3"/><circle cx="12" cy="18.5" r="1.3"/></symbol>
 <symbol id="i-send" viewBox="0 0 24 24"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4z"/></symbol>
 <symbol id="i-key" viewBox="0 0 24 24"><circle cx="8" cy="15" r="4.5"/><path d="M11.2 11.8 20 3M16.5 6.5l3 3M14 9l2 2"/></symbol>
 <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7.5" height="9" rx="1.8"/><rect x="13.5" y="3" width="7.5" height="5.5" rx="1.8"/><rect x="13.5" y="11.5" width="7.5" height="9.5" rx="1.8"/><rect x="3" y="15" width="7.5" height="6" rx="1.8"/></symbol>
@@ -818,6 +838,7 @@ svg.ic{width:17px;height:17px;flex:none;fill:none;stroke:currentColor;stroke-wid
       <button class="sb-item" data-nav="next"><svg class="ic"><use href="#i-zap"/></svg><span>סידור <span class="tyl">2027</span></span><span class="sb-pip" id="sbNextPip" hidden></span></button>
       <div class="sb-sect">כלים</div>
       <button class="sb-item" data-nav="train"><svg class="ic"><use href="#i-target"/></svg>אימונים וכשירויות<span class="sb-cnt" id="sbTrCnt" hidden></span></button>
+      
       <button class="sb-item" data-act="chat-open"><svg class="ic"><use href="#i-chat"/></svg>צ׳אט תיקונים</button>
       <button class="sb-item" data-act="settings"><svg class="ic"><use href="#i-sliders"/></svg>גיבוי והגדרות</button>
     </nav>
@@ -840,6 +861,7 @@ svg.ic{width:17px;height:17px;flex:none;fill:none;stroke:currentColor;stroke-wid
       <section class="view" id="v-year" aria-label="סידור שנתי"></section>
       <section class="view" id="v-next" aria-label="סידור השנה הבאה"></section>
       <section class="view" id="v-train" aria-label="אימונים וכשירויות"></section>
+      
     </main>
   </div>
 </div>
@@ -850,9 +872,11 @@ svg.ic{width:17px;height:17px;flex:none;fill:none;stroke:currentColor;stroke-wid
   <button class="bn-it" data-nav="year"><svg class="ic"><use href="#i-table"/></svg>שנתי</button>
   <button class="bn-it" data-nav="next"><svg class="ic"><use href="#i-zap"/></svg><span class="tyl">2027</span><span class="bn-pip" id="bnNextPip" hidden></span></button>
   <button class="bn-it" data-nav="train"><svg class="ic"><use href="#i-target"/></svg>אימונים</button>
+  
 </nav>
 
 <button class="chat-fab" id="chatFab" data-act="chat-open" aria-label="צ׳אט תיקונים — כתוב מה לא בסדר בסידור"><svg class="ic"><use href="#i-chat"/></svg></button>
+
 
 <div class="bell" id="bellDrop" role="dialog" aria-label="התראות"></div>
 
@@ -868,6 +892,7 @@ svg.ic{width:17px;height:17px;flex:none;fill:none;stroke:currentColor;stroke-wid
     <div class="ov-b" id="dayBody"></div>
   </div>
 </div>
+
 
 <div class="ov" id="genOv" role="dialog" aria-modal="true" aria-labelledby="genTitle">
   <div class="ov-p lg">
@@ -914,11 +939,28 @@ svg.ic{width:17px;height:17px;flex:none;fill:none;stroke:currentColor;stroke-wid
         <button class="th-opt" data-theme-set="day"><span class="th-sw" style="background:linear-gradient(90deg,#f7f9fb 0 34%,#1f5fbf 34% 67%,#e8b024 67%)"></span><span>יום בהיר</span></button>
       </div><span class="th-n">ההחלפה מיידית ונשמרת במכשיר זה. קבצי הייצוא נשארים בהירים להדפסה.</span></div>
       <div class="set"><div><b>סנכרון בין מכשירים</b><span id="setSyncSt">כבוי — הנתונים נשמרים רק במכשיר הזה</span></div><button class="btn btn-gh btn-sm" data-act="sync-open"><svg class="ic"><use href="#i-sync"/></svg>הגדרה</button></div>
+      <div class="set"><div><b>גרסת המפקדים</b><span id="setShareSt">לא מוגדר</span></div><button class="btn btn-gh btn-sm" data-act="share-open"><svg class="ic"><use href="#i-users"/></svg>הגדרה</button></div>
       <div class="set"><div><b>חיבור הצ׳אט</b><span id="setAiSt">לא מחובר</span></div><button class="btn btn-gh btn-sm" data-act="chat-ai"><svg class="ic"><use href="#i-key"/></svg>הגדרה</button></div>
       <div class="set"><div><b>גיבוי נתונים</b><span>הורדת קובץ עם כל הנתונים של האפליקציה</span></div><button class="btn btn-gh btn-sm" data-act="backup"><svg class="ic"><use href="#i-download"/></svg>הורדה</button></div>
       <div class="set"><div><b>שחזור מגיבוי</b><span>טעינת קובץ גיבוי שהורד בעבר — מחליף את הנתונים הנוכחיים</span></div><label class="btn btn-gh btn-sm"><svg class="ic"><use href="#i-upload"/></svg>בחירת קובץ<input type="file" id="restoreFile" accept=".json,application/json"></label></div>
       <div class="set danger"><div><b>איפוס כל הנתונים</b><span>מחיקת הטיוטה, האישור, הנעילות והאימונים במכשיר זה</span></div><button class="btn btn-no btn-sm" id="resetAll" data-act="reset-all"><svg class="ic"><use href="#i-trash"/></svg>איפוס</button></div>
       <p class="set-note" id="setNote"></p>
+    </div>
+  </div>
+</div>
+
+<div class="ov" id="shareOv" role="dialog" aria-modal="true" aria-labelledby="shareTitle">
+  <div class="ov-p">
+    <div class="ov-h">
+      <div class="ov-ic"><svg class="ic"><use href="#i-users"/></svg></div>
+      <div class="ov-ht"><h2 id="shareTitle">גרסת המפקדים</h2><p>המפקדים רואים את הסידור הרשמי והמאושר, ומוסיפים אימונים</p></div>
+      <button class="ov-x" data-close="shareOv" aria-label="סגירה"><svg class="ic"><use href="#i-x"/></svg></button>
+    </div>
+    <div class="ov-b">
+      <div class="ai-st" id="shareSt" role="status"></div>
+      <div id="shareBody"></div>
+      <p class="set-note" id="shareNote" role="status"></p>
+      <p class="fn">מה המפקדים רואים: 2026 והשנים שאישרת. טיוטה שלא אושרה נשארת רק אצלך. הם לא יכולים לשנות משמרות — רק להוסיף אימונים, שמופיעים אצל כולם עם המשמרת שרשמה. את כל האימונים אפשר למחוק כאן.</p>
     </div>
   </div>
 </div>
@@ -938,6 +980,7 @@ svg.ic{width:17px;height:17px;flex:none;fill:none;stroke:currentColor;stroke-wid
     </div>
   </div>
 </div>
+
 
 <div class="ov" id="chatOv" role="dialog" aria-modal="true" aria-labelledby="chatTitle">
   <div class="ov-p chat-p">
@@ -996,10 +1039,15 @@ svg.ic{width:17px;height:17px;flex:none;fill:none;stroke:currentColor;stroke-wid
   </div>
 </div>
 
+
+
+
 <div id="toast" role="status" aria-live="polite"></div>
 
 <script>
 'use strict';
+// שתי גרסאות נבנות מהקובץ הזה (src/build.py): admin — הגרסה המלאה של המנהל · member — גרסת המפקדים (צפייה, אימונים ופתקים)
+const APP_ROLE='admin',MEMBER=APP_ROLE==='member';
 /* ============================================================
    עזרים
    ============================================================ */
@@ -1082,7 +1130,9 @@ let DRAFT_PINS=null;
 const approvedOf=y=>APPROVED[y]||null;
 const curDraft=()=>DRAFT_YEAR===TARGET_YEAR?DRAFT_MAP:null;
 const isApproved=()=>!!approvedOf(TARGET_YEAR);
-const isDraftDate=d=>{const y=d.getFullYear();return y>2026&&!approvedOf(y)};
+const isDraftDate=d=>{if(MEMBER)return false;const y=d.getFullYear();return y>2026&&!approvedOf(y)};
+// המשמרת של המשתמש: במנהל — מהגדרות הסבב · במפקד — מה שבחר בפתיחה הראשונה
+const myShift=()=>baseSched().my||'ג׳';
 function shiftFromName(nm,date){const s=schedFor(date);return s.shifts.find(x=>x.name===nm)||null}
 function shiftOnDuty(date){
   const d=strip(date),y=d.getFullYear();
@@ -1238,7 +1288,7 @@ function blockStart(d){const h=HOL_MAP[holKey(d)];return(h&&!h.minor)?pd(h.start
 // 2026 וסידורים מאושרים — בדיוק כפי שנקבעו. נוסחה — בלוק חג נסגר כולו ע"י המשמרת שפותחת אותו.
 function dutyFor(date){
   const d=strip(date),y=d.getFullYear(),k=isoOf(d);
-  if(y<2026)return PAST_SCHED[k]||null;
+    if(y<2026)return PAST_SCHED[k]||null;
   if(y===2026&&SCHED2026[k])return SCHED2026[k];
   const ap=approvedOf(y);if(ap&&ap[k])return ap[k];
   if(y>2026&&y<=MAX_YEAR){const nm=planOf(y).map[k];if(nm)return nm}
@@ -1272,16 +1322,55 @@ function syncYears(){
 /* ============================================================
    אימונים וכשירויות
    ============================================================ */
-let TRAININGS=[],trainSeq=1;
-const trainingsOn=iso=>TRAININGS.filter(t=>t.date===iso);
+// TRAININGS — האימונים שנרשמו בגרסה של המנהל (נשמרים ומסונכרנים כמו שאר הנתונים).
+// אימונים משותפים עם גרסת המפקדים: כל אימון נשמר גם בענן, עם המשמרת של מי שרשם אותו, וכולם רואים את כולם.
+// s — המשמרת שרשמה · p — האימון כבר פורסם לענן. המזהה בענן נגזר מהתאריך, השם והמספר — זהה בכל המכשירים שלך
+let TRAININGS=[],trainSeq=1,_trRev=0;
+const trBump=()=>{_trRev++};
 function sortTr(){TRAININGS.sort((a,b)=>(pd(a.date)-pd(b.date))||(a.id-b.id))}
+// המזהה של אימון בענן — קבוע וזהה בכל המכשירים (לפי התאריך, השם והמספר), גם אם גרסה ישנה במכשיר אחר לא שמרה שדות חדשים
+function trGid(t){if(t.g)return t.g;let h=2166136261;const k=t.date+'|'+t.name+'|'+t.id;for(let i=0;i<k.length;i++){h^=k.charCodeAt(i);h=Math.imul(h,16777619)>>>0}return 'L'+h.toString(36)+'x'+t.id}
+const trOk=x=>!!x&&typeof x.n==='string'&&!!x.n&&typeof x.d==='string'&&/^\d{4}-\d{1,2}-\d{1,2}$/.test(x.d);
+// רשימה אחידה לתצוגה: {k — מפתח למחיקה ('o'+מספר: נרשם כאן · 'c'+מזהה: מהענן), name, date, s — המשמרת שרשמה, del — אפשר למחוק}
+let _trC=null,_trV='';
+function trAll(){
+  const v=_dv+'|'+_trRev;
+  if(_trC&&_trV===v)return _trC;
+  const out=[];
+  
+  const on=shOn(),mine=myShift(),seen=new Set();
+  TRAININGS.forEach(t=>{seen.add(trGid(t));out.push({k:'o'+t.id,name:t.name,date:t.date,s:on?(t.s||mine):'',del:1,at:t.id})});
+  if(on)for(const g in SHR.tr){const x=SHR.tr[g];if(seen.has(g)||SHR.pend.del.includes(g)||!trOk(x))continue;out.push({k:'c'+g,name:x.n,date:isoOf(pd(x.d)),s:x.s||'',del:1,at:+x.at||0})}
+  
+  
+  out.sort((a,b)=>(pd(a.date)-pd(b.date))||(a.at-b.at));
+  _trC=out;_trV=v;return out;
+}
+const trainingsOn=iso=>trAll().filter(t=>t.date===iso);
+// האימונים משותפים עם המפקדים (בגרסת המפקדים תמיד; אצל המנהל — כשהשיתוף פעיל)
+const trShared=()=>shOn();
+// שם האימון עם המשמרת שרשמה אותו: מלא ברשימות, מקוצר בלוחות
+const trLabel=t=>t.s?t.name+' · משמרת '+t.s:t.name;
+const trShort=t=>t.s?t.name+' '+t.s:t.name;
 function addTraining(name,iso){
   name=String(name||'').trim().slice(0,40);
   if(!name||!iso)return null;
-  const t={id:trainSeq++,name,date:isoOf(pd(iso))};
-  TRAININGS.push(t);sortTr();saveState();return t;
+  const date=isoOf(pd(iso));
+  
+  
+  const t={id:trainSeq++,name,date,s:myShift()};
+  TRAININGS.push(t);sortTr();saveState();shTrAdded(t);return t;
+  
 }
-function delTraining(id){const i=TRAININGS.findIndex(t=>t.id===id);if(i<0)return false;TRAININGS.splice(i,1);saveState();return true}
+function delTraining(k){
+  k=String(k||'');
+  
+  
+  if(k[0]==='c')return shDelCloud(k.slice(1));
+  const id=+k.slice(1),i=TRAININGS.findIndex(t=>t.id===id);if(i<0)return false;
+  const t=TRAININGS[i];TRAININGS.splice(i,1);saveState();shTrDeleted(t);return true;
+  
+}
 
 /* ============================================================
    טיוטת השנה הבאה
@@ -1742,7 +1831,7 @@ function draftStats(){
 // ימי האיזון שבתוקף בשנה מסוימת (Map: תאריך → {from,to})
 let APPROVED_BAL={};
 function balanceDaysOf(y,src){
-  const m=new Map();if(y<2027||y>MAX_YEAR)return m;
+  const m=new Map();if(MEMBER||y<2027||y>MAX_YEAR)return m;
   let list,map;
   if(src==='draft'&&y===TARGET_YEAR&&curDraft()){list=planOf(y).bal;map=DRAFT_MAP}
   else if(approvedOf(y)){list=APPROVED_BAL[y]||[];map=approvedOf(y)}
@@ -1876,7 +1965,9 @@ function wkConsecText(y,c){
 /* ============================================================
    שמירה במכשיר
    ============================================================ */
-const STORE_KEY='sidur-avoda-v1',VIEW_KEY='sidur-avoda-view';
+const VIEW_KEY=MEMBER?'sidur-mefakdim-view':'sidur-avoda-view';
+
+const STORE_KEY='sidur-avoda-v1';
 // 2 = סידורי 2024–2026 אומתו יום-יום מול הסידורים המקוריים · 3 = בחירה ידנית של משמרת לחג נכנסת לבסיס הטיוטה
 // 4 = הבסיס שובר רצפי עבודה (יומיים ברצף שלא בשישי-שבת ולא בחג) · 5 = סופי שבוע מאוזנים ובלי סוף שבוע ברצף לאותה משמרת
 // 6 = עצמאות בלוק של 48 שעות (ערב החג והחג אצל אותה משמרת) · לכל משמרת עד 4 ימי עבודה בשבוע (ראשון עד שבת)
@@ -1889,7 +1980,7 @@ function snapshot(at){
     approved:APPROVED,approvedBal:APPROVED_BAL,draftMap:curDraft(),draftYear:curDraft()?TARGET_YEAR:null,draftPins:curDraft()&&DRAFT_PINS?[...DRAFT_PINS]:null,holLocks:HOL_LOCKS,holLocksYear:TARGET_YEAR,histEdits:HIST_EDITS,totEdits:TOT_EDITS,
     trainings:TRAININGS,trainSeq,savedAt:at||Date.now()};
 }
-function persistNow(at){_saveT=null;const s=snapshot(at);_savedAt=s.savedAt;try{localStorage.setItem(STORE_KEY,JSON.stringify(s))}catch(e){}if(!at)syncLocal()}
+function persistNow(at){_saveT=null;const s=snapshot(at);_savedAt=s.savedAt;try{localStorage.setItem(STORE_KEY,JSON.stringify(s))}catch(e){}if(!at)syncLocal();shSoon()}
 function saveState(){bumpData();clearTimeout(_saveT);_saveT=setTimeout(()=>persistNow(),250)}
 function flushSave(){if(_saveT){clearTimeout(_saveT);persistNow()}}
 function applyState(d){
@@ -1918,7 +2009,7 @@ function applyState(d){
   if(isObj(d.totEdits))Object.keys(d.totEdits).forEach(y=>{const e=d.totEdits[y];if(!isObj(e))return;const o={};SHIFT_NAMES.forEach(n=>{const v=e[n];if(typeof v==='number'&&isFinite(v)&&v>=0&&v<=366)o[n]=Math.round(v)});if(Object.keys(o).length)TOT_EDITS[+y]=o});
   bumpData();
   if((+d.dataRev||0)<DATA_REV)migrateVerified(+d.dataRev||0);
-  TRAININGS=Array.isArray(d.trainings)?d.trainings.filter(t=>t&&t.name&&t.date).map(t=>({id:+t.id||0,name:String(t.name).slice(0,40),date:isoOf(pd(t.date))})):[];
+  TRAININGS=Array.isArray(d.trainings)?d.trainings.filter(t=>t&&t.name&&t.date).map(t=>{const o={id:+t.id||0,name:String(t.name).slice(0,40),date:isoOf(pd(t.date))};if(typeof t.g==='string'&&/^[A-Za-z0-9]{2,40}$/.test(t.g))o.g=t.g;if(SHIFT_NAMES.includes(t.s))o.s=t.s;if(t.p)o.p=1;return o}):[];
   trainSeq=Math.max(typeof d.trainSeq==='number'?d.trainSeq:1,1,...TRAININGS.map(t=>t.id+1));
   _savedAt=d.savedAt||null;
   return true;
@@ -1973,13 +2064,14 @@ function draftRulesFix(){
 }
 function loadState(){try{const raw=localStorage.getItem(STORE_KEY);if(!raw)return false;return applyState(JSON.parse(raw))}catch(e){return false}}
 
+
 /* ============================================================
    ממשק — הודעות, חלונות, אישור דו-לחיצה
    ============================================================ */
 function toast(msg,ms){const t=$('#toast');if(!t)return;t.textContent=msg;t.classList.add('show');clearTimeout(toast._t);toast._t=setTimeout(()=>t.classList.remove('show'),ms||2800)}
 let _open=[];
 function openModal(id){const o=document.getElementById(id);if(!o)return;o.classList.add('show');if(!_open.includes(id))_open.push(id)}
-function closeModal(id){const o=document.getElementById(id);if(o)o.classList.remove('show');_open=_open.filter(x=>x!==id);if(id==='dayOv')_dayIso=null}
+function closeModal(id){const o=document.getElementById(id);if(o)o.classList.remove('show');_open=_open.filter(x=>x!==id);if(id==='dayOv')_dayIso=null;}
 function closeAll(){_open.slice().forEach(closeModal)}
 // במקום confirm() שנחסם ב-Safari: לחיצה ראשונה מחמשת, שנייה מבצעת
 const ARM={};
@@ -2001,7 +2093,8 @@ const VIEWS={
   month:{title:'לוח חודשי',render:()=>renderMonth()},
   year:{title:'סידור שנתי',render:()=>renderYear()},
   next:{get title(){return 'סידור '+TARGET_YEAR},render:k=>renderNext(k)},
-  train:{title:'אימונים וכשירויות',render:()=>renderTrain()}
+  train:{title:'אימונים וכשירויות',render:()=>renderTrain()},
+  
 };
 let curView='overview';
 function go(v){
@@ -2010,8 +2103,9 @@ function go(v){
   $$('.view').forEach(s=>s.classList.toggle('active',s.id==='v-'+v));
   $$('.sb-item[data-nav],.bn-it[data-nav]').forEach(b=>b.classList.toggle('active',b.dataset.nav===v));
   const fab=$('#chatFab'),fo=v==='next'||v==='year'||v==='month';if(fab)fab.classList.toggle('show',fo);document.body.classList.toggle('fab-on',fo);
+  
   const t=$('#hdTitle');if(t)t.textContent=VIEWS[v].title;
-  document.title=VIEWS[v].title+' · סידור עבודה';
+  document.title=VIEWS[v].title+(MEMBER?' · סידור מפקדים':' · סידור עבודה');
   VIEWS[v].render(false);
   try{localStorage.setItem(VIEW_KEY,v)}catch(e){}
   try{window.scrollTo(0,0)}catch(e){}
@@ -2026,7 +2120,7 @@ function refresh(){
    מסגרת — סרגל צד, כותרת, התראות
    ============================================================ */
 function renderChrome(){
-  const now=dutyFor(TODAY),tom=dutyFor(addDays(TODAY,1)),my=baseSched().my||'ג׳';
+  const now=dutyFor(TODAY),tom=dutyFor(addDays(TODAY,1)),my=myShift();
   const el=$('#sbNow');
   if(el)el.innerHTML=`<div class="eyebrow"><span class="live"></span>במשמרת עכשיו</div><div class="now-v">${now?'משמרת '+now:'—'}</div><div class="now-s">מחר: ${tom||'—'} · ${dayName(TODAY)} ${fmtDM(TODAY)}</div>`;
   $$('.tyl').forEach(e=>{e.textContent=TARGET_YEAR});
@@ -2043,23 +2137,27 @@ function tick(){
   const hs=$('#hdSub');if(hs)hs.textContent=ds;
   const t=strip(n);
   if(t.getTime()!==TODAY.getTime()){TODAY=t;if(syncYears())onYearRollover();refresh()}
-  syncWatch();
+  syncWatch();shWatch();
+  
 }
 // 1 בינואר: שנת היעד עוברת לשנה הבאה. טיוטה שלא אושרה לשנה שהתחילה — לא נגררת.
 function onYearRollover(){
+  if(calY>MAX_YEAR)calY=MAX_YEAR;if(yearY>MAX_YEAR)yearY=MAX_YEAR;
+  
   if(DRAFT_YEAR!==TARGET_YEAR){DRAFT_MAP=null;DRAFT_YEAR=null}
   HOL_LOCKS={};pendingGen=null;
-  if(calY>MAX_YEAR)calY=MAX_YEAR;if(yearY>MAX_YEAR)yearY=MAX_YEAR;
   saveState();
   toast('שנה חדשה — מרחב העבודה עבר לסידור '+TARGET_YEAR,4200);
+  
 }
 function computeAlerts(){
   const out=[];
   allEvents().filter(e=>e.end>=TODAY&&dayDiff(TODAY,e.start)<=14).forEach(e=>out.push({
     ic:'i-flag',tone:'gold',t:e.name+' — '+(e.start<=TODAY?'בעיצומו':whenTxt(e.start)),
     s:fmtFull(e.start)+' · משמרת '+(dutyFor(e.start)||'—')+(e.minor||e.cw?'':' · בלוק '+e.dur+' שעות')+(e.com?' · '+COM_NAME[e.com]:''),day:isoOf(e.start)}));
-  TRAININGS.filter(t=>{const n=dayDiff(TODAY,pd(t.date));return n>=0&&n<=7}).forEach(t=>{
-    const d=pd(t.date);out.push({ic:'i-target',tone:'indigo',t:t.name+' — '+whenTxt(d),s:dayName(d)+' · '+fmtFull(d)+' · משמרת '+(dutyFor(d)||'—'),day:t.date})});
+  trAll().filter(t=>{const n=dayDiff(TODAY,pd(t.date));return n>=0&&n<=7}).forEach(t=>{
+    const d=pd(t.date);out.push({ic:'i-target',tone:'indigo',t:trLabel(t)+' — '+whenTxt(d),s:dayName(d)+' · '+fmtFull(d)+(t.s?'':' · משמרת '+(dutyFor(d)||'—')),day:t.date})});
+  if(MEMBER)return out;
   if(!isApproved())out.push({ic:'i-zap',tone:'amber',t:'סידור '+TARGET_YEAR+' טרם אושר',s:'עד לאישור, הלוח מציג את '+TARGET_YEAR+' לפי הנוסחה',nav:'next'});
   else if(curDraft()){const p=diffCount(approvedOf(TARGET_YEAR),curDraft());if(p)out.push({ic:'i-alert',tone:'amber',t:p+' שינויים בטיוטה שלא אושרו',s:'הלוח מציג את הגרסה המאושרת האחרונה',nav:'next'})}
   if(curDraft()){
@@ -2075,7 +2173,7 @@ function renderBell(){
   const dot=$('#bellDot');if(dot)dot.hidden=!a.length;
   const appr=isApproved(),pend=appr&&curDraft()?diffCount(approvedOf(TARGET_YEAR),curDraft()):0,pip=!appr||pend>0;
   ['#sbNextPip','#bnNextPip'].forEach(s=>{const e=$(s);if(e)e.hidden=!pip});
-  const up=TRAININGS.filter(t=>pd(t.date)>=TODAY).length,tc=$('#sbTrCnt');
+  const up=trAll().filter(t=>pd(t.date)>=TODAY).length,tc=$('#sbTrCnt');
   if(tc){tc.hidden=!up;tc.textContent=up}
   const box=$('#bellDrop');if(!box)return;
   box.innerHTML=`<div class="bell-h"><span>התראות</span><span class="num">${a.length}</span></div><div class="bell-l">${a.length?a.map(x=>`<button class="bi" ${x.day?`data-day="${x.day}"`:`data-nav="${x.nav}"`}><span class="ibox ${x.tone}">${ico(x.ic)}</span><span class="bi-t"><b>${esc(x.t)}</b><span>${esc(x.s)}</span></span></button>`).join(''):'<div class="empty" style="margin:12px">אין התראות</div>'}</div>`;
@@ -2097,7 +2195,7 @@ function yearStats(y){
 }
 function trRow(t){
   const d=pd(t.date),past=d<TODAY,nm=dutyFor(d);
-  return `<div class="tr-row${past?' past':''}"><button class="tr-open" data-day="${t.date}"><span class="tr-b"><b>${d.getDate()}</b><span>${MON_S[d.getMonth()]}</span></span><span class="tr-t"><b>${esc(t.name)}</b><span>${dayName(d)} · משמרת ${nm||'—'} · ${whenTxt(d)}</span></span></button><button class="xb" data-trdel="${t.id}" aria-label="מחיקת ${esc(t.name)}">${ico('i-trash')}</button></div>`;
+  return `<div class="tr-row${past?' past':''}"><button class="tr-open" data-day="${t.date}"><span class="tr-b"><b>${d.getDate()}</b><span>${MON_S[d.getMonth()]}</span></span><span class="tr-t"><b>${esc(trLabel(t))}</b><span>${dayName(d)}${t.s?'':' · משמרת '+(nm||'—')} · ${whenTxt(d)}</span></span></button>${t.del?`<button class="xb" data-trdel="${esc(t.k)}" aria-label="מחיקת ${esc(t.name)}">${ico('i-trash')}</button>`:''}</div>`;
 }
 function animateBars(root){
   const bars=root.querySelectorAll('[data-w]');
@@ -2106,14 +2204,16 @@ function animateBars(root){
 }
 function renderOverview(){
   const v=$('#v-overview');if(!v)return;
-  const now=dutyFor(TODAY),tom=dutyFor(addDays(TODAY,1)),hol=HOL_MAP[holKey(TODAY)],my=baseSched().my||'ג׳';
+  const now=dutyFor(TODAY),tom=dutyFor(addDays(TODAY,1)),hol=HOL_MAP[holKey(TODAY)],my=myShift();
   let mi=-1;for(let i=0;i<=63;i++){if(dutyFor(addDays(TODAY,i))===my){mi=i;break}}
   const md=mi>=0?addDays(TODAY,mi):null;
   const evs=upcomingEvents(6),ne=evs[0]||null;
   const yy=clampY(TODAY.getFullYear()),ys=yearStats(yy);
+  
   const ds=draftStats(),appr=isApproved(),pend=appr?diffCount(approvedOf(TARGET_YEAR),ds.map):0,plan=planInfo();
   const fr=draftFairness(ds.map),fOk=fr.filter(x=>x.st==='ok').length,fBad=fr.some(x=>x.st==='bad'||x.st==='gap');
-  const ups=TRAININGS.filter(t=>pd(t.date)>=TODAY).slice(0,4);
+  
+  const ups=trAll().filter(t=>pd(t.date)>=TODAY).slice(0,4);
   const wk0=addDays(TODAY,-TODAY.getDay());
   let h='<div class="bento">';
   h+=`<div class="card hero c-6"><span class="brk a"></span><span class="brk b"></span>
@@ -2140,6 +2240,7 @@ function renderOverview(){
   h+=`<div class="card c-6"><div class="ch"><span class="ibox gold">${ico('i-flag')}</span><h3>חגים ומועדים קרובים</h3></div>`;
   h+=evs.length?evs.map(e=>`<div class="ev" data-day="${isoOf(e.start)}" role="button" tabindex="0"><div class="ev-b${e.minor&&!e.yel?' minor':' hol'}"><b>${e.start.getDate()}</b><span>${MON_S[e.start.getMonth()]}</span></div><div class="ev-t"><b>${esc(e.name)}${e.est?' *':''}</b><span>${e.minor?'יום עבודה רגיל':e.cw?COM_NAME[e.com]+' · יום עבודה רגיל'+(e.days>1?' · עד '+fmtDM(e.end):''):'בלוק '+e.dur+' שעות'+(e.days>1?' · עד '+fmtDM(e.end):'')+(e.com?' · '+COM_NAME[e.com]:'')}</span></div><div class="ev-r"><b>${e.start<=TODAY?'בעיצומו':whenTxt(e.start)}</b><span>משמרת ${dutyFor(e.start)||'—'}${isDraftDate(e.start)?' · טיוטה':''}</span></div></div>`).join(''):'<div class="empty">אין חגים בהמשך הלוח</div>';
   h+='</div>';
+  
   const maxT=Math.max(1,...SHIFT_NAMES.map(n=>ys.st[n].total));
   h+='<div class="c-6 stack">';
   h+=`<div class="card"><div class="ch"><span class="ibox steel">${ico('i-scale')}</span><h3>חלוקת ימים ${yy}</h3><div class="end"><button class="link" data-nav="year">לסידור השנתי${ico('i-chevl')}</button></div></div><div class="dist">`;
@@ -2155,9 +2256,12 @@ function renderOverview(){
     </div>
     <div class="row-btns" style="margin-top:12px"><button class="btn btn-gh btn-sm" data-nav="next">${ico('i-table')}מרחב העבודה</button><button class="btn btn-gh btn-sm" data-act="gen-run">${ico('i-zap')}הפעלת מנוע הוגנות</button></div></div>`;
   h+='</div>';
-  h+=`<div class="card c-12"><div class="ch"><span class="ibox indigo">${ico('i-target')}</span><h3>אימונים קרובים</h3><div class="end"><button class="link" data-nav="train">לכל האימונים${ico('i-chevl')}</button></div></div>`;
+  
+  // בגרסת המפקדים אין את כרטיסי חלוקת הימים וסידור השנה הבאה — האימונים הקרובים עולים לצד החגים
+  h+=`<div class="card ${MEMBER?'c-6':'c-12'}"><div class="ch"><span class="ibox indigo">${ico('i-target')}</span><h3>אימונים קרובים</h3><div class="end"><button class="link" data-nav="train">לכל האימונים${ico('i-chevl')}</button></div></div>`;
   h+=ups.length?`<div class="tr-grid">${ups.map(trRow).join('')}</div>`:`<div class="empty">אין אימונים מתוכננים<br><button class="link" data-nav="train" style="margin-top:6px">${ico('i-plus')}הוספת אימון</button></div>`;
   h+='</div></div>';
+  
   v.innerHTML=h;
   animateBars(v);
 }
@@ -2178,10 +2282,10 @@ function renderMonth(){
     const nm=dutyFor(d),hl=HOL_MAP[holKey(d)],trs=trainingsOn(k),t=d.getTime()===TODAY.getTime();
     if(!out&&nm&&nm in cnt)cnt[nm]++;
     let c='mday';if(out)c+=' out';if(we)c+=' we';if(hl)c+=isHolDay(hl)?' hol':' holm';if(t)c+=' today';
-    g+=`<button class="${c}" data-day="${k}" aria-label="${dayName(d)} ${fmtFull(d)}, משמרת ${nm||'ללא'}${hl?', '+esc(holDayName(hl)):''}"><span class="md-top"><span class="md-n">${d.getDate()}</span>${nm?`<span class="md-sh">${sh1(nm)}</span>`:''}</span>${hl?`<span class="md-hl${hl.first||hl.lst?'':' cont'}">${esc(holDayName(hl))}</span>`:''}${trs.length?`<span class="md-tr">${ico('i-target')}${esc(trs[0].name)}${trs.length>1?' +'+(trs.length-1):''}</span>`:''}</button>`;
+    g+=`<button class="${c}" data-day="${k}" aria-label="${dayName(d)} ${fmtFull(d)}, משמרת ${nm||'ללא'}${hl?', '+esc(holDayName(hl)):''}"><span class="md-top"><span class="md-n">${d.getDate()}</span>${nm?`<span class="md-sh">${sh1(nm)}</span>`:''}</span>${hl?`<span class="md-hl${hl.first||hl.lst?'':' cont'}">${esc(holDayName(hl))}</span>`:''}${trs.length?`<span class="md-tr">${ico('i-target')}${esc(trShort(trs[0]))}${trs.length>1?' +'+(trs.length-1):''}</span>`:''}</button>`;
   }
-  const draft=calY>2026&&!approvedOf(calY);
-  v.innerHTML=`<div class="ph"><div><h1>${MONTHS[calM]} ${calY}</h1>${draft?`<p class="warn">סידור ${calY} טרם אושר — מוצג לפי הנוסחה</p>`:''}</div>
+  const draft=calY>2026&&!approvedOf(calY)?`סידור ${calY} טרם אושר — מוצג לפי הנוסחה`:'';
+  v.innerHTML=`<div class="ph"><div><h1>${MONTHS[calM]} ${calY}</h1>${draft?`<p class="warn">${draft}</p>`:''}</div>
     <div class="nav-grp"><button class="nb" data-mnav="-1" ${atMin?'disabled':''} aria-label="החודש הקודם">${ico('i-chevr')}</button><button class="btn btn-gh btn-sm" data-mnav="0">היום</button><button class="nb" data-mnav="1" ${atMax?'disabled':''} aria-label="החודש הבא">${ico('i-chevl')}</button></div></div>
     <div class="card mcard"><div class="mgrid">${g}</div>
     <div class="msum">${SHIFT_NAMES.map(n=>`<span class="tag">משמרת ${n} <b class="num">${cnt[n]}</b></span>`).join('')}</div>
@@ -2215,9 +2319,9 @@ function renderYear(){
       r1+=`<td class="yd${wc?' we':''}${hd?' hl':''}">${d}</td>`;
       const bl=balM.get(k);
       let c2='ys';if(hd)c2+=' hl';else if(hl)c2+=' hlm';else if(wc)c2+=' we';if(trs.length)c2+=' tr';if(k===todayK)c2+=' td';if(bl)c2+=' bal';
-      r2+=`<td class="${c2}" data-day="${k}" title="${fmtDM(dt)} · משמרת ${nm||'—'}${hl?' · '+esc(holDayName(hl))+(hl.com?' ('+COM_NAME[hl.com]+')':''):''}${bl?' · יום איזון':''}${trs.length?' · '+esc(trs.map(t=>t.name).join(', ')):''}">${sh1(nm)}</td>`;
+      r2+=`<td class="${c2}" data-day="${k}" title="${fmtDM(dt)} · משמרת ${nm||'—'}${hl?' · '+esc(holDayName(hl))+(hl.com?' ('+COM_NAME[hl.com]+')':''):''}${bl?' · יום איזון':''}${trs.length?' · '+esc(trs.map(trLabel).join(', ')):''}">${sh1(nm)}</td>`;
       let lbl='',lc='';
-      if(hl&&(hl.first||(d===1&&hd)))lbl=holGridLabel(hl,dt);else if(trs.length){lbl=trs[0].name;lc=' trl'}
+      if(hl&&(hl.first||(d===1&&hd)))lbl=holGridLabel(hl,dt);else if(trs.length){lbl=trShort(trs[0]);lc=' trl'}
       r3+=`<td class="yh${yhClass(lbl)}${lc}${wc?' we':''}${hd?' hl':''}">${esc(lbl)}</td>`;
     }
     body+=`<tr class="mt"><th class="mn" rowspan="3" scope="row">${MONTHS[m]}</th><td class="rl">תאריך</td>${r1}<td class="tt"></td><td class="tt"></td><td class="tt"></td></tr>`;
@@ -2225,10 +2329,13 @@ function renderYear(){
     body+=`<tr><td class="rl">חגים</td>${r3}<td class="tt"></td><td class="tt"></td><td class="tt"></td></tr>`;
   }
   let badge='';
+  
+  
   if(y===2026)badge=`<span class="badge info">${ico('i-lock')}סידור מוטמע</span>`;
   else if(approvedOf(y))badge=`<span class="badge ok">${ico('i-check')}מאושר</span>`;
   else if(y===TARGET_YEAR)badge=`<button class="badge warn" data-nav="next">${ico('i-clock')}טיוטה — לפי נוסחה${ico('i-chevl')}</button>`;
   else badge=`<span class="badge warn">${ico('i-clock')}לא אושר — לפי נוסחה</span>`;
+  
   const sum=tot['א׳']+tot['ב׳']+tot['ג׳'];
   const sp=spreadOf(tot);
   const wi=wkInfo(wkCtx(y),f=>SHIFT_NAMES.indexOf(dutyFor(dayAt(y,f)))),wc=wi.cnt,wsp=Math.max(...wc)-Math.min(...wc),wn=wi.consec.length;
@@ -2239,6 +2346,7 @@ function renderYear(){
     <div class="gt"><span>סה״כ ${y}:</span><span>א׳ <b>${tot['א׳']}</b></span><span>ב׳ <b>${tot['ב׳']}</b></span><span>ג׳ <b>${tot['ג׳']}</b></span><span class="${sp>1?'st-bad':'st-ok'}">פער <b>${sp}</b></span><span>סך הכל <b>${sum}</b> ימים</span></div>
     <div class="gt gt2"><span>סופי שבוע ${y}:</span><span>א׳ <b>${wc[0]}</b></span><span>ב׳ <b>${wc[1]}</b></span><span>ג׳ <b>${wc[2]}</b></span><span class="${wsp>1?'st-bad':'st-ok'}">פער <b>${wsp}</b></span><span class="${wn?'st-warn':'st-ok'}"${wn?` title="${esc(wi.consec.map(c=>wkConsecText(y,c)).join(' · '))}"`:''}>${wn?(wn===1?'סוף שבוע אחד ברצף':wn+' סופי שבוע ברצף'):'בלי סוף שבוע ברצף'}</span></div>`;
 }
+
 
 /* ============================================================
    מסך: סידור השנה הבאה — מרחב עבודה
@@ -2365,7 +2473,7 @@ function renderNext(keep){
       let c2='ys dc';if(hd)c2+=' hl';else if(wc)c2+=' we';if(!nm)c2+=' gap';if(nm!==(base[k]||null))c2+=' chg';if(bl)c2+=' bal';
       r2+=`<td class="${c2}" data-draftday="${k}" title="${fmtDM(dt)} · ${nm?'משמרת '+nm:'ללא משמרת'}${hl?' · '+esc(holDayName(hl))+(hl.com?' ('+COM_NAME[hl.com]+')':''):''}${bl?' · יום איזון: ממשמרת '+bl.from+' למשמרת '+bl.to:''}${pkM.has(k)?' · '+esc(pkM.get(k)):''}">${sh1(nm)}</td>`;
       let lbl='',lc='';
-      if(hl&&(hl.first||(d===1&&hd)))lbl=holGridLabel(hl,dt);else if(trs.length){lbl=trs[0].name;lc=' trl'}
+      if(hl&&(hl.first||(d===1&&hd)))lbl=holGridLabel(hl,dt);else if(trs.length){lbl=trShort(trs[0]);lc=' trl'}
       r3+=`<td class="yh${yhClass(lbl)}${lc}${wc?' we':''}${hd?' hl':''}">${esc(lbl)}</td>`;
     }
     body+=`<tr class="mt"><th class="mn" rowspan="3" scope="row">${MONTHS[m]}</th><td class="rl">תאריך</td>${r1}<td class="tt"></td><td class="tt"></td><td class="tt"></td></tr>`;
@@ -2523,16 +2631,17 @@ function setPick(name,S){
   toast(name+' '+TARGET_YEAR+': '+(ok?'נבחרה משמרת '+S:'לפי המנוע'));
 }
 
+
 /* ============================================================
    מסך: אימונים
    ============================================================ */
 let _trDate='';
 function renderTrain(){
   const v=$('#v-train');if(!v)return;
-  const up=TRAININGS.filter(t=>pd(t.date)>=TODAY),past=TRAININGS.filter(t=>pd(t.date)<TODAY).reverse();
+  const all=trAll(),up=all.filter(t=>pd(t.date)>=TODAY),past=all.filter(t=>pd(t.date)<TODAY).reverse();
   const dsel=_trDate?pd(_trDate):null,hl=dsel?HOL_MAP[holKey(dsel)]:null;
   const prevName=$('#trName')?$('#trName').value:'';
-  let h=`<div class="ph"><div><h1>תכנון אימונים</h1><p>אימוני חובה מסומנים על גבי הלוח החודשי והשנתי</p></div></div><div class="bento">`;
+  let h=`<div class="ph"><div><h1>תכנון אימונים</h1><p>${trShared()?'משותף לכל המפקדים: כל אימון מופיע אצל כולם, עם המשמרת שרשמה אותו':'אימוני חובה מסומנים על גבי הלוח החודשי והשנתי'}</p></div></div><div class="bento">`;
   h+=`<div class="card c-5"><div class="ch"><span class="ibox indigo">${ico('i-plus')}</span><h3>הוספת יום אימון</h3></div>
     <label class="fl" for="trName">שם האימון</label>
     <input class="inp" id="trName" type="text" maxlength="40" placeholder="למשל: מטווח" enterkeyhint="done" autocomplete="off">
@@ -2556,9 +2665,9 @@ function addFromForm(){
   refresh();toast('נוסף: '+t.name+' · '+dayName(d)+' '+fmtDM(d));
 }
 function onTrDel(el){
-  const id=+el.dataset.trdel;
-  if(!armTap('tr'+id,el,ico('i-trash'))){toast('לחץ שוב למחיקה');return}
-  if(delTraining(id)){refresh();toast('האימון נמחק')}
+  const k=String(el.dataset.trdel||'');
+  if(!armTap('tr'+k,el,ico('i-trash'))){toast('לחץ שוב למחיקה');return}
+  if(delTraining(k)){trBump();refresh();toast('האימון נמחק')}
 }
 
 /* ============================================================
@@ -2593,7 +2702,7 @@ function renderDay(){
     h+=`<div class="note ${isHolDay(hl)?'hol':'gold'}">${ico('i-flag')}<div><b>${esc(holDayName(hl))}${hl.com?' · '+COM_NAME[hl.com]:''}</b><span>${hl.sub?'בלוק '+esc(hl.name)+' · ':''}${when}${tail}</span>${also.length?`<span>באותו יום: ${esc(also.join(' · '))}</span>`:''}</div></div>`;
   }
   h+='<div class="sec">אימונים וכשירויות</div>';
-  h+=trs.length?trs.map(t=>`<div class="trl">${ico('i-target')}<b>${esc(t.name)}</b><button class="xb" data-trdel="${t.id}" aria-label="מחיקת ${esc(t.name)}">${ico('i-trash')}</button></div>`).join(''):'<div class="empty">אין אימונים ביום זה</div>';
+  h+=trs.length?trs.map(t=>`<div class="trl">${ico('i-target')}<b>${esc(trLabel(t))}</b>${t.del?`<button class="xb" data-trdel="${esc(t.k)}" aria-label="מחיקת ${esc(t.name)}">${ico('i-trash')}</button>`:''}</div>`).join(''):'<div class="empty">אין אימונים ביום זה</div>';
   h+=`<div class="addrow"><input class="inp" id="dayTrName" type="text" maxlength="40" placeholder="הוספת אימון ליום זה" enterkeyhint="done" autocomplete="off"><button class="btn btn-ok" data-act="day-tr-add">${ico('i-plus')}הוספה</button></div>`;
   h+=`<div class="presets">${PRESETS.map(p=>`<button class="pre" data-dpreset="${esc(p)}">${esc(p)}</button>`).join('')}</div>`;
   $('#dayBody').innerHTML=h;
@@ -2630,6 +2739,7 @@ function exportModel(y,src){
   const ap=approvedOf(y);
   let status;
   if(y===2026)status='סידור רשמי';
+  else if(MEMBER)status='מאושר';
   else if(draft)status=ap?(diffCount(ap,DRAFT_MAP)?'טיוטה — שינויים שלא אושרו':'מאושר'):'טיוטה — טרם אושר';
   else status=ap?'מאושר':'לפי הנוסחה — טרם אושר';
   const bal=balanceDaysOf(y,draft?'draft':'view');
@@ -2641,7 +2751,7 @@ function exportModel(y,src){
       if(nm&&nm in mt){mt[nm]++;tot[nm]++}
       let lbl='',lt='',span=1;const hd=isHolDay(hl);
       if(hl&&(hl.first||(d===1&&hd))){lbl=holGridLabel(hl,dt);lt='hol';if(hd)span=holRun(dt,n-d+1)}
-      else if(trs.length){lbl=trs[0].name;lt='tr'}
+      else if(trs.length){lbl=trShort(trs[0]);lt='tr'}
       cells.push({d,col:sd+d-1,w:dt.getDay(),k,nm,hol:hd,lbl,lt,span,bal:bal.get(k)||null});
     }
     months.push({name:MONTHS[mo],cells,mt});
@@ -3007,6 +3117,7 @@ function doExport(kind,el){
   }catch(e){toast('הייצוא נכשל — נסה שוב')}
   finally{if(el)el.classList.remove('busy')}
 }
+
 
 /* ============================================================
    צ׳אט תיקונים — פקודות מובנות (בלי אינטרנט) + צ׳אט חכם לניסוח חופשי (Claude, ChatGPT או Gemini — כשמוגדר מפתח)
@@ -3858,15 +3969,21 @@ function chatClear(btn){
   CHAT={msgs:[],undo:[],seq:CHAT.seq};chatSave();chatRender();toast('השיחה נמחקה — הטיוטה לא השתנתה');
 }
 
+
 /* ============================================================
    גיבוי והגדרות
    ============================================================ */
 function openSettings(){
+  
+  
   setNoteUpd();
   const a=$('#setAiSt');if(a)a.innerHTML=aiSumHtml();
   const s=$('#setSyncSt');if(s)s.textContent=syncSum();
+  const sh=$('#setShareSt');if(sh)sh.textContent=shSum();
   disarm('reset-all');openModal('setOv');
+  
 }
+
 function setNoteUpd(){
   const n=$('#setNote');if(!n)return;
   const d=_savedAt?new Date(_savedAt):null;
@@ -3907,25 +4024,16 @@ function doReset(btn){
   closeModal('setOv');refresh();toast(wasSync?'כל הנתונים במכשיר הזה אופסו, והוא נותק מהסנכרון':'כל הנתונים אופסו');
 }
 
+
 /* ============================================================
-   סנכרון בין מכשירים — Firebase Realtime Database (REST + האזנה חיה)
+   Firebase — עזרים משותפים: קודים, רשת והודעות שגיאה (הסנכרון שלך וגרסת המפקדים)
    ============================================================ */
-// כל קבוצת מכשירים שומרת תחת /s/<מפתח הקוד>: {v, at, dev, rev, json}. הקוד הוא הסוד — מי שיש לו אותו רואה ומשנה.
-// קוד הסנכרון: 10 ספרות ו־2 אותיות באנגלית (כ־5.8 טריליון צירופים), מוצג כ־12345-67890-AB.
-// קוד ישן של 24 תווים (מהגרסה הראשונה) ממשיך לעבוד במכשירים שכבר מחוברים.
-// כל מכשיר נכנס כמשתמש אנונימי (חוקי מסד הנתונים דורשים כניסה). at = זמן השמירה, dev = המכשיר ששמר.
-// שינוי מקומי מסומן "ממתין" ונשלח אחרי שנייה; שינוי ממכשיר אחר מגיע בהאזנה חיה, ובכל חזרה לאפליקציה יש בדיקה מלאה.
-// שינויים בשני המכשירים בלי סנכרון ביניהם: הגרסה החדשה יותר נשארת, והשנייה נשמרת במכשיר לשחזור.
-// לא מסונכרנים: מפתחות הצ׳אט, השיחה, ערכת הצבעים והמסך האחרון.
 const FB={key:'AIzaSyCca_WVrRLnLoziFjAwbgNBvpY6TEkrE0E',db:'https://sidur-c7135-default-rtdb.europe-west1.firebasedatabase.app',
-  signUp:'https://identitytoolkit.googleapis.com/v1/accounts:signUp',token:'https://securetoken.googleapis.com/v1/token'};
-const SYNC_STORE='sidur-avoda-sync',SYNC_PREV='sidur-avoda-sync-prev',SITE_URL='https://wwvdng29r6-ctrl.github.io/Sidur/';
+  signUp:'https://identitytoolkit.googleapis.com/v1/accounts:signUp',token:'https://securetoken.googleapis.com/v1/token',
+  signIn:'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword'};
+const SITE_URL='https://wwvdng29r6-ctrl.github.io/Sidur/';
 const SC_ABC='23456789ABCDEFGHJKMNPQRSTUVWXYZ',SC_LEN=24; // הקוד הישן ומזהה הפתיחה — בלי 0/O, 1/I/L
 const SC_LET='ABCDEFGHJKLMNPQRSTUVWXYZ'; // אותיות הקוד החדש — בלי I ו־O, שלא יתבלבלו עם 1 ו־0
-// dev — מזהה של הפתיחה הנוכחית (לא נשמר): כל לשונית ופתיחה מתנהגות כמו מכשיר נפרד, כדי ששתי לשוניות פתוחות יתעדכנו זו מזו
-let SYNC={dev:'',code:'',at:0,dirty:0,rt:'',it:'',exp:0};
-let _sst='off',_serr='',_sOld=false,_sErrShown=false,_sPushT=null,_sPushing=false,_sAgain=false,_sChg=0,_sGen=0,_sRetry=0,_sRetryT=null,_sChecking=null,_sJoin=null,_sPre='';
-let _es=null,_esT=null,_esN=0,_esLast=0,_tokP=null;
 
 // קוד אקראי מאובטח (בלי הטיה)
 function sRand(n){
@@ -3946,8 +4054,6 @@ const scShort=c=>typeof c==='string'&&/^[0-9]{10}[A-HJ-NP-Z]{2}$/.test(c);
 const scLegacy=c=>typeof c==='string'&&c.length===SC_LEN&&[...c].every(x=>SC_ABC.includes(x));
 const scOk=c=>scShort(c)||scLegacy(c);
 const scFmt=c=>scShort(c)?c.slice(0,5)+'-'+c.slice(5,10)+'-'+c.slice(10):String(c).replace(/(.{4})(?=.)/g,'$1-');
-// המפתח במסד הנתונים. לקוד הקצר מתווספת קידומת קבועה — חוקי המסד דורשים מפתח של 24 תווים לפחות, כך שאין צורך לשנות אותם
-const scKey=c=>scShort(c)?'sidur-sync-v2-'+c:c;
 // מוציא את הקוד גם מתוך הודעה או קישור שהודבקו בשלמותם, בלי מקפים, באותיות קטנות, ואפילו כשהאותיות הוקלדו לפני הספרות
 function scFrom(s){
   s=String(s==null?'':s).toUpperCase();
@@ -3959,15 +4065,6 @@ function scFrom(s){
   if(m)return m[2]+m[3]+m[1];
   return s.replace(/[^0-9A-Z]/g,'');
 }
-function syncLoad(){
-  let o=null;try{o=JSON.parse(localStorage.getItem(SYNC_STORE)||'null')}catch(e){}
-  if(o&&typeof o==='object'){for(const k of ['code','rt','it'])if(typeof o[k]==='string')SYNC[k]=o[k];for(const k of ['at','dirty','exp'])if(typeof o[k]==='number')SYNC[k]=o[k]}
-  SYNC.dev=sRand(10)||('D'+Math.random().toString(36).slice(2,11)).toUpperCase();
-  if(SYNC.code&&!scOk(SYNC.code)){SYNC.code='';syncStore()}
-}
-function syncStore(){try{const o=Object.assign({},SYNC);delete o.dev;localStorage.setItem(SYNC_STORE,JSON.stringify(o))}catch(e){}}
-
-// --- רשת ---
 async function fbFetch(url,opt){
   if(typeof fetch!=='function')throw Object.assign(new Error('net'),{net:1});
   const ac=typeof AbortController==='function'?new AbortController():null,tm=ac?setTimeout(()=>ac.abort(),20000):0;
@@ -3980,6 +4077,130 @@ async function fbFetch(url,opt){
   if(!r.ok){const m=j&&(j.error&&typeof j.error==='object'?j.error.message:j.error);throw Object.assign(new Error(typeof m==='string'&&m?m:'HTTP '+r.status),{status:r.status})}
   return j;
 }
+function syncErr(e){
+  if(!e)return 'תקלה לא ידועה';
+  if(e.bad)return 'הנתונים בסנכרון לא תקינים';
+  if(e.net)return typeof navigator!=='undefined'&&navigator.onLine===false?'אין חיבור לאינטרנט':'אין תשובה מהשרת — אולי אין אינטרנט';
+  const m=String(e.message||'');
+  if(/ADMIN_ONLY|OPERATION_NOT_ALLOWED/i.test(m))return 'הכניסה האנונימית כבויה ב־Firebase (Authentication ← Sign-in method ← Anonymous)';
+  if(/CONFIGURATION_NOT_FOUND/i.test(m))return 'Authentication עוד לא הופעל בפרויקט ב־Firebase';
+  if(/API.?KEY|referer/i.test(m))return 'מפתח ה־API של Firebase לא תקין או חסום לאתר הזה';
+  if(e.status===401||e.status===403||/permission/i.test(m))return 'חוקי האבטחה של מסד הנתונים חוסמים — צריך לבדוק אותם ב־Firebase';
+  if(e.status===404)return 'מסד הנתונים לא נמצא ב־Firebase';
+  if(e.status===429||/QUOTA|TOO_MANY/i.test(m))return 'יותר מדי בקשות — ננסה שוב בעוד כמה דקות';
+  if(e.status>=500)return 'שרת Firebase לא זמין כרגע';
+  return 'תקלה: '+m.slice(0,80);
+}
+// זמן קצר לתצוגה: "היום 20:41" או "28.10.2026 20:41"
+function fmtWhen(ms){const d=new Date(ms);return (strip(d).getTime()===strip(new Date()).getTime()?'היום':fmtFull(d))+' '+pad(d.getHours())+':'+pad(d.getMinutes())}
+// המפתח של קוד ההצטרפות במסד (חוקי המסד דורשים מפתח של 24 תווים לפחות)
+const jKey=c=>'sidur-join-v1-'+c;
+// כניסה ל-Firebase לגרסת המפקדים: anon — משתמש אנונימי (מפקד) · אחרת — אימייל וסיסמה (המנהל). האסימון מתחדש לבד (תקף שעה)
+function fbAuth(store,anon){
+  const A={uid:'',rt:'',it:'',exp:0,email:'',_p:null};
+  try{const o=JSON.parse(localStorage.getItem(store)||'null');if(o&&typeof o==='object'){['uid','rt','it','email'].forEach(k=>{if(typeof o[k]==='string')A[k]=o[k]});if(typeof o.exp==='number')A.exp=o.exp}}catch(e){}
+  A.save=()=>{try{localStorage.setItem(store,JSON.stringify({uid:A.uid,rt:A.rt,it:A.it,exp:A.exp,email:A.email}))}catch(e){}};
+  A.set=(it,rt,exp,uid,email)=>{A.it=it||'';if(rt)A.rt=rt;A.exp=Date.now()+(parseInt(exp,10)||3600)*1000;if(uid)A.uid=uid;if(email!=null)A.email=email;A.save()};
+  A.clear=()=>{A.uid='';A.rt='';A.it='';A.email='';A.exp=0;A.save()};
+  A.token=force=>{
+    if(!force&&A.it&&A.exp>Date.now()+90000)return Promise.resolve(A.it);
+    if(A._p)return A._p;
+    const p=(async()=>{
+      if(A.rt){
+        try{
+          const j=await fbFetch(FB.token+'?key='+FB.key,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:'grant_type=refresh_token&refresh_token='+encodeURIComponent(A.rt)});
+          A.set(j&&j.id_token,j&&j.refresh_token,j&&j.expires_in,j&&j.user_id);if(A.it)return A.it;
+        }catch(e){if(e.net||!(e.status>=400&&e.status<500)||/API.?KEY|referer/i.test(e.message))throw e}
+        A.rt='';A.it='';A.exp=0;A.save();
+      }
+      if(!anon)throw Object.assign(new Error('signed out'),{out:1});
+      const j=await fbFetch(FB.signUp+'?key='+FB.key,{method:'POST',headers:{'Content-Type':'application/json'},body:'{"returnSecureToken":true}'});
+      A.set(j&&j.idToken,j&&j.refreshToken,j&&j.expiresIn,j&&j.localId);
+      if(!A.it)throw Object.assign(new Error('no token'),{status:500});
+      return A.it;
+    })();
+    A._p=p;p.then(()=>{if(A._p===p)A._p=null},()=>{if(A._p===p)A._p=null});
+    return p;
+  };
+  // בקשה למסד: GET / PUT / DELETE לנתיב (בלי .json). אסימון שפג — מחדשים פעם אחת
+  A.req=async(method,path,body)=>{
+    const go=t=>fbFetch(FB.db+'/'+path+'.json?auth='+encodeURIComponent(t)+(method==='GET'?'':'&print=silent'),method==='GET'?{}:Object.assign({method},body===undefined?{}:{headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}));
+    try{return await go(await A.token())}
+    catch(e){if(e.status!==401)throw e;return go(await A.token(true))}
+  };
+  return A;
+}
+// עדכון עץ נתונים מקומי לפי אירוע מההאזנה החיה: put מחליף את הנתיב, patch ממזג את הילדים (null = מחיקה)
+function treeApply(root,path,data,patch){
+  const ks=String(path||'/').split('/').filter(Boolean);
+  if(!ks.length){
+    if(!patch)return data==null?null:data;
+    const o=root&&typeof root==='object'?root:{};
+    for(const c in data){if(data[c]===null)delete o[c];else o[c]=data[c]}
+    return o;
+  }
+  const top=root&&typeof root==='object'?root:{};let o=top;
+  for(let i=0;i<ks.length-1;i++){if(!o[ks[i]]||typeof o[ks[i]]!=='object')o[ks[i]]={};o=o[ks[i]]}
+  const k=ks[ks.length-1];
+  if(patch){if(!o[k]||typeof o[k]!=='object')o[k]={};for(const c in data){if(data[c]===null)delete o[k][c];else o[k][c]=data[c]}}
+  else if(data===null)delete o[k];else o[k]=data;
+  return top;
+}
+// האזנה חיה לנתיב (EventSource): onEvt(path,data,patch) · onFail(e) · מתחברת מחדש לבד, ו-watch() מחדש חיבור שהשתתק
+function fbListen(A,path,onEvt,onFail){
+  const L={es:null,t:null,n:0,last:0,stopped:true};
+  const close=()=>{if(L.es){try{L.es.close()}catch(e){}L.es=null}};
+  const later=()=>{clearTimeout(L.t);L.t=setTimeout(()=>{L.t=null;open()},[2e3,5e3,15e3,3e4,6e4][Math.min(L.n++,4)])};
+  const open=()=>{
+    if(L.stopped||typeof EventSource!=='function')return;
+    if(L.es&&L.es.readyState!==2)return;
+    close();
+    A.token().then(tok=>{
+      if(L.stopped||L.es)return;
+      let es;try{es=new EventSource(FB.db+'/'+path+'.json?auth='+encodeURIComponent(tok))}catch(e){later();return}
+      L.es=es;L.last=Date.now();
+      const on=(n,f)=>es.addEventListener(n,ev=>{if(L.es!==es)return;L.last=Date.now();f(ev)});
+      on('put',ev=>{L.n=0;let d=null;try{d=JSON.parse(ev.data)}catch(x){}if(d)onEvt(d.path,d.data,false)});
+      on('patch',ev=>{let d=null;try{d=JSON.parse(ev.data)}catch(x){}if(d)onEvt(d.path,d.data,true)});
+      on('keep-alive',()=>{});
+      on('auth_revoked',()=>{A.it='';A.exp=0;A.save();close();open()});
+      on('cancel',()=>{close();if(onFail)onFail({status:401,message:'Permission denied'});later()});
+      es.onerror=()=>{if(L.es===es&&es.readyState===2){close();later()}};
+    },e=>{if(L.stopped)return;if(onFail)onFail(e);later()});
+  };
+  L.start=()=>{L.stopped=false;L.n=0;open()};
+  L.stop=()=>{L.stopped=true;clearTimeout(L.t);L.t=null;close()};
+  L.watch=()=>{if(!L.stopped&&L.es&&Date.now()-L.last>150000){close();open()}};
+  return L;
+}
+
+
+/* ============================================================
+   סנכרון בין מכשירים — Firebase Realtime Database (REST + האזנה חיה)
+   ============================================================ */
+// כל קבוצת מכשירים שומרת תחת /s/<מפתח הקוד>: {v, at, dev, rev, json}. הקוד הוא הסוד — מי שיש לו אותו רואה ומשנה.
+// קוד הסנכרון: 10 ספרות ו־2 אותיות באנגלית (כ־5.8 טריליון צירופים), מוצג כ־12345-67890-AB.
+// קוד ישן של 24 תווים (מהגרסה הראשונה) ממשיך לעבוד במכשירים שכבר מחוברים.
+// כל מכשיר נכנס כמשתמש אנונימי (חוקי מסד הנתונים דורשים כניסה). at = זמן השמירה, dev = המכשיר ששמר.
+// שינוי מקומי מסומן "ממתין" ונשלח אחרי שנייה; שינוי ממכשיר אחר מגיע בהאזנה חיה, ובכל חזרה לאפליקציה יש בדיקה מלאה.
+// שינויים בשני המכשירים בלי סנכרון ביניהם: הגרסה החדשה יותר נשארת, והשנייה נשמרת במכשיר לשחזור.
+// לא מסונכרנים: מפתחות הצ׳אט, השיחה, ערכת הצבעים והמסך האחרון.
+const SYNC_STORE='sidur-avoda-sync',SYNC_PREV='sidur-avoda-sync-prev';
+// dev — מזהה של הפתיחה הנוכחית (לא נשמר): כל לשונית ופתיחה מתנהגות כמו מכשיר נפרד, כדי ששתי לשוניות פתוחות יתעדכנו זו מזו
+let SYNC={dev:'',code:'',at:0,dirty:0,rt:'',it:'',exp:0};
+let _sst='off',_serr='',_sOld=false,_sErrShown=false,_sPushT=null,_sPushing=false,_sAgain=false,_sChg=0,_sGen=0,_sRetry=0,_sRetryT=null,_sChecking=null,_sJoin=null,_sPre='';
+let _es=null,_esT=null,_esN=0,_esLast=0,_tokP=null;
+
+// המפתח במסד הנתונים. לקוד הקצר מתווספת קידומת קבועה — חוקי המסד דורשים מפתח של 24 תווים לפחות, כך שאין צורך לשנות אותם
+const scKey=c=>scShort(c)?'sidur-sync-v2-'+c:c;
+function syncLoad(){
+  let o=null;try{o=JSON.parse(localStorage.getItem(SYNC_STORE)||'null')}catch(e){}
+  if(o&&typeof o==='object'){for(const k of ['code','rt','it'])if(typeof o[k]==='string')SYNC[k]=o[k];for(const k of ['at','dirty','exp'])if(typeof o[k]==='number')SYNC[k]=o[k]}
+  SYNC.dev=sRand(10)||('D'+Math.random().toString(36).slice(2,11)).toUpperCase();
+  if(SYNC.code&&!scOk(SYNC.code)){SYNC.code='';syncStore()}
+}
+function syncStore(){try{const o=Object.assign({},SYNC);delete o.dev;localStorage.setItem(SYNC_STORE,JSON.stringify(o))}catch(e){}}
+
 function sTok(it,rt,exp){SYNC.it=it||'';if(rt)SYNC.rt=rt;SYNC.exp=Date.now()+(parseInt(exp,10)||3600)*1000;syncStore()}
 // כניסה אנונימית; האסימון מתחדש אוטומטית (תקף שעה)
 function syncToken(force){
@@ -4006,20 +4227,6 @@ async function fbDb(method,code,sub,body){
   const go=t=>fbFetch(fbUrl(code,sub)+'?auth='+encodeURIComponent(t)+(method==='PUT'?'&print=silent':''),method==='GET'?{}:{method,headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
   try{return await go(await syncToken())}
   catch(e){if(e.status!==401)throw e;return go(await syncToken(true))} // אסימון שפג — מחדשים פעם אחת
-}
-function syncErr(e){
-  if(!e)return 'תקלה לא ידועה';
-  if(e.bad)return 'הנתונים בסנכרון לא תקינים';
-  if(e.net)return typeof navigator!=='undefined'&&navigator.onLine===false?'אין חיבור לאינטרנט':'אין תשובה מהשרת — אולי אין אינטרנט';
-  const m=String(e.message||'');
-  if(/ADMIN_ONLY|OPERATION_NOT_ALLOWED/i.test(m))return 'הכניסה האנונימית כבויה ב־Firebase (Authentication ← Sign-in method ← Anonymous)';
-  if(/CONFIGURATION_NOT_FOUND/i.test(m))return 'Authentication עוד לא הופעל בפרויקט ב־Firebase';
-  if(/API.?KEY|referer/i.test(m))return 'מפתח ה־API של Firebase לא תקין או חסום לאתר הזה';
-  if(e.status===401||e.status===403||/permission/i.test(m))return 'חוקי האבטחה של מסד הנתונים חוסמים — צריך לבדוק אותם ב־Firebase';
-  if(e.status===404)return 'מסד הנתונים לא נמצא ב־Firebase';
-  if(e.status===429||/QUOTA|TOO_MANY/i.test(m))return 'יותר מדי בקשות — ננסה שוב בעוד כמה דקות';
-  if(e.status>=500)return 'שרת Firebase לא זמין כרגע';
-  return 'תקלה: '+m.slice(0,80);
 }
 
 // --- מצב ---
@@ -4329,26 +4536,281 @@ function syncInit(){
   }
 }
 
+
+
+/* ============================================================
+   גרסת המפקדים — צד המנהל: כניסה כמנהל, קוד הצטרפות, פרסום הסידור ואימונים משותפים
+   ============================================================ */
+// בענן (Firebase, אותו פרויקט): /adm — קוד ההצטרפות (רק המנהל) · /pub/<מפתח הקוד>/d — הסידור שפורסם ·
+// /pub/<מפתח>/tr/<מזהה> — האימונים של כולם · /pres/<מפתח>/<מזהה מכשיר> — מתי כל מפקד נכנס (רק המנהל רואה) ·
+// /m/<מפתח אישי> — הגיבוי המוצפן של כל מפקד. רק המנהל (משתמש אימייל וסיסמה) כותב את הסידור; מפקד כותב ומוחק רק אימונים שלו.
+// מה שמתפרסם: 2024–2026 ושנים שאושרו. טיוטה שלא אושרה נשארת אצלך — הסידור נכנס למפקדים רק כשמאשרים אותו.
+// החלפת קוד: הסידור והאימונים עוברים לקוד החדש, והקוד הישן נמחק — מי שלא קיבל את הקוד החדש מפסיק להתעדכן.
+const SHR_STORE='sidur-avoda-share',SHR_AUTH='sidur-avoda-admin',MEM_URL=SITE_URL+'mefakdim/';
+let SHR={jc:'',pubH:'',pubAt:0,tr:{},pend:{add:[],del:[]}};
+let SHA=null,_shT=null,_shBusy=false,_shAgain=false,_shL=null,_shSt='off',_shErr='',_shRules=0,_shPres=null,_shPresAt=0,_shRetry=0,_shRetryT=null,_shNote='';
+function shLoad(){
+  SHA=fbAuth(SHR_AUTH,false);
+  let o=null;try{o=JSON.parse(localStorage.getItem(SHR_STORE)||'null')}catch(e){}
+  if(o&&typeof o==='object'){
+    if(scShort(o.jc))SHR.jc=o.jc;
+    if(typeof o.pubH==='string')SHR.pubH=o.pubH;
+    if(typeof o.pubAt==='number')SHR.pubAt=o.pubAt;
+    if(o.tr&&typeof o.tr==='object'&&!Array.isArray(o.tr))SHR.tr=o.tr;
+    if(o.pend&&Array.isArray(o.pend.add)&&Array.isArray(o.pend.del))SHR.pend={add:o.pend.add.filter(x=>typeof x==='string'),del:o.pend.del.filter(x=>typeof x==='string')};
+  }
+  if(!SHA.rt)SHR.jc='';
+}
+function shStore(){try{localStorage.setItem(SHR_STORE,JSON.stringify({jc:SHR.jc,pubH:SHR.pubH,pubAt:SHR.pubAt,tr:SHR.tr,pend:SHR.pend}))}catch(e){}}
+// השיתוף פעיל: מחובר כמנהל ויש קוד הצטרפות
+const shOn=()=>!!(SHA&&SHA.uid&&SHA.rt&&SHR.jc);
+// הסידור שמתפרסם: אות לכל יום (חודשים מופרדים ב-|, '-' ליום בלי משמרת)
+function shYearStr(y){const ms=[];for(let m=0;m<12;m++){let x='';const n=new Date(y,m+1,0).getDate();for(let d=1;d<=n;d++){const nm=dutyFor(new Date(y,m,d));x+=nm?sh1(nm):'-'}ms.push(x)}return ms.join('|')}
+function shPayload(){
+  const y={},ap=[],last=Math.max(2026,...Object.keys(APPROVED).map(Number).filter(k=>approvedOf(k)));
+  for(let k=HIST_MIN;k<=last;k++){if(k>2026&&!approvedOf(k))continue;y[k]=shYearStr(k);if(k>2026)ap.push(k)}
+  return{v:1,y,ap,he:HIST_EDITS,te:TOT_EDITS};
+}
+function shHash(o){const t=JSON.stringify(o);let h=2166136261;for(let i=0;i<t.length;i++){h^=t.charCodeAt(i);h=Math.imul(h,16777619)>>>0}return h.toString(36)+'.'+t.length}
+async function shPublishTo(jc,force){
+  const p=shPayload(),h=shHash(p);
+  if(!force&&jc===SHR.jc&&h===SHR.pubH)return;
+  await SHA.req('PUT','pub/'+jKey(jc)+'/d',Object.assign(p,{h,at:Date.now()}));
+  if(jc===SHR.jc){SHR.pubH=h;SHR.pubAt=Date.now();shStore()}
+}
+// אימונים שלך: מתפרסמים עם המשמרת שלך. p — כבר פורסם (מסונכרן גם למכשיר השני שלך, כדי שלא יפורסם שוב)
+const shTrRec=t=>({d:t.date,n:t.name,s:t.s||myShift(),u:SHA.uid,at:Date.now()});
+function shTrAdded(t){if(!shOn())return;SHR.pend.add.push(trGid(t));shStore();shSoon(400)}
+function shTrDeleted(t){
+  const g=trGid(t);SHR.pend.add=SHR.pend.add.filter(x=>x!==g);
+  if(!shOn()||(!t.p&&!SHR.tr[g])){shStore();return}
+  if(!SHR.pend.del.includes(g))SHR.pend.del.push(g);delete SHR.tr[g];shStore();shSoon(400);
+}
+// אימון שמפקד רשם — המנהל יכול למחוק כל אימון
+function shDelCloud(g){if(!shOn()||!SHR.tr[g])return false;if(!SHR.pend.del.includes(g))SHR.pend.del.push(g);delete SHR.tr[g];shStore();shSoon(300);return true}
+async function shFlushTr(){
+  const jk=jKey(SHR.jc);let mark=false;
+  for(const t of TRAININGS){
+    const g=trGid(t);
+    if((t.p&&!SHR.pend.add.includes(g))||SHR.pend.del.includes(g))continue;
+    const rec=shTrRec(t);
+    await SHA.req('PUT','pub/'+jk+'/tr/'+g,rec);
+    SHR.tr[g]=rec;SHR.pend.add=SHR.pend.add.filter(x=>x!==g);
+    if(!t.p||!t.s){t.p=1;t.s=rec.s;mark=true}
+  }
+  SHR.pend.add=SHR.pend.add.filter(g=>TRAININGS.some(t=>trGid(t)===g));
+  for(const g of SHR.pend.del.slice()){await SHA.req('DELETE','pub/'+jk+'/tr/'+g);SHR.pend.del=SHR.pend.del.filter(x=>x!==g)}
+  shStore();trBump();
+  if(mark)saveState();
+}
+function shSoon(ms){if(!shOn())return;clearTimeout(_shT);_shT=setTimeout(shSync,ms==null?2500:ms)}
+function shFlush(){if(_shT){clearTimeout(_shT);_shT=null;shSync()}}
+async function shSync(){
+  _shT=null;
+  if(!shOn())return;
+  if(_shBusy){_shAgain=true;return}
+  _shBusy=true;
+  try{await shPublishTo(SHR.jc,false);await shFlushTr();_shSt='ok';_shErr='';_shRetry=0}
+  catch(e){if(e&&e.out){shSignedOut();return}_shSt=e&&e.net?'offline':'err';_shErr=syncErr(e);clearTimeout(_shRetryT);_shRetryT=setTimeout(()=>{_shRetryT=null;shSoon(0)},[5e3,15e3,3e4,6e4,12e4,3e5][Math.min(_shRetry++,5)])}
+  finally{_shBusy=false;if(_shAgain){_shAgain=false;shSoon(300)}shUi()}
+}
+// האזנה חיה לאימונים (כדי לראות מיד אימון שמפקד הוסיף או מחק)
+function shListen(){
+  if(_shL){_shL.stop();_shL=null}
+  if(!shOn())return;
+  const jc=SHR.jc;
+  _shL=fbListen(SHA,'pub/'+jKey(jc)+'/tr',(path,data,patch)=>{
+    if(SHR.jc!==jc)return;
+    const t=treeApply(SHR.tr,path,data,patch);SHR.tr=t&&typeof t==='object'?t:{};
+    shStore();trBump();try{refresh()}catch(e){}
+  },e=>{if(e&&e.out)shSignedOut()});
+  _shL.start();
+}
+function shKick(){if(shOn()){shSoon(0);if(_shL)_shL.watch();else shListen()}}
+function shWatch(){if(_shL)_shL.watch()}
+function shSignedOut(){
+  if(_shL){_shL.stop();_shL=null}clearTimeout(_shT);_shT=null;
+  SHA.clear();SHR.jc='';SHR.pubH='';shStore();trBump();_shSt='off';_shErr='';
+  toast('החיבור כמנהל הסתיים — צריך להתחבר שוב בגיבוי והגדרות ← גרסת המפקדים',6000);
+  shUi();try{refresh()}catch(e){}
+}
+function shInit(){if(shOn()){_shSt='init';shListen();shSoon(800)}}
+function shSum(){
+  if(!SHA||!SHA.uid)return 'לא מוגדר — מתחברים כמנהל ויוצרים קוד הצטרפות';
+  if(!SHR.jc)return 'מחובר כמנהל — עוד אין קוד הצטרפות';
+  return {ok:'פעיל — הסידור מתפרסם למפקדים',init:'פעיל — מתחבר…',offline:'פעיל — אין אינטרנט כרגע. השינויים יישלחו כשהחיבור יחזור',err:'יש תקלה — '+(_shErr||'לא ידועה')}[_shSt]||'פעיל';
+}
+function shUi(){const s=$('#setShareSt');if(s)s.textContent=shSum();if(_open.includes('shareOv'))shRender()}
+// כללי האבטחה של מסד הנתונים — כוללים את הסנכרון שלך, ומרשים רק לך לכתוב את הסידור
+function shRules(uid){
+  const A="auth != null && auth.uid === '"+uid+"'";
+  return JSON.stringify({rules:{
+    s:{'$code':{'.read':'auth != null && $code.length >= 24','.write':'auth != null && $code.length >= 24'}},
+    adm:{'.read':A,'.write':A},
+    pub:{'$j':{'.read':'auth != null && $j.length >= 24','.write':A,
+      tr:{'$t':{'.write':"auth != null && root.child('pub').child($j).child('d').exists() && ((!data.exists() && newData.child('u').val() === auth.uid) || (data.exists() && data.child('u').val() === auth.uid && (!newData.exists() || newData.child('u').val() === auth.uid)))",
+        '.validate':"newData.hasChildren(['d','n','s','u','at']) && newData.child('d').isString() && newData.child('d').val().length <= 10 && newData.child('n').isString() && newData.child('n').val().length >= 1 && newData.child('n').val().length <= 40 && newData.child('s').isString() && newData.child('s').val().length <= 3 && newData.child('at').isNumber()"}}}},
+    pres:{'$j':{'.read':A,'.write':A,'$uid':{'.write':"auth != null && auth.uid === $uid && root.child('pub').child($j).child('d').exists()",'.validate':"newData.hasChildren(['s','at']) && newData.child('at').isNumber()"}}},
+    m:{'$k':{'.read':'auth != null && $k.length >= 24','.write':'auth != null && $k.length >= 24','.validate':"newData.hasChildren(['c','iv']) && newData.child('c').isString() && newData.child('c').val().length < 400000"}}
+  }},null,2);
+}
+function shSignErr(e){
+  const m=String(e&&e.message||'');
+  if(/INVALID_LOGIN_CREDENTIALS|INVALID_PASSWORD|EMAIL_NOT_FOUND|INVALID_CREDENTIAL/i.test(m))return 'האימייל או הסיסמה לא נכונים';
+  if(/INVALID_EMAIL/i.test(m))return 'כתובת האימייל לא תקינה';
+  if(/OPERATION_NOT_ALLOWED|PASSWORD_LOGIN_DISABLED/i.test(m))return 'הכניסה עם אימייל וסיסמה עוד לא הופעלה ב־Firebase (Authentication ← Sign-in method ← Email/Password)';
+  if(/USER_DISABLED/i.test(m))return 'המשתמש הזה חסום ב־Firebase';
+  if(/TOO_MANY_ATTEMPTS/i.test(m))return 'יותר מדי ניסיונות — כדאי לנסות שוב בעוד כמה דקות';
+  return syncErr(e);
+}
+// --- חלון גרסת המפקדים ---
+function openShare(){disarm('sh-rotate');disarm('sh-out');_shNote='';shRender();openModal('shareOv');if(SHA.uid)shCheck()}
+// בדיקת הכללים וטעינת קוד ההצטרפות מהענן
+async function shCheck(){
+  try{
+    const a=await SHA.req('GET','adm');_shRules=1;
+    if(a&&scShort(a.jc)&&a.jc!==SHR.jc){SHR.jc=a.jc;SHR.pubH='';shStore();shListen();shSoon(0)}
+    if(SHR.jc)await shLoadPres();
+  }catch(e){if(e&&e.out){shSignedOut();return}_shRules=e&&(e.status===401||e.status===403)?-1:0;if(!_shRules)_shErr=syncErr(e)}
+  shRender();
+}
+async function shLoadPres(){try{const d=await SHA.req('GET','pres/'+jKey(SHR.jc));_shPres=d&&typeof d==='object'?d:{};_shPresAt=Date.now()}catch(e){_shPres=null}}
+function shRender(){
+  const b=$('#shareBody');if(!b)return;
+  const st=$('#shareSt');
+  let h='',sc='',si='i-info',stt;
+  if(!SHA.uid){stt='לא מחובר כמנהל';}
+  else if(_shRules===-1){sc=' bad';si='i-alert';stt='צריך לעדכן את כללי האבטחה ב־Firebase (שלב 2)'}
+  else if(!SHR.jc){stt='מחובר כמנהל — נשאר ליצור קוד הצטרפות'}
+  else if(_shSt==='err'){sc=' bad';si='i-alert';stt=_shErr||'תקלה בפרסום'}
+  else if(_shSt==='offline'){si='i-alert';stt='אין אינטרנט — השינויים יפורסמו כשהחיבור יחזור'}
+  else{sc=' ok';si='i-check';stt='פעיל'+(SHR.pubAt?' · הסידור פורסם '+fmtWhen(SHR.pubAt):'')}
+  if(st){st.className='ai-st'+sc;st.innerHTML=ico(si)+'<span>'+esc(stt)+'</span>'}
+  if(!SHA.uid){
+    h+=`<div class="sy-step"><b>1. חיבור כמנהל</b><span>מתחברים עם משתמש אימייל וסיסמה שיוצרים פעם אחת ב־Firebase. רק המשתמש הזה יכול לשנות את מה שהמפקדים רואים.</span>
+<div class="ai-how"><b>ב־Firebase (פעם אחת)</b><ol><li>Authentication ← Sign-in method ← Email/Password ← Enable ← Save.</li><li>Authentication ← Users ← Add user: האימייל שלך וסיסמה חדשה.</li><li>כאן: מקלידים אותם ולוחצים "התחברות כמנהל".</li></ol></div>
+<label class="fl" for="shEmail">אימייל</label><input class="inp" id="shEmail" type="email" dir="ltr" autocomplete="username" autocapitalize="off" spellcheck="false" placeholder="name@example.com" value="${esc(SHA.email||'')}">
+<label class="fl" for="shPass">סיסמה</label><input class="inp" id="shPass" type="password" dir="ltr" autocomplete="current-password" enterkeyhint="go">
+<div class="row-btns" style="margin-top:12px"><button class="btn btn-ok" data-act="sh-signin">${ico('i-lock')}התחברות כמנהל</button></div></div>`;
+  }else{
+    h+=`<div class="set"><div><b>מחובר כמנהל</b><span dir="ltr" class="sh-mail">${esc(SHA.email||'')}</span></div><button class="btn btn-no btn-sm" data-act="sh-out">${ico('i-x')}ניתוק</button></div>`;
+    h+=`<div class="sy-step"><b>2. כללי האבטחה</b><span>${_shRules===1?'הכללים מעודכנים.':'מעתיקים את הכללים ומדביקים אותם ב־Firebase. הם כוללים גם את הסנכרון שלך בין המכשירים.'}</span>
+<div class="ai-how"><ol><li>לוחצים "העתקת הכללים".</li><li>ב־Firebase: Realtime Database ← Rules ← מוחקים את מה שיש ומדביקים.</li><li>Publish, ואז כאן "בדיקה".</li></ol></div>
+<div class="row-btns" style="margin-top:10px"><button class="btn btn-gh" data-act="sh-rules">${ico('i-copy')}העתקת הכללים</button><button class="btn btn-gh" data-act="sh-check">${ico('i-sync')}בדיקה</button></div>
+<details class="sh-rules"><summary>הצגת הכללים</summary><pre dir="ltr" id="shRulesTxt">${esc(shRules(SHA.uid))}</pre></details></div>`;
+    h+=`<div class="sy-step"><b>3. קוד הצטרפות למפקדים</b>`;
+    if(!SHR.jc)h+=`<span>יוצרים קוד ושולחים אותו למפקדים יחד עם הקישור לגרסה שלהם. בלי הקוד אי אפשר לראות את הסידור.</span><div class="row-btns"><button class="btn btn-ok" data-act="sh-create" ${_shRules===-1?'disabled':''}>${ico('i-key')}יצירת קוד הצטרפות</button></div>`;
+    else{
+      const share=typeof navigator!=='undefined'&&typeof navigator.share==='function';
+      h+=`<span>שולחים למפקדים את הקישור ואת הקוד. כל מפקד מקליד את הקוד פעם אחת.</span>
+<div class="sy-code"><input class="inp sy-in" id="shCodeOut" readonly dir="ltr" value="${scFmt(SHR.jc)}"><button class="btn btn-gh" data-act="sh-copy">${ico('i-copy')}העתקה</button>${share?`<button class="btn btn-gh" data-act="sh-share">${ico('i-share')}שיתוף</button>`:''}</div>
+<div class="sh-link" dir="ltr">${esc(MEM_URL)}</div>
+<div class="row-btns" style="margin-top:10px"><button class="btn btn-gh btn-sm" data-act="sh-pub">${ico('i-upload')}פרסום עכשיו</button><button class="btn btn-no btn-sm" data-act="sh-rotate">${ico('i-swap')}החלפת קוד</button></div>
+<p class="fn">החלפת קוד: מי שלא יקבל את הקוד החדש מפסיק להתעדכן. הסידור והאימונים עוברים לקוד החדש.</p>`;
+    }
+    h+='</div>';
+    if(SHR.jc){
+      const rows=_shPres?Object.keys(_shPres).map(k=>_shPres[k]).filter(x=>x&&typeof x.at==='number').sort((a,b)=>b.at-a.at):null;
+      h+=`<div class="sy-step"><b>מפקדים מחוברים</b>${rows===null?'<span>טוען…</span>':rows.length?'<div class="sh-pres">'+rows.map(x=>`<div class="sh-pr"><span class="sh-av">${esc(sh1(x.s)||'?')}</span><b>${SHIFT_NAMES.includes(x.s)?'משמרת '+esc(x.s):'בלי משמרת'}</b><span>נכנס לאחרונה ${fmtWhen(x.at)}</span></div>`).join('')+'</div>':'<span>עוד אף מפקד לא התחבר.</span>'}
+<div class="row-btns" style="margin-top:10px"><button class="btn btn-gh btn-sm" data-act="sh-pres">${ico('i-sync')}רענון</button></div></div>`;
+    }
+  }
+  b.innerHTML=h;
+  const n=$('#shareNote');if(n)n.textContent=_shNote;
+}
+function shNoteSet(t){_shNote=t;const n=$('#shareNote');if(n)n.textContent=t}
+async function shSignIn(btn){
+  const em=($('#shEmail')||{}).value||'',pw=($('#shPass')||{}).value||'';
+  if(!em.trim()||!pw){shNoteSet('צריך להקליד אימייל וסיסמה.');return}
+  if(btn)btn.disabled=true;shNoteSet('מתחבר…');
+  try{
+    const j=await fbFetch(FB.signIn+'?key='+FB.key,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:em.trim(),password:pw,returnSecureToken:true})});
+    if(!j||!j.idToken||!j.localId)throw Object.assign(new Error('no token'),{status:500});
+    SHA.set(j.idToken,j.refreshToken,j.expiresIn,j.localId,j.email||em.trim());
+    shNoteSet('');_shRules=0;await shCheck();
+    toast('מחובר כמנהל');
+  }catch(e){shNoteSet('הכניסה נכשלה — '+shSignErr(e)+'.')}
+  finally{if(btn&&btn.isConnected)btn.disabled=false}
+}
+function shOut(btn){
+  if(!armTap('sh-out',btn,ico('i-alert')+'לחץ שוב לניתוק'))return;
+  if(_shL){_shL.stop();_shL=null}clearTimeout(_shT);_shT=null;
+  SHA.clear();SHR.jc='';SHR.pubH='';SHR.tr={};shStore();trBump();_shSt='off';_shRules=0;_shPres=null;
+  shRender();refresh();toast('המכשיר נותק מניהול גרסת המפקדים — המפקדים ממשיכים לראות את מה שפורסם');
+}
+async function shCopyText(t,okMsg,inpId){
+  let ok=false;
+  try{if(navigator.clipboard&&navigator.clipboard.writeText){await navigator.clipboard.writeText(t);ok=true}}catch(e){}
+  if(!ok&&inpId){const i=$('#'+inpId);if(i){try{i.focus();i.select();i.setSelectionRange(0,99999);ok=document.execCommand('copy')}catch(e){}}}
+  toast(ok?okMsg:'לא הצלחתי להעתיק — אפשר לסמן ולהעתיק ידנית');
+  return ok;
+}
+async function shCreate(btn){
+  if(!SHA.uid||SHR.jc)return;
+  const jc=sNewCode();if(!scShort(jc)){shNoteSet('הדפדפן הזה לא מאפשר ליצור קוד מאובטח.');return}
+  if(btn)btn.disabled=true;shNoteSet('יוצר קוד ומפרסם את הסידור…');
+  try{
+    await shPublishTo(jc,true);
+    await SHA.req('PUT','adm',{jc,at:Date.now()});
+    SHR.pend.add=TRAININGS.map(trGid);SHR.pend.del=[];SHR.tr={};
+    SHR.jc=jc;SHR.pubAt=Date.now();SHR.pubH=shHash(shPayload());shStore();
+    await shFlushTr();_shSt='ok';_shErr='';shListen();await shLoadPres();
+    shNoteSet('הקוד נוצר והסידור פורסם. עכשיו שולחים למפקדים את הקישור ואת הקוד.');toast('קוד ההצטרפות נוצר');
+  }catch(e){if(e&&e.out){shSignedOut();return}shNoteSet('יצירת הקוד נכשלה — '+syncErr(e)+'.')}
+  finally{if(btn&&btn.isConnected)btn.disabled=false;shRender();refresh()}
+}
+async function shRotate(btn){
+  if(!shOn())return;
+  if(!armTap('sh-rotate',btn,ico('i-alert')+'לחץ שוב — הקוד הנוכחי יפסיק לעבוד',6000))return;
+  const old=SHR.jc,nj=sNewCode();if(!scShort(nj))return;
+  shNoteSet('מחליף קוד…');
+  try{
+    const tr=await SHA.req('GET','pub/'+jKey(old)+'/tr');
+    await shPublishTo(nj,true);
+    if(tr&&typeof tr==='object'&&Object.keys(tr).length)await SHA.req('PUT','pub/'+jKey(nj)+'/tr',tr);
+    await SHA.req('PUT','adm',{jc:nj,at:Date.now()});
+    SHR.jc=nj;SHR.pubAt=Date.now();SHR.pubH=shHash(shPayload());shStore();shListen();
+    try{await SHA.req('DELETE','pub/'+jKey(old));await SHA.req('DELETE','pres/'+jKey(old))}catch(e){}
+    _shPres={};shNoteSet('הקוד הוחלף. שולחים את הקוד החדש למפקדים — הקוד הישן כבר לא עובד.');toast('קוד ההצטרפות הוחלף');
+  }catch(e){if(e&&e.out){shSignedOut();return}shNoteSet('ההחלפה נכשלה — '+syncErr(e)+'. הקוד הנוכחי ממשיך לעבוד.')}
+  shRender();
+}
+async function shShare(){
+  const text='סידור העבודה — גרסת המפקדים\n'+MEM_URL+'#join='+SHR.jc+'\n\nקוד הצטרפות: '+scFmt(SHR.jc)+'\n\nפותחים את הקישור ומקלידים את הקוד. באייפון: קודם מוסיפים למסך הבית (שיתוף ← הוספה למסך הבית) ופותחים מהאייקון.';
+  try{await navigator.share({title:'סידור עבודה — מפקדים',text})}catch(e){if(!e||e.name!=='AbortError')shCopyText(text,'הקישור והקוד הועתקו')}
+}
+async function shPubNow(btn){
+  if(!shOn())return;if(btn)btn.disabled=true;shNoteSet('מפרסם…');
+  try{await shPublishTo(SHR.jc,true);await shFlushTr();_shSt='ok';_shErr='';shNoteSet('הסידור פורסם עכשיו.')}
+  catch(e){if(e&&e.out){shSignedOut();return}shNoteSet('הפרסום נכשל — '+syncErr(e)+'.')}
+  finally{if(btn&&btn.isConnected)btn.disabled=false;shRender()}
+}
+
+
 /* ============================================================
    אירועים
    ============================================================ */
 const ACTIONS={
   'bell':()=>{const b=$('#bellDrop');if(!b)return;renderBell();b.classList.toggle('show')},
   'settings':()=>openSettings(),
+  
   'gen-run':()=>runGenerator(),
   'gen-apply':el=>applyGen(el),
   'gen-reset':el=>genResetLocks(el),
   'draft-reset':el=>draftReset(el),
   'draft-approve':el=>draftApprove(el),
   'plan-undo':el=>planUndo(el),
+  
   'tr-add':()=>addFromForm(),
   'day-tr-add':()=>addFromDay(),
   'day-prev':()=>shiftDay(-1),
   'day-next':()=>shiftDay(1),
+  'export-year':()=>openExport(yearY,'view'),
+  
+  
   'backup':()=>doBackup(),
   'hist-reset':el=>histReset(el),
   'tot-reset':el=>totReset(el),
-  'export-year':()=>openExport(yearY,'view'),
   'export-draft':()=>openExport(TARGET_YEAR,'draft'),
   'reset-all':el=>doReset(el),
   'chat-open':()=>openChat(),
@@ -4366,7 +4828,19 @@ const ACTIONS={
   'sync-share':()=>syncShare(),
   'sync-now':el=>syncNow(el),
   'sync-off':el=>syncOff(el),
-  'sync-prev':el=>syncPrevRestore(el)
+  'sync-prev':el=>syncPrevRestore(el),
+  'share-open':()=>openShare(),
+  'sh-signin':el=>shSignIn(el),
+  'sh-out':el=>shOut(el),
+  'sh-rules':()=>shCopyText(shRules(SHA.uid),'הכללים הועתקו — עכשיו מדביקים אותם ב־Firebase'),
+  'sh-check':()=>{shNoteSet('בודק…');shCheck().then(()=>shNoteSet(_shRules===1?'הכללים מעודכנים.':_shRules===-1?'הכללים עוד לא עודכנו — מדביקים אותם ב־Firebase ולוחצים Publish.':'הבדיקה נכשלה — '+(_shErr||'תקלה')+'.'))},
+  'sh-create':el=>shCreate(el),
+  'sh-rotate':el=>shRotate(el),
+  'sh-copy':()=>shCopyText(scFmt(SHR.jc),'הקוד הועתק','shCodeOut'),
+  'sh-share':()=>shShare(),
+  'sh-pub':el=>shPubNow(el),
+  'sh-pres':()=>{shLoadPres().then(shRender)},
+  
 };
 document.addEventListener('click',e=>{
   const t=e.target;if(!t||!t.closest)return;
@@ -4374,13 +4848,16 @@ document.addEventListener('click',e=>{
   if(bell&&bell.classList.contains('show')&&!t.closest('#bellDrop')&&!t.closest('[data-act="bell"]'))bell.classList.remove('show');
   let el;
   if((el=t.closest('[data-trdel]'))){onTrDel(el);return}
+  
   if((el=t.closest('[data-pickset]'))){const p=el.dataset.pickset.split('|');setPick(p[0],p[1]||null);return}
   if((el=t.closest('[data-pick]'))){openPick(el.dataset.pick);return}
   if((el=t.closest('[data-hist]'))){const p=el.dataset.hist.split('|');cycleHist(+p[0],p.slice(1).join('|'));return}
-  if((el=t.closest('[data-exp]'))){doExport(el.dataset.exp,el);return}
   if((el=t.closest('[data-aiprov]'))){aiTab(el.dataset.aiprov);return}
-  if((el=t.closest('[data-theme-set]'))){setTheme(el.dataset.themeSet);return}
   if((el=t.closest('[data-draftday]'))){cycleDraftDay(el.dataset.draftday);return}
+  
+  
+  if((el=t.closest('[data-exp]'))){doExport(el.dataset.exp,el);return}
+  if((el=t.closest('[data-theme-set]'))){setTheme(el.dataset.themeSet);return}
   if((el=t.closest('[data-preset]'))){const i=$('#trName');if(i)i.value=el.dataset.preset;return}
   if((el=t.closest('[data-dpreset]'))){const i=$('#dayTrName');if(i)i.value=el.dataset.dpreset;return}
   if((el=t.closest('[data-mnav]'))){
@@ -4404,8 +4881,12 @@ document.addEventListener('keydown',e=>{
     const t=e.target;if(!t)return;
     if(t.id==='trName'){e.preventDefault();addFromForm();return}
     if(t.id==='dayTrName'){e.preventDefault();addFromDay();return}
+    
+    
     if(t.id==='chatInput'&&!e.shiftKey&&!e.isComposing){e.preventDefault();chatSend(t.value);return}
     if(t.id==='syncCodeIn'&&!e.isComposing){e.preventDefault();syncJoin($('[data-act="sync-join"]'));return}
+    if(t.id==='shPass'&&!e.isComposing){e.preventDefault();shSignIn($('[data-act="sh-signin"]'));return}
+    
     if(t.matches&&t.matches('[role="button"][data-day]')){e.preventDefault();openDay(t.dataset.day)}
   }
 });
@@ -4413,16 +4894,21 @@ document.addEventListener('change',e=>{
   const t=e.target;if(!t)return;
   if(t.id==='jumpDate'){if(t.value){const d=pd(t.value);t.value='';openDay(isoOf(d))}return}
   if(t.id==='trDate'){_trDate=t.value?isoOf(pd(t.value)):'';renderTrain();return}
+  
   if(t.id==='restoreFile'){const f=t.files&&t.files[0];t.value='';if(f)doRestore(f);return}
   if(t.id==='aiBackup'){aiBackup(t.checked);return}
   if(t.matches&&t.matches('[data-tot]')){const p=t.dataset.tot.split('|');setTot(+p[0],p[1],t.value)}
+  
 });
+
+
 document.addEventListener('input',e=>{const t=e.target;if(t&&t.id==='chatInput')chatGrow(t)});
 // אחרי הזנה ברצף בטבלת הסה״כ — רענון רק כשהמיקוד יוצא מהטבלה (כדי לא לסגור את המקלדת)
 document.addEventListener('focusout',e=>{
   const t=e.target;if(!t||!t.matches||!t.matches('[data-tot]'))return;
   setTimeout(()=>{const a=document.activeElement;if(_totDirty&&!(a&&a.matches&&a.matches('[data-tot]'))){_totDirty=false;refresh()}},60);
 });
+
 
 /* ============================================================
    ערכות צבעים
@@ -4455,11 +4941,12 @@ function setupPWA(){
     const x=c.getContext&&c.getContext('2d');if(!x)return;
     const bgc=cssVar('--bg','#090b08');
     x.fillStyle=cssVar('--bg2','#0c0f0a');x.fillRect(0,0,192,192);
-    x.strokeStyle=cssVar('--olive','#8ba25a');x.lineWidth=8;x.beginPath();x.arc(96,96,54,0,Math.PI*2);x.stroke();
+    // גרסת המפקדים — אותו סמל בצבע ענבר, כדי שיהיה קל להבדיל בין שתי האפליקציות במסך הבית
+    x.strokeStyle=MEMBER?cssVar('--amber','#e39a32'):cssVar('--olive','#8ba25a');x.lineWidth=8;x.beginPath();x.arc(96,96,54,0,Math.PI*2);x.stroke();
     x.lineWidth=7;x.beginPath();x.moveTo(96,24);x.lineTo(96,60);x.moveTo(96,132);x.lineTo(96,168);x.moveTo(24,96);x.lineTo(60,96);x.moveTo(132,96);x.lineTo(168,96);x.stroke();
-    x.fillStyle=cssVar('--olive-2','#afc67e');x.beginPath();x.arc(96,96,11,0,Math.PI*2);x.fill();
+    x.fillStyle=MEMBER?cssVar('--amber','#e39a32'):cssVar('--olive-2','#afc67e');x.beginPath();x.arc(96,96,11,0,Math.PI*2);x.fill();
     const url=c.toDataURL('image/png');
-    const man={name:'סידור עבודה',short_name:'סידור',display:'standalone',background_color:bgc,theme_color:bgc,lang:'he',dir:'rtl',start_url:location.href.split('#')[0],icons:[{src:url,sizes:'192x192',type:'image/png'}]};
+    const man={name:MEMBER?'סידור מפקדים':'סידור עבודה',short_name:MEMBER?'מפקדים':'סידור',display:'standalone',background_color:bgc,theme_color:bgc,lang:'he',dir:'rtl',start_url:location.href.split('#')[0],icons:[{src:url,sizes:'192x192',type:'image/png'}]};
     const murl=URL.createObjectURL(new Blob([JSON.stringify(man)],{type:'application/manifest+json'}));
     if(!_pwaLinks){
       const link=rel=>{const l=document.createElement('link');l.rel=rel;document.head.appendChild(l);return l};
@@ -4474,7 +4961,9 @@ function setupPWA(){
    ============================================================ */
 function init(){
   applyTheme(curTheme());
+  
   syncYears();
+  
   syncLoad();
   loadState();
   chatLoad();
@@ -4482,15 +4971,21 @@ function init(){
   else if(_migSave){_migSave=false;persistNow();if(_migAtz)setTimeout(()=>toast('עצמאות הוא עכשיו בלוק של 48 שעות — ערב החג והחג אצל אותה משמרת. הטיוטה עודכנה.',6500),700)}
   _migAtz=false;
   sortTr();
+  shLoad();
+  
   try{const v=localStorage.getItem(VIEW_KEY);if(v&&VIEWS[v])curView=v}catch(e){}
   $$('.ov').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)closeModal(o.id)}));
   tick();renderChrome();renderBell();go(curView);
   setInterval(tick,15000);
-  // יציאה מהאפליקציה: שמירה ושליחה מיידית · חזרה: בדיקה מלאה מול הסנכרון
-  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'){flushSave();syncFlush()}else{tick();syncKick()}});
-  window.addEventListener('pagehide',()=>{flushSave();syncFlush()});
+  // יציאה מהאפליקציה: שמירה ושליחה מיידית · חזרה: בדיקה מלאה מול הסנכרון והענן
+  
+  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'){flushSave();syncFlush();shFlush()}else{tick();syncKick();shKick()}});
+  window.addEventListener('pagehide',()=>{flushSave();syncFlush();shFlush()});
+  
+  
   setupPWA();
-  syncInit();
+  syncInit();shInit();
+  
 }
 init();
 </script>
