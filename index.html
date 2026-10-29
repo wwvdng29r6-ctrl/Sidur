@@ -2605,7 +2605,7 @@ function openExport(y,src){
   const m=exportModel(y,src);
   $('#expTitle').textContent='ייצוא סידור '+y;
   $('#expSub').textContent=m.status;
-  $('#expNote').textContent='כולל שורת חגים, סיכום לכל חודש וסה״כ שנתי'+(m.bal.size?' · '+m.bal.size+' ימי איזון מסומנים':'')+'.';
+  $('#expNote').textContent='כולל שורת חגים, סה״כ ימים לכל חודש ולשנה, וטבלת ימי עבודה וסופי שבוע של כל משמרת לפי שנה'+(m.bal.size?' · '+m.bal.size+' ימי איזון מסומנים':'')+'.';
   try{if(document.fonts&&document.fonts.load)['400','600','700','800'].forEach(w=>document.fonts.load(w+' 24px Heebo').catch(()=>{}))}catch(e){}
   openModal('expOv');
 }
@@ -2636,11 +2636,11 @@ function exportModel(y,src){
     for(let i=0;i<n;i++){const v=get(isoOf(addDays(s,i)));if(v&&!sh.includes(v))sh.push(v)}
     return{name:h.name,s,e,n,dur:h.dur,est:!!h.est,shifts:sh,p1:holShift(h.name,y-1),p2:holShift(h.name,y-2),p3:holShift(h.name,y-3)};
   });
-  const past=pastTotals(y),pastRows=[y-3,y-2,y-1].map(k=>({y:k,t:yearTotals(k)}));
+  const past=pastTotals(y),pastRows=[y-3,y-2,y-1].map(k=>({y:k,t:yearTotals(k)})),pastWk=[y-3,y-2,y-1].map(k=>({y:k,t:wkTotals(k)}));
   const cum={};SHIFT_NAMES.forEach(n=>cum[n]=past.sum[n]+tot[n]);
   const tblHols=hols.filter(h=>EXPORT_TABLE_HOLS.includes(h.name));
   const wk=wkInfo(wkCtx(y),f=>SHIFT_NAMES.indexOf(get(isoOf(dayAt(y,f))))).cnt;
-  return{y,cols,months,tot,spread:spreadOf(tot),status,bal,hols,tblHols,when:new Date(),past,pastRows,cum,wk};
+  return{y,cols,months,tot,spread:spreadOf(tot),status,bal,hols,tblHols,when:new Date(),past,pastRows,pastWk,cum,wk};
 }
 // ---- דף A4 לרוחב על canvas (בסיס ל-PDF ולתמונה) ----
 function drawSheet(m){
@@ -2648,7 +2648,7 @@ function drawSheet(m){
   const c=document.createElement('canvas');c.width=W;c.height=H;
   const x=c.getContext('2d');
   const F=(mm,wt)=>(wt||400)+' '+(mm*S).toFixed(1)+'px Heebo,"Arial Hebrew",Arial,sans-serif';
-  const C={ink:'#15181b',mute:'#6b7075',line:'#d2d5d8',strong:'#8e9297',we:'#ffa459',weH:'#ffa459',hol:'#ffe14d',holT:'#fff3b0',holInk:'#3d3000',weInk:'#7c2d00',head:'#eceef0',mon:'#f3f4f5',tr:'#3f45a6',bal:'#5b7d22',bad:'#b3261e',ok:'#2e7d32',warn:'#a35f00',cur:'#eef3e2',date:'#262b30'};
+  const C={ink:'#15181b',mute:'#6b7075',line:'#d2d5d8',strong:'#8e9297',we:'#ffa459',weH:'#ffa459',hol:'#ffe14d',holT:'#fff3b0',holInk:'#3d3000',weInk:'#7c2d00',head:'#eceef0',mon:'#f3f4f5',tr:'#3f45a6',bal:'#5b7d22',bad:'#b3261e',ok:'#2e7d32',warn:'#a35f00',cur:'#eef3e2',date:'#262b30',hdr:'#2b3440',hdrInk:'#ffffff',weHInk:'#4a1a00',type:'#dfe4ea',sum:'#dfe4ea'};
   const P=v=>v*S;
   x.fillStyle='#fff';x.fillRect(0,0,W,H);
   x.direction='rtl';x.textBaseline='middle';
@@ -2657,18 +2657,21 @@ function drawSheet(m){
   // כותרת
   txt('סידור עבודה '+m.y,R,M+3.4,6.2,800,C.ink,'right');
   // טבלה
-  const top=M+10,wMon=15,wType=11,wTot=6.5,wD=(297-2*M-wMon-wType-3*wTot)/m.cols;
-  const hHead=5,hDate=3.9,hShift=4.4,hLab=3.0,hMonth=hDate+hShift+hLab,hSum=4.8;
-  const xDay=i=>R-wMon-wType-(i+1)*wD,xTot=j=>R-wMon-wType-m.cols*wD-(j+1)*wTot;
-  const tblW=wMon+wType+m.cols*wD+3*wTot,tblL=R-tblW;
-  rect(tblL,top,tblW,hHead,C.head);
+  const top=M+10,wMon=15,wType=12.5,wTot=6.2,NT=4,wD=(297-2*M-wMon-wType-NT*wTot)/m.cols;
+  const hHead=6,hDate=3.9,hShift=4.4,hLab=3.0,hMonth=hDate+hShift+hLab,hSum=4.8;
+  const xDay=i=>R-wMon-wType-(i+1)*wD,xTot=j=>R-wMon-wType-m.cols*wD-(j+1)*wTot;   // j=3 — עמודת סה״כ ימי החודש
+  const tblW=wMon+wType+m.cols*wD+NT*wTot,tblL=R-tblW,gR=R-wMon-wType,gL=xDay(m.cols-1);
+  const sum3=t=>SHIFT_NAMES.reduce((a,n)=>a+(t[n]||0),0);
+  // שורת הימים — רקע כהה ואותיות לבנות גדולות; שישי ושבת בכתום של העמודה
+  rect(tblL,top,tblW,hHead,C.hdr);
   for(let i=0;i<m.cols;i++)if(i%7>=5)rect(xDay(i),top,wD,hHead,C.weH);
-  txt('חודש',R-wMon/2,top+hHead/2,2.4,700,C.mute);txt('סוג',R-wMon-wType/2,top+hHead/2,2.4,700,C.mute);
-  for(let i=0;i<m.cols;i++)txt(DOWL[i%7],xDay(i)+wD/2,top+hHead/2,2.5,800,i%7>=5?C.weInk:C.mute);
-  SHIFT_NAMES.forEach((n,j)=>txt(n,xTot(j)+wTot/2,top+hHead/2,2.6,800,C.ink));
+  txt('חודש',R-wMon/2,top+hHead/2+0.1,2.7,800,C.hdrInk);txt('סוג',R-wMon-wType/2,top+hHead/2+0.1,2.7,800,C.hdrInk);
+  for(let i=0;i<m.cols;i++)txt(DOWL[i%7],xDay(i)+wD/2,top+hHead/2+0.15,3.0,800,i%7>=5?C.weHInk:C.hdrInk);
+  SHIFT_NAMES.forEach((n,j)=>txt(n,xTot(j)+wTot/2,top+hHead/2+0.1,2.8,800,C.hdrInk));
+  txt('סה״כ',xTot(3)+wTot/2,top+hHead/2+0.1,1.95,800,C.hdrInk);
   m.months.forEach((mo,mi)=>{
     const y0=top+hHead+mi*hMonth,yS=y0+hDate,yL=yS+hShift;
-    rect(R-wMon-wType,y0,wMon+wType,hMonth,C.mon);
+    rect(R-wMon,y0,wMon,hMonth,C.mon);rect(R-wMon-wType,y0,wType,hMonth,C.type);
     for(let i=0;i<m.cols;i++)if(i%7>=5)rect(xDay(i),y0,wD,hMonth,C.we);
     mo.cells.forEach(ce=>{
       const xx=xDay(ce.col),we=ce.w>=5;
@@ -2678,40 +2681,45 @@ function drawSheet(m){
       if(ce.nm)txt(sh1(ce.nm),xx+wD/2,yS+hShift/2+0.15,3.05,800,ce.hol?C.holInk:C.ink);
       if(ce.bal){x.fillStyle=C.bal;x.beginPath();x.arc(P(xx+wD-0.75),P(yS+0.75),P(0.5),0,Math.PI*2);x.fill()}
     });
+    // שמות החגים (ואימונים) — ממורכזים על ימי החג. שם של יום אחד יכול לגלוש קצת לשני הצדדים, בלי לצאת מהטבלה
     mo.cells.forEach(ce=>{
       if(!ce.lbl)return;
-      const spanW=ce.span*wD,xr=xDay(ce.col)+wD;
+      const spanW=ce.span*wD,xr=xDay(ce.col)+wD,aw=spanW+(ce.span===1?wD*1.8:0);
       let sz=2.05;x.font=F(sz,700);
-      while(sz>1.35&&x.measureText(ce.lbl).width>P(spanW+(ce.span===1?wD*1.6:0)-0.4)){sz-=0.1;x.font=F(sz,700)}
-      x.save();x.beginPath();x.rect(P(xr-spanW-(ce.span===1?wD*1.6:0)),P(yL),P(spanW+(ce.span===1?wD*1.6:0)),P(hLab));x.clip();
-      txt(ce.lbl,xr-0.3,yL+hLab/2+0.1,sz,700,ce.lt==='tr'?C.tr:C.holInk,'right');
+      while(sz>1.35&&x.measureText(ce.lbl).width>P(aw-0.4)){sz-=0.1;x.font=F(sz,700)}
+      const tw=x.measureText(ce.lbl).width/S,xc=Math.min(gR-tw/2-0.25,Math.max(gL+tw/2+0.25,xr-spanW/2));
+      x.save();x.beginPath();x.rect(P(Math.max(gL,xc-aw/2)),P(yL),P(Math.min(gR,xc+aw/2)-Math.max(gL,xc-aw/2)),P(hLab));x.clip();
+      txt(ce.lbl,xc,yL+hLab/2+0.1,sz,700,ce.lt==='tr'?C.tr:C.holInk);
       x.restore();
     });
     txt(mo.name,R-wMon/2,y0+hMonth/2,3,800,C.ink);
-    txt('תאריך',R-wMon-wType/2,y0+hDate/2,1.9,600,C.mute);
-    txt('משמרת',R-wMon-wType/2,yS+hShift/2,1.9,600,C.mute);
-    txt('חגים',R-wMon-wType/2,yL+hLab/2,1.9,600,C.mute);
-    rect(xTot(2),yS,3*wTot,hShift,C.head);
+    // עמודת הסוג — כתב כהה ומודגש על רקע אפור־כחלחל
+    txt('תאריך',R-wMon-wType/2,y0+hDate/2+0.1,2.25,700,C.ink);
+    txt('משמרת',R-wMon-wType/2,yS+hShift/2+0.1,2.45,800,C.ink);
+    txt('חגים',R-wMon-wType/2,yL+hLab/2+0.1,2.1,700,C.ink);
+    rect(xTot(3),yS,NT*wTot,hShift,C.head);rect(xTot(3),yS,wTot,hShift,C.sum);
     SHIFT_NAMES.forEach((n,j)=>txt(String(mo.mt[n]),xTot(j)+wTot/2,yS+hShift/2+0.15,2.7,800,C.ink));
+    txt(String(sum3(mo.mt)),xTot(3)+wTot/2,yS+hShift/2+0.15,2.7,800,C.ink);
   });
   const yE=top+hHead+12*hMonth;
-  rect(tblL,yE,tblW,hSum,C.head);
+  rect(tblL,yE,tblW,hSum,C.head);rect(xTot(3),yE,wTot,hSum,C.sum);
   txt('סה״כ שנתי',R-(wMon+wType)/2,yE+hSum/2,2.7,800,C.ink);
   txt('פער בין המשמרות: '+m.spread,R-wMon-wType-2,yE+hSum/2,2.4,700,m.spread>1?C.bad:C.ok,'right');
   SHIFT_NAMES.forEach((n,j)=>txt(String(m.tot[n]),xTot(j)+wTot/2,yE+hSum/2+0.15,2.9,800,C.ink));
+  txt(String(sum3(m.tot)),xTot(3)+wTot/2,yE+hSum/2+0.15,2.75,800,C.ink);
   // קווי רשת
   x.strokeStyle=C.line;x.lineWidth=P(0.12);x.beginPath();
-  const vx=[R,R-wMon,R-wMon-wType];for(let i=0;i<=m.cols;i++)vx.push(R-wMon-wType-i*wD);for(let j=1;j<=3;j++)vx.push(xTot(j-1)-wTot+wTot);vx.push(tblL);
-  vx.forEach(v=>{x.moveTo(P(v),P(top));x.lineTo(P(v),P(yE+hSum))});
+  const vx=[R,R-wMon,R-wMon-wType];for(let i=0;i<=m.cols;i++)vx.push(R-wMon-wType-i*wD);for(let j=0;j<NT;j++)vx.push(xTot(j));vx.push(tblL);
+  vx.forEach(v=>{x.moveTo(P(v),P(top+hHead));x.lineTo(P(v),P(yE+hSum))});
   for(let mi=0;mi<12;mi++){const y0=top+hHead+mi*hMonth;[y0+hDate,y0+hDate+hShift].forEach(yy=>{x.moveTo(P(tblL),P(yy));x.lineTo(P(R-wMon),P(yy))})}
   x.stroke();
   x.strokeStyle=C.strong;x.lineWidth=P(0.28);x.beginPath();
   for(let mi=0;mi<=12;mi++){const yy=top+hHead+mi*hMonth;x.moveTo(P(tblL),P(yy));x.lineTo(P(R),P(yy))}
   x.moveTo(P(tblL),P(top));x.lineTo(P(R),P(top));x.moveTo(P(tblL),P(yE+hSum));x.lineTo(P(R),P(yE+hSum));
-  [R,R-wMon-wType,xTot(0)+wTot,tblL].forEach(v=>{x.moveTo(P(v),P(top));x.lineTo(P(v),P(yE+hSum))});
+  [R,R-wMon,R-wMon-wType,xTot(0)+wTot,xTot(2),tblL].forEach(v=>{x.moveTo(P(v),P(top));x.lineTo(P(v),P(yE+hSum))});
   x.stroke();
   // טבלת חגים: מי סגר כל חג ב־3 השנים הקודמות ומי סוגר אותו השנה
-  const totW=52,gapW=6;
+  const totW=59,gapW=6;
   const hs=m.tblHols,nH=Math.max(1,hs.length),wL=wMon+wType,cw=(297-2*M-totW-gapW-wL)/nH,hH=7,hR=3.9,tW=wL+nH*cw,tL=R-tW,t0=yE+hSum+5,tH=hH+4*hR;
   rect(tL,t0,tW,hH,C.head);
   txt('שנה / חג',R-wL/2,t0+hH/2,2.35,800,C.ink);
@@ -2742,29 +2750,33 @@ function drawSheet(m){
   x.moveTo(P(tL),P(t0+hH));x.lineTo(P(R),P(t0+hH));
   x.moveTo(P(tL),P(t0+hH+3*hR));x.lineTo(P(R),P(t0+hH+3*hR));
   x.stroke();
-  // טבלת סה״כ משמרות — מי עשתה יום מיותר ב־3 השנים האחרונות ובשנה הזו
+  // סה״כ לפי שנה — ימי העבודה וסופי השבוע של כל משמרת, ב־3 השנים האחרונות ובשנה הזו.
+  // השורות מיושרות לטבלת החגים; המשמרת שעשתה הכי הרבה מסומנת בכתום
   {
-    const sR=M+totW,cL=19,cN=(totW-cL)/3,hH2=4.6,rH=(tH-hH2)/4;
-    const xN=k=>sR-cL-k*cN-cN/2;
-    rect(M,t0,totW,hH2,C.head);
-    txt('סה״כ משמרות',sR-cL/2,t0+hH2/2,2.1,800,C.ink);
-    SHIFT_NAMES.forEach((n,k)=>txt(n,xN(k),t0+hH2/2+0.1,2.5,800,C.ink));
-    const rowsT=m.pastRows.map(r=>({lab:String(r.y),t:r.t})).concat([{lab:m.y+' — השנה',t:m.tot,cur:1}]);
+    const sR=M+totW,cL=17,cN=(totW-cL)/6,hA=3.4,hB=hH-hA,xG=g=>sR-cL-g*3*cN,xN=(g,k)=>xG(g)-k*cN-cN/2;
+    const wkO=a=>a?{'א׳':a[0],'ב׳':a[1],'ג׳':a[2]}:null;
+    rect(M,t0,totW,hH,C.head);
+    txt('שנה',sR-cL/2,t0+hH/2,2.35,800,C.ink);
+    ['ימי עבודה','סופי שבוע'].forEach((t,g)=>txt(t,xG(g)-1.5*cN,t0+hA/2+0.15,2.15,800,C.ink));
+    [0,1].forEach(g=>SHIFT_NAMES.forEach((n,k)=>txt(n,xN(g,k),t0+hA+hB/2+0.1,2.4,800,C.ink)));
+    const rowsT=m.pastRows.map((r,i)=>({lab:String(r.y),t:[r.t,wkO(m.pastWk[i]&&m.pastWk[i].t)]})).concat([{lab:m.y+' — השנה',t:[m.tot,wkO(m.wk)],cur:1}]);
     rowsT.forEach((r,i)=>{
-      const y0=t0+hH2+i*rH;
-      if(r.cur)rect(M,y0,totW,rH,C.cur);else if(r.sum)rect(M,y0,totW,rH,C.head);
-      txt(r.lab,sR-cL/2,y0+rH/2+0.1,2.15,r.cur||r.sum?800:600,r.cur||r.sum?C.ink:C.mute);
-      SHIFT_NAMES.forEach((n,k)=>{const v=r.t?r.t[n]:null;txt(v==null?'—':String(v),xN(k),y0+rH/2+0.15,2.55,800,v==null?C.mute:isExtra(r.t,n)?C.warn:C.ink)});
+      const y0=t0+hH+i*hR;
+      if(r.cur)rect(M,y0,totW,hR,C.cur);
+      txt(r.lab,sR-cL/2,y0+hR/2+0.1,2.15,r.cur?800:600,r.cur?C.ink:C.mute);
+      r.t.forEach((t,g)=>SHIFT_NAMES.forEach((n,k)=>{const v=t?t[n]:null;txt(v==null?'—':String(v),xN(g,k),y0+hR/2+0.15,2.55,800,v==null?C.mute:isExtra(t,n)?C.warn:C.ink)}));
     });
     x.strokeStyle=C.line;x.lineWidth=P(0.12);x.beginPath();
-    for(let k=1;k<3;k++){const xv=sR-cL-k*cN;x.moveTo(P(xv),P(t0));x.lineTo(P(xv),P(t0+tH))}
-    for(let i=1;i<4;i++){const yy=t0+hH2+i*rH;x.moveTo(P(M),P(yy));x.lineTo(P(sR),P(yy))}
+    [0,1].forEach(g=>{for(let k=1;k<3;k++){const xv=xG(g)-k*cN;x.moveTo(P(xv),P(t0+hA));x.lineTo(P(xv),P(t0+tH))}});
+    x.moveTo(P(M),P(t0+hA));x.lineTo(P(sR-cL),P(t0+hA));
+    for(let i=1;i<3;i++){const yy=t0+hH+i*hR;x.moveTo(P(M),P(yy));x.lineTo(P(sR),P(yy))}
     x.stroke();
     x.strokeStyle=C.strong;x.lineWidth=P(0.28);x.beginPath();
     x.rect(P(M),P(t0),P(totW),P(tH));
     x.moveTo(P(sR-cL),P(t0));x.lineTo(P(sR-cL),P(t0+tH));
-    x.moveTo(P(M),P(t0+hH2));x.lineTo(P(sR),P(t0+hH2));
-    x.moveTo(P(M),P(t0+hH2+3*rH));x.lineTo(P(sR),P(t0+hH2+3*rH));
+    x.moveTo(P(xG(1)),P(t0));x.lineTo(P(xG(1)),P(t0+tH));
+    x.moveTo(P(M),P(t0+hH));x.lineTo(P(sR),P(t0+hH));
+    x.moveTo(P(M),P(t0+hH+3*hR));x.lineTo(P(sR),P(t0+hH+3*hR));
     x.stroke();
   }
   return c;
@@ -2817,13 +2829,13 @@ const xE=s=>String(s).replace(/[<>&"]/g,ch=>({'<':'&lt;','>':'&gt;','&':'&amp;',
 const colL=i=>{let s='';i++;while(i>0){const r=(i-1)%26;s=String.fromCharCode(65+r)+s;i=Math.floor((i-1)/26)}return s};
 function makeXlsx(m){
   // סגנונות: [גופן, מילוי, גבול, יישור]
-  const XF=[[0,0,0,''],[2,0,0,'right'],[3,0,0,'right'],[1,4,1,'center'],[1,6,1,'center'],[6,0,1,'center'],[7,2,1,'center'],[1,0,1,'center'],[1,2,1,'center'],[1,3,1,'center'],[1,5,1,'center'],[4,0,1,'right'],[4,2,1,'right'],[5,0,1,'right'],[5,2,1,'right'],[1,7,1,'center'],[3,7,1,'center'],[1,4,1,'center'],[0,0,1,''],[0,2,1,''],[1,4,1,'right'],[0,0,1,'right'],[1,0,1,'center'],[3,0,0,'right'],[8,0,0,'right'],[9,0,0,'right'],[1,8,1,'center'],[8,8,1,'center'],[10,8,1,'center'],[6,0,1,'center'],[1,8,1,'right'],[1,4,1,'right'],[1,4,1,'center',1],[10,0,1,'center'],[10,4,1,'center'],[0,0,1,'center'],[0,8,1,'center'],[3,0,1,'center'],[8,4,1,'center',1],[10,4,1,'center',1],[6,9,1,'center'],[4,9,1,'right'],[5,9,1,'right']];
-  const ST={title:1,sub:2,head:3,headWe:4,date:5,dateWe:6,sh:7,shWe:8,shHol:9,shBal:10,lab:11,labWe:12,tr:13,trWe:14,mon:15,type:16,tot:17,empty:18,emptyWe:19,th:20,td:21,tdB:22,note:23,bad:24,ok:25,cur:26,curBad:27,curWarn:28,small:29,curLab:30,thR:31,headFit:32,amb:33,ambHead:34,tdC:35,tdCcur:36,muteC:37,headBad:38,headWarn:39,dateHol:40,labHol:41,trHol:42};
+  const XF=[[0,0,0,''],[2,0,0,'right'],[3,0,0,'right'],[1,4,1,'center'],[1,6,1,'center'],[6,0,1,'center'],[7,2,1,'center'],[1,0,1,'center'],[1,2,1,'center'],[1,3,1,'center'],[1,5,1,'center'],[4,0,1,'center'],[4,2,1,'center'],[5,0,1,'center'],[5,2,1,'center'],[1,7,1,'center'],[3,7,1,'center'],[1,4,1,'center'],[0,0,1,''],[0,2,1,''],[1,4,1,'right'],[0,0,1,'right'],[1,0,1,'center'],[3,0,0,'right'],[8,0,0,'right'],[9,0,0,'right'],[1,8,1,'center'],[8,8,1,'center'],[10,8,1,'center'],[6,0,1,'center'],[1,8,1,'right'],[1,4,1,'right'],[1,4,1,'center',1],[10,0,1,'center'],[10,4,1,'center'],[0,0,1,'center'],[0,8,1,'center'],[3,0,1,'center'],[8,4,1,'center',1],[10,4,1,'center',1],[6,9,1,'center'],[4,9,1,'center'],[5,9,1,'center'],[11,10,1,'center'],[12,6,1,'center'],[6,11,1,'center'],[1,11,1,'center']];
+  const ST={title:1,sub:2,head:3,headWe:4,date:5,dateWe:6,sh:7,shWe:8,shHol:9,shBal:10,lab:11,labWe:12,tr:13,trWe:14,mon:15,type:16,tot:17,empty:18,emptyWe:19,th:20,td:21,tdB:22,note:23,bad:24,ok:25,cur:26,curBad:27,curWarn:28,small:29,curLab:30,thR:31,headFit:32,amb:33,ambHead:34,tdC:35,tdCcur:36,muteC:37,headBad:38,headWarn:39,dateHol:40,labHol:41,trHol:42,gridHead:43,gridHeadWe:44,typeB:45,sumCol:46};
   const fill=c=>'<fill><patternFill patternType="solid"><fgColor rgb="FF'+c+'"/><bgColor indexed="64"/></patternFill></fill>';
   const font=(sz,b,col)=>'<font>'+(b?'<b/>':'')+'<sz val="'+sz+'"/>'+(col?'<color rgb="FF'+col+'"/>':'')+'<name val="Arial"/></font>';
   const styles='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">'
-    +'<fonts count="11">'+font(10)+font(10,1)+font(15,1)+font(8,0,'6B7075')+font(8,1,'4F3D06')+font(8,1,'3F45A6')+font(9,1,'262B30')+font(9,1,'7C2D00')+font(10,1,'B3261E')+font(10,1,'2E7D32')+font(10,1,'A35F00')+'</fonts>'
-    +'<fills count="10"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill>'+fill('FFA459')+fill('FFE14D')+fill('ECEEF0')+fill('DCE8C6')+fill('FFA459')+fill('F3F4F5')+fill('EEF3E2')+fill('FFF3B0')+'</fills>'
+    +'<fonts count="13">'+font(10)+font(10,1)+font(15,1)+font(8,0,'6B7075')+font(8,1,'4F3D06')+font(8,1,'3F45A6')+font(9,1,'262B30')+font(9,1,'7C2D00')+font(10,1,'B3261E')+font(10,1,'2E7D32')+font(10,1,'A35F00')+font(10,1,'FFFFFF')+font(10,1,'4A1A00')+'</fonts>'
+    +'<fills count="12"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill>'+fill('FFA459')+fill('FFE14D')+fill('ECEEF0')+fill('DCE8C6')+fill('FFA459')+fill('F3F4F5')+fill('EEF3E2')+fill('FFF3B0')+fill('2B3440')+fill('DFE4EA')+'</fills>'
     +'<borders count="2"><border><left/><right/><top/><bottom/><diagonal/></border><border><left style="thin"><color rgb="FFD2D5D8"/></left><right style="thin"><color rgb="FFD2D5D8"/></right><top style="thin"><color rgb="FFD2D5D8"/></top><bottom style="thin"><color rgb="FFD2D5D8"/></bottom><diagonal/></border></borders>'
     +'<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>'
     +'<cellXfs count="'+XF.length+'">'+XF.map(([f,l,b,a,sh])=>'<xf numFmtId="0" fontId="'+f+'" fillId="'+l+'" borderId="'+b+'" xfId="0" applyFont="1" applyFill="1" applyBorder="1"'+(a?' applyAlignment="1"><alignment horizontal="'+a+'" vertical="center"'+(sh?' shrinkToFit="1"':'')+'/></xf>':'/>')).join('')+'</cellXfs>'
@@ -2839,13 +2851,15 @@ function makeXlsx(m){
   // גיליון 1 — הסידור. הסיכומים הם נוסחאות מתאי המשמרות: שינוי משמרת ביום מעדכן את הסה״כ, הפער וטבלאות הסיכום.
   const D0=2,TC=D0+m.cols,rows=[],merges=[],shRef={},dvR=[];
   rows.push(row(1,[cell('A1','סידור עבודה '+m.y,ST.title)],24));
-  const hc=[cell('A3','חודש',ST.head),cell('B3','סוג',ST.head)];
-  for(let i=0;i<m.cols;i++)hc.push(cell(colL(D0+i)+'3',DOWL[i%7],i%7>=5?ST.headWe:ST.head));
-  SHIFT_NAMES.forEach((n,j)=>hc.push(cell(colL(TC+j)+'3',n,ST.head)));
-  rows.push(row(3,hc,16));
+  // שורת הימים — בולטת: רקע כהה ואותיות לבנות; שישי ושבת בכתום של העמודה. בסוף — סה״כ ימי החודש
+  const hc=[cell('A3','חודש',ST.gridHead),cell('B3','סוג',ST.gridHead)];
+  for(let i=0;i<m.cols;i++)hc.push(cell(colL(D0+i)+'3',DOWL[i%7],i%7>=5?ST.gridHeadWe:ST.gridHead));
+  SHIFT_NAMES.forEach((n,j)=>hc.push(cell(colL(TC+j)+'3',n,ST.gridHead)));
+  hc.push(cell(colL(TC+3)+'3','סה״כ',ST.gridHead));
+  rows.push(row(3,hc,21));
   m.months.forEach((mo,mi)=>{
     const r=4+mi*3,byCol={};mo.cells.forEach(ce=>byCol[ce.col]=ce);
-    const r1=[cell('A'+r,mo.name,ST.mon),cell('B'+r,'תאריך',ST.type)],r2=[cell('A'+(r+1),'',ST.mon),cell('B'+(r+1),'משמרת',ST.type)],r3=[cell('A'+(r+2),'',ST.mon),cell('B'+(r+2),'חגים',ST.type)];
+    const r1=[cell('A'+r,mo.name,ST.mon),cell('B'+r,'תאריך',ST.typeB)],r2=[cell('A'+(r+1),'',ST.mon),cell('B'+(r+1),'משמרת',ST.typeB)],r3=[cell('A'+(r+2),'',ST.mon),cell('B'+(r+2),'חגים',ST.typeB)];
     merges.push('A'+r+':A'+(r+2));
     for(let i=0;i<m.cols;i++){
       const L=colL(D0+i),we=i%7>=5,ce=byCol[i];
@@ -2858,25 +2872,33 @@ function makeXlsx(m){
     // ימי החודש ברצף בשורת המשמרת — טווח הספירה והרשימה הנפתחת
     const c0=Math.min(...mo.cells.map(ce=>ce.col)),c1=Math.max(...mo.cells.map(ce=>ce.col)),rng=colL(D0+c0)+(r+1)+':'+colL(D0+c1)+(r+1);dvR.push(rng);
     SHIFT_NAMES.forEach((n,j)=>{const L=colL(TC+j);r1.push(cell(L+r,'',ST.tot));r2.push(fcell(L+(r+1),'COUNTIF('+rng+',"'+sh1(n)+'*")',mo.mt[n],ST.tot));r3.push(cell(L+(r+2),'',ST.tot))});
+    {const L=colL(TC+3);r1.push(cell(L+r,'',ST.sumCol));r2.push(fcell(L+(r+1),'SUM('+colL(TC)+(r+1)+':'+colL(TC+2)+(r+1)+')',SHIFT_NAMES.reduce((a,n)=>a+mo.mt[n],0),ST.sumCol));r3.push(cell(L+(r+2),'',ST.sumCol))}
     rows.push(row(r,r1,15),row(r+1,r2,16),row(r+2,r3,12));
   });
   const rE=4+36,totRef=n=>colL(TC+SHIFT_NAMES.indexOf(n))+rE,totR='$'+colL(TC)+'$'+rE+':$'+colL(TC+2)+'$'+rE,spF='MAX('+totR+')-MIN('+totR+')';
   const re=[cell('A'+rE,'סה״כ שנתי',ST.tot),cell('B'+rE,'',ST.tot),fcell(colL(D0)+rE,'"פער בין המשמרות: "&('+spF+')','פער בין המשמרות: '+m.spread,m.spread>1?ST.bad:ST.ok)];
   cf(colL(D0)+rE,[[spF+'>1',0],[spF+'<=1',2]]);
   SHIFT_NAMES.forEach((n,j)=>{const L=colL(TC+j);re.push(fcell(L+rE,'SUM('+L+'4:'+L+(rE-1)+')',m.tot[n],ST.tot))});
+  re.push(fcell(colL(TC+3)+rE,'SUM('+colL(TC)+rE+':'+colL(TC+2)+rE+')',SHIFT_NAMES.reduce((a,n)=>a+m.tot[n],0),ST.sumCol));
   rows.push(row(rE,re,18));merges.push('A'+rE+':B'+rE);
   // שתי טבלאות הסיכום באותן שורות, כמו בייצוא ל־PDF: טבלת החגים מימין (כל חג על פני 3 עמודות) — מי סגר כל חג בשנים
   // הקודמות ומי סוגר השנה, ומשמאל לה, אחרי עמודת רווח, טבלת סה״כ המשמרות. כל שנה באותה שורה בשתי הטבלאות.
   const hr0=rE+2,HS=m.tblHols,span=3,hcS=i=>colL(D0+i*span),hcE=i=>colL(D0+i*span+span-1);
-  const T0=D0+HS.length*span+1,TL=4,tcS=k=>T0+TL+k*3;   // תווית ברוחב 4 עמודות, 3 עמודות לכל משמרת
+  // טבלת סה״כ לפי שנה (משמאל, אחרי עמודת רווח): ימי עבודה וסופי שבוע של כל משמרת. תווית ברוחב 4 עמודות, 2 עמודות לכל ערך
+  const T0=D0+HS.length*span+1,TL=4,tw=(g,k)=>T0+TL+(g*3+k)*2;
   // valFn מחזירה [ערך, סגנון, נוסחה?]
   const hCells=(r,lab,labSt,valFn)=>{const cs=[cell('A'+r,lab,labSt),cell('B'+r,'',labSt)];merges.push('A'+r+':B'+r);
     HS.forEach((h,i)=>{const[v,st,f]=valFn(h);for(let k=0;k<span;k++){const ref=colL(D0+i*span+k)+r;cs.push(k?cell(ref,'',st):f?fcell(ref,f,v,st):cell(ref,v,st))}merges.push(hcS(i)+r+':'+hcE(i)+r)});return cs};
-  // תאי טבלת הסה״כ בשורה r; n=2 — תא שמשתרע על שתי שורות (השורה השנייה מקבלת תאים ריקים באותו עיצוב, בלי מיזוג נוסף)
-  const tCells=(r,lab,labSt,vals,n,cont)=>{const cs=[],r2=r+(n||1)-1;
-    for(let k=0;k<TL;k++)cs.push(cell(colL(T0+k)+r,k||cont?'':lab,labSt));if(!cont)merges.push(colL(T0)+r+':'+colL(T0+TL-1)+r2);
-    vals.forEach((v,i)=>{for(let k=0;k<3;k++){const ref=colL(tcS(i)+k)+r;cs.push(k||cont?cell(ref,'',v[1]):v[2]?fcell(ref,v[2],v[0],v[1]):cell(ref,v[0],v[1]))}if(!cont)merges.push(colL(tcS(i))+r+':'+colL(tcS(i)+2)+r2)});return cs};
-  const tVals=(t,cur)=>SHIFT_NAMES.map(n=>[t?t[n]:'—',!t?ST.muteC:isExtra(t,n)?(cur?ST.curWarn:ST.amb):(cur?ST.cur:ST.tdB),cur?totRef(n):null]);
+  // תווית השנה (rows: 2 — משתרעת על שתי שורות, 0 — המשך של תא ממוזג) ותא ערך ברוחב 2 עמודות
+  const tLab=(r,lab,st,rows)=>{const cs=[];for(let k=0;k<TL;k++)cs.push(cell(colL(T0+k)+r,k?'':lab,st));if(rows!==0)merges.push(colL(T0)+r+':'+colL(T0+TL-1)+(r+(rows===2?1:0)));return cs};
+  const tVal=(r,c,v,st,f)=>{const a=colL(c)+r;merges.push(a+':'+colL(c+1)+r);return[f?fcell(a,f,v,st):cell(a,v,st),cell(colL(c+1)+r,'',st)]};
+  const wkO=a=>a?{'א׳':a[0],'ב׳':a[1],'ג׳':a[2]}:null;
+  // סופי השבוע של משמרת = ימי השישי שהיא עובדת בשנה (כמו באפליקציה) — מתעדכן כשמשנים משמרת בקובץ
+  const wkRng='$'+colL(D0)+'$4:$'+colL(D0+m.cols-1)+'$'+(rE-1);
+  const wkF=n=>'SUMPRODUCT((MOD(COLUMN('+wkRng+')-'+(D0+1)+',7)=5)*(MOD(ROW('+wkRng+')-5,3)=0)*(LEFT('+wkRng+',1)="'+sh1(n)+'"))';
+  const yRow=(r,ts,cur)=>{const cs=[];ts.forEach((t,g)=>SHIFT_NAMES.forEach((n,k)=>{
+    const st=!t?ST.muteC:isExtra(t,n)?(cur?ST.curWarn:ST.amb):(cur?ST.cur:ST.tdB);
+    cs.push(...tVal(r,tw(g,k),t?t[n]:'—',st,cur?(g?wkF(n):totRef(n)):null))}));return cs};
   // מי עושה את החג השנה — מתאי המשמרת של ימי החג: כל משמרת פעם אחת, לפי הסדר, "—" כשאין
   const holF=h=>{const refs=[];
     for(let i=0;i<h.n;i++){const ref=shRef[isoOf(addDays(h.s,i))];if(!ref)return null;refs.push(ref)}
@@ -2886,17 +2908,21 @@ function makeXlsx(m){
   const curR=hr0+5;
   HS.forEach((h,i)=>{if(!holF(h))return;const X=hcS(i)+curR,P1=hcS(i)+(curR-1),P2=hcS(i)+(curR-2);
     cf(X,[['AND('+P1+'<>"—",'+P1+'<>"",LEFT('+X+',2)='+P1+')',0],['AND('+P2+'<>"—",'+P2+'<>"",LEFT('+X+',2)='+P2+')',1],['TRUE',3]])});
-  {const V=SHIFT_NAMES.map((n,j)=>colL(tcS(j))+curR).join(',');
-   SHIFT_NAMES.forEach((n,j)=>{const X=colL(tcS(j))+curR;cf(X,[['AND(MAX('+V+')>MIN('+V+'),'+X+'=MAX('+V+'))',1],['TRUE',3]])})}
-  const tHead=[['א׳',ST.head],['ב׳',ST.head],['ג׳',ST.head]];
-  rows.push(row(hr0,[...hCells(hr0,'שנה / חג',ST.thR,h=>[h.name+(h.est?' *':''),ST.headFit]),...tCells(hr0,'סה״כ משמרות',ST.thR,tHead,2)],18));
-  rows.push(row(hr0+1,[...hCells(hr0+1,'תאריכים '+m.y,ST.type,h=>[fmtDM(h.s)+(h.n>1?'–'+fmtDM(h.e):''),ST.small]),...tCells(hr0+1,'',ST.thR,tHead,1,true)],15));
-  [m.y-3,m.y-2,m.y-1].forEach((yy,k)=>{const r=hr0+2+k,pr=m.pastRows.find(x=>x.y===yy);
-    rows.push(row(r,[...hCells(r,String(yy),ST.th,h=>[[h.p3,h.p2,h.p1][k]||'—',ST.tdB]),...tCells(r,String(yy),ST.th,tVals(pr?pr.t:null))],16))});
-  rows.push(row(curR,[...hCells(curR,m.y+' — השנה',ST.curLab,h=>{const rp=holRepeat(h);return[h.shifts.join('/')||'—',rp==='bad'?ST.curBad:rp==='warn'?ST.curWarn:ST.cur,holF(h)]}),...tCells(curR,m.y+' — השנה',ST.curLab,tVals(m.tot,1))],18));
+  // השנה: המשמרת עם הכי הרבה ימים / סופי שבוע — בכתום (מתעדכן עם הנוסחאות)
+  [0,1].forEach(g=>{const V=SHIFT_NAMES.map((n,k)=>colL(tw(g,k))+curR).join(',');
+    SHIFT_NAMES.forEach((n,k)=>{const X=colL(tw(g,k))+curR;cf(X,[['AND(MAX('+V+')>MIN('+V+'),'+X+'=MAX('+V+'))',1],['TRUE',3]])})});
+  const yHead1=tLab(hr0,'שנה',ST.thR,2);
+  ['ימי עבודה','סופי שבוע'].forEach((t,g)=>{const c0=tw(g,0);for(let k=0;k<6;k++)yHead1.push(cell(colL(c0+k)+hr0,k?'':t,ST.head));merges.push(colL(c0)+hr0+':'+colL(c0+5)+hr0)});
+  const yHead2=tLab(hr0+1,'',ST.thR,0);
+  [0,1].forEach(g=>SHIFT_NAMES.forEach((n,k)=>yHead2.push(...tVal(hr0+1,tw(g,k),n,ST.head))));
+  rows.push(row(hr0,[...hCells(hr0,'שנה / חג',ST.thR,h=>[h.name+(h.est?' *':''),ST.headFit]),...yHead1],18));
+  rows.push(row(hr0+1,[...hCells(hr0+1,'תאריכים '+m.y,ST.type,h=>[fmtDM(h.s)+(h.n>1?'–'+fmtDM(h.e):''),ST.small]),...yHead2],15));
+  [m.y-3,m.y-2,m.y-1].forEach((yy,k)=>{const r=hr0+2+k,pr=m.pastRows.find(x=>x.y===yy),pw=m.pastWk.find(x=>x.y===yy);
+    rows.push(row(r,[...hCells(r,String(yy),ST.th,h=>[[h.p3,h.p2,h.p1][k]||'—',ST.tdB]),...tLab(r,String(yy),ST.th),...yRow(r,[pr?pr.t:null,pw?wkO(pw.t):null])],16))});
+  rows.push(row(curR,[...hCells(curR,m.y+' — השנה',ST.curLab,h=>{const rp=holRepeat(h);return[h.shifts.join('/')||'—',rp==='bad'?ST.curBad:rp==='warn'?ST.curWarn:ST.cur,holF(h)]}),...tLab(curR,m.y+' — השנה',ST.curLab),...yRow(curR,[m.tot,wkO(m.wk)],1)],18));
   // רשימה נפתחת בכל יום: א / ב / ג (או ריק)
   const dvXml='<dataValidations count="1"><dataValidation type="list" allowBlank="1" showErrorMessage="1" errorTitle="'+xE('משמרת')+'" error="'+xE('אפשר לבחור רק א, ב או ג')+'" sqref="'+dvR.join(' ')+'"><formula1>'+xE('"'+SHIFT_NAMES.map(sh1).join(',')+'"')+'</formula1></dataValidation></dataValidations>';
-  const colsXml='<cols><col min="1" max="1" width="9" customWidth="1"/><col min="2" max="2" width="7" customWidth="1"/><col min="3" max="'+(2+m.cols)+'" width="3.7" customWidth="1"/><col min="'+(3+m.cols)+'" max="'+(5+m.cols)+'" width="5" customWidth="1"/></cols>';
+  const colsXml='<cols><col min="1" max="1" width="9" customWidth="1"/><col min="2" max="2" width="8.5" customWidth="1"/><col min="3" max="'+(2+m.cols)+'" width="3.7" customWidth="1"/><col min="'+(3+m.cols)+'" max="'+(5+m.cols)+'" width="5" customWidth="1"/><col min="'+(6+m.cols)+'" max="'+(6+m.cols)+'" width="6.5" customWidth="1"/>'+(T0+TL+12>6+m.cols?'<col min="'+(7+m.cols)+'" max="'+(T0+TL+12)+'" width="5" customWidth="1"/>':'')+'</cols>';
   // סדר האלמנטים לפי התקן: נתונים, מיזוגים, צבעים מותנים, אימות נתונים, שוליים, הגדרות הדפסה
   const ws=(views,cols,data,mg,setup,extra)=>'<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">'
     +(setup?'<sheetPr><pageSetUpPr fitToPage="1"/></sheetPr>':'')+'<sheetViews>'+views+'</sheetViews><sheetFormatPr defaultRowHeight="15"/>'+cols+'<sheetData>'+data.join('')+'</sheetData>'
