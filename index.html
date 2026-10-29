@@ -2755,7 +2755,7 @@ function holExtraDaysOf(y){
 }
 function expNoteSet(m){
   const el=$('#expNote');if(!el)return;
-  if(_expHol){el.textContent='כל התאריכים של השנה. משמרות רק בחגים שהמשמרות סוגרות (פסח, יום הזיכרון ועצמאות, שבועות, ראש השנה, יום כיפור וסוכות). שאר החגים וימי הזיכרון בצהוב בלי משמרת — חנוכה, ט״ו בשבט, פורים, יום השואה, ל״ג בעומר, תשעה באב, סיגד, חג הקורבן, נבי שועייב ונבי סבלאן. בתחתית: מי סגר כל חג ב־3 השנים הקודמות ומי סוגר השנה.';return}
+  if(_expHol){el.textContent='כל התאריכים של השנה, ומשמרות רק בחגים שהמשמרות סוגרות (פסח, יום הזיכרון ועצמאות, שבועות, ראש השנה, יום כיפור וסוכות). שאר החגים, ימי הזיכרון, חגי הדרוזים וחג הקורבן — בצהוב בלי משמרת. ב־Excel משבצים את שאר הימים מהרשימה בכל תא, וכל הסיכומים והטבלאות מתעדכנים כמו בסידור המלא.';return}
   if(!m)m=exportModel(_exp.y,_exp.src);
   el.textContent='כולל שורת חגים, סה״כ ימים לכל חודש ולשנה, וטבלת ימי עבודה וסופי שבוע של כל משמרת לפי שנה'+(m.bal.size?' · '+m.bal.size+' ימי איזון מסומנים':'')+'.';
 }
@@ -2815,7 +2815,8 @@ function exportModel(y,src,holOnly){
   const past=pastTotals(y),pastRows=[y-3,y-2,y-1].map(k=>({y:k,t:yearTotals(k)})),pastWk=[y-3,y-2,y-1].map(k=>({y:k,t:wkTotals(k)}));
   const cum={};SHIFT_NAMES.forEach(n=>cum[n]=past.sum[n]+tot[n]);
   const tblHols=hols.filter(h=>EXPORT_TABLE_HOLS.includes(h.name));
-  const wk=wkInfo(wkCtx(y),f=>SHIFT_NAMES.indexOf(get(isoOf(dayAt(y,f))))).cnt;
+  // סופי השבוע = ימי השישי שכל משמרת עובדת. בחגים בלבד — רק מה שמופיע בקובץ (כמו הנוסחה ב-Excel, שמתעדכנת כשמשבצים)
+  const wk=holOnly?SHIFT_NAMES.map(n=>months.reduce((a,mo)=>a+mo.cells.filter(c=>c.w===5&&c.nm===n).length,0)):wkInfo(wkCtx(y),f=>SHIFT_NAMES.indexOf(get(isoOf(dayAt(y,f))))).cnt;
   return{y,cols,months,tot,spread:spreadOf(tot),status,bal,hols,tblHols,when:new Date(),past,pastRows,pastWk,cum,wk,holOnly:!!holOnly};
 }
 // ---- דף A4 לרוחב על canvas (בסיס ל-PDF ולתמונה) ----
@@ -3010,8 +3011,8 @@ const xE=s=>String(s).replace(/[<>&"]/g,ch=>({'<':'&lt;','>':'&gt;','&':'&amp;',
 const colL=i=>{let s='';i++;while(i>0){const r=(i-1)%26;s=String.fromCharCode(65+r)+s;i=Math.floor((i-1)/26)}return s};
 function makeXlsx(m){
   // סגנונות: [גופן, מילוי, גבול, יישור]
-  const XF=[[0,0,0,''],[2,0,0,'right'],[3,0,0,'right'],[1,4,1,'center'],[1,6,1,'center'],[6,0,1,'center'],[7,2,1,'center'],[1,0,1,'center'],[1,2,1,'center'],[1,3,1,'center'],[1,5,1,'center'],[4,0,1,'center'],[4,2,1,'center'],[5,0,1,'center'],[5,2,1,'center'],[1,7,1,'center'],[3,7,1,'center'],[1,4,1,'center'],[0,0,1,''],[0,2,1,''],[1,4,1,'right'],[0,0,1,'right'],[1,0,1,'center'],[3,0,0,'right'],[8,0,0,'right'],[9,0,0,'right'],[1,8,1,'center'],[8,8,1,'center'],[10,8,1,'center'],[6,0,1,'center'],[1,8,1,'right'],[1,4,1,'right'],[1,4,1,'center',1],[10,0,1,'center'],[10,4,1,'center'],[0,0,1,'center'],[0,8,1,'center'],[3,0,1,'center'],[8,4,1,'center',1],[10,4,1,'center',1],[6,9,1,'center'],[4,9,1,'center'],[5,9,1,'center'],[11,10,1,'center'],[12,6,1,'center'],[6,11,1,'center'],[1,11,1,'center'],[4,9,1,'center',1]];
-  const ST={title:1,sub:2,head:3,headWe:4,date:5,dateWe:6,sh:7,shWe:8,shHol:9,shBal:10,lab:11,labWe:12,tr:13,trWe:14,mon:15,type:16,tot:17,empty:18,emptyWe:19,th:20,td:21,tdB:22,note:23,bad:24,ok:25,cur:26,curBad:27,curWarn:28,small:29,curLab:30,thR:31,headFit:32,amb:33,ambHead:34,tdC:35,tdCcur:36,muteC:37,headBad:38,headWarn:39,dateHol:40,labHol:41,trHol:42,gridHead:43,gridHeadWe:44,typeB:45,sumCol:46,labHolFit:47};
+  const XF=[[0,0,0,''],[2,0,0,'right'],[3,0,0,'right'],[1,4,1,'center'],[1,6,1,'center'],[6,0,1,'center'],[7,2,1,'center'],[1,0,1,'center'],[1,2,1,'center'],[1,3,1,'center'],[1,5,1,'center'],[4,0,1,'center'],[4,2,1,'center'],[5,0,1,'center'],[5,2,1,'center'],[1,7,1,'center'],[3,7,1,'center'],[1,4,1,'center'],[0,0,1,''],[0,2,1,''],[1,4,1,'right'],[0,0,1,'right'],[1,0,1,'center'],[3,0,0,'right'],[8,0,0,'right'],[9,0,0,'right'],[1,8,1,'center'],[8,8,1,'center'],[10,8,1,'center'],[6,0,1,'center'],[1,8,1,'right'],[1,4,1,'right'],[1,4,1,'center',1],[10,0,1,'center'],[10,4,1,'center'],[0,0,1,'center'],[0,8,1,'center'],[3,0,1,'center'],[8,4,1,'center',1],[10,4,1,'center',1],[6,9,1,'center'],[4,9,1,'center'],[5,9,1,'center'],[11,10,1,'center'],[12,6,1,'center'],[6,11,1,'center'],[1,11,1,'center'],[4,9,1,'center',1],[1,9,1,'center']];
+  const ST={title:1,sub:2,head:3,headWe:4,date:5,dateWe:6,sh:7,shWe:8,shHol:9,shBal:10,lab:11,labWe:12,tr:13,trWe:14,mon:15,type:16,tot:17,empty:18,emptyWe:19,th:20,td:21,tdB:22,note:23,bad:24,ok:25,cur:26,curBad:27,curWarn:28,small:29,curLab:30,thR:31,headFit:32,amb:33,ambHead:34,tdC:35,tdCcur:36,muteC:37,headBad:38,headWarn:39,dateHol:40,labHol:41,trHol:42,gridHead:43,gridHeadWe:44,typeB:45,sumCol:46,labHolFit:47,shOff:48};
   const fill=c=>'<fill><patternFill patternType="solid"><fgColor rgb="FF'+c+'"/><bgColor indexed="64"/></patternFill></fill>';
   const font=(sz,b,col)=>'<font>'+(b?'<b/>':'')+'<sz val="'+sz+'"/>'+(col?'<color rgb="FF'+col+'"/>':'')+'<name val="Arial"/></font>';
   const styles='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">'
@@ -3030,8 +3031,10 @@ function makeXlsx(m){
   const cfs=[];let cfP=1;
   const cf=(ref,rules)=>cfs.push('<conditionalFormatting sqref="'+ref+'">'+rules.map(([f,d])=>'<cfRule type="expression" dxfId="'+d+'" priority="'+(cfP++)+'"><formula>'+xE(f)+'</formula></cfRule>').join('')+'</conditionalFormatting>');
   // גיליון 1 — הסידור. הסיכומים הם נוסחאות מתאי המשמרות: שינוי משמרת ביום מעדכן את הסה״כ, הפער וטבלאות הסיכום.
-  // HO — חגים בלבד: כל התאריכים, משמרות רק בחגים שהמשמרות סוגרות (שאר החגים בצהוב בלי משמרת); בלי פער ובלי טבלת ימי עבודה וסופי שבוע
-  const HO=!!m.holOnly,SN1=(HO?'סידור חגים ':'סידור ')+m.y,SN2=(HO?'פירוט החגים ':'חגים ')+m.y;
+  // HO — חגים בלבד: אותו קובץ בדיוק כמו הסידור המלא, אבל רק משמרות החגים שהמשמרות סוגרות ממולאות. שאר הימים ריקים
+  // לשיבוץ ידני מהרשימה (שאר החגים בצהוב בהיר), וכל הסיכומים — חודש, שנה, פער, ימי עבודה וסופי שבוע, טבלת החגים
+  // והגיליון השני — מתעדכנים ממה שממלאים. בלי ימי האיזון של הסידור המחושב
+  const HO=!!m.holOnly,SN1=(HO?'סידור חגים ':'סידור ')+m.y;
   const D0=2,TC=D0+m.cols,rows=[],merges=[],shRef={},dvR=[];
   rows.push(row(1,[cell('A1',(HO?'סידור חגים ':'סידור עבודה ')+m.y,ST.title)],24));
   // שורת הימים — בולטת: רקע כהה ואותיות לבנות; שישי ושבת בכתום של העמודה. בסוף — סה״כ ימי החודש
@@ -3048,32 +3051,25 @@ function makeXlsx(m){
       const L=colL(D0+i),we=i%7>=5,ce=byCol[i];
       if(!ce){[r1,r2,r3].forEach((a,q)=>a.push(cell(L+(r+q),'',we?ST.emptyWe:ST.empty)));continue}
       r1.push(cell(L+r,ce.d,ce.hol?ST.dateHol:we?ST.dateWe:ST.date));
-      r2.push(cell(L+(r+1),sh1(ce.nm),ce.hol?(ce.nos?ST.dateHol:ST.shHol):ce.bal?ST.shBal:we?ST.shWe:ST.sh));shRef[ce.k]=L+(r+1);
+      r2.push(cell(L+(r+1),sh1(ce.nm),ce.hol?(ce.nos?ST.shOff:ST.shHol):ce.bal?ST.shBal:we?ST.shWe:ST.sh));shRef[ce.k]=L+(r+1);
       r3.push(cell(L+(r+2),ce.lbl||'',ce.lt==='tr'?(ce.hol?ST.trHol:we?ST.trWe:ST.tr):(ce.hol?(ce.span>1?ST.labHolFit:ST.labHol):we?ST.labWe:ST.lab)));
       if(ce.lbl&&ce.span>1)merges.push(L+(r+2)+':'+colL(D0+i+ce.span-1)+(r+2));
     }
-    if(HO&&!mo.cells.some(ce=>ce.hol&&!ce.nos)){
-      // חגים בלבד, חודש בלי חגים — עמודות הסה״כ ריקות
-      for(let j=0;j<4;j++){const L=colL(TC+j);[r1,r2,r3].forEach((a,q)=>a.push(cell(L+(r+q),'',ST.empty)))}
-    }else{
-    // ימי החודש ברצף בשורת המשמרת — טווח הספירה והרשימה הנפתחת (בחגים בלבד הרשימה רק בימי החג)
-    const c0=Math.min(...mo.cells.map(ce=>ce.col)),c1=Math.max(...mo.cells.map(ce=>ce.col)),rng=colL(D0+c0)+(r+1)+':'+colL(D0+c1)+(r+1);
-    dvR.push(HO?mo.cells.filter(ce=>ce.hol&&!ce.nos).map(ce=>colL(D0+ce.col)+(r+1)).join(' '):rng);
+    // ימי החודש ברצף בשורת המשמרת — טווח הספירה והרשימה הנפתחת
+    const c0=Math.min(...mo.cells.map(ce=>ce.col)),c1=Math.max(...mo.cells.map(ce=>ce.col)),rng=colL(D0+c0)+(r+1)+':'+colL(D0+c1)+(r+1);dvR.push(rng);
     SHIFT_NAMES.forEach((n,j)=>{const L=colL(TC+j);r1.push(cell(L+r,'',ST.tot));r2.push(fcell(L+(r+1),'COUNTIF('+rng+',"'+sh1(n)+'*")',mo.mt[n],ST.tot));r3.push(cell(L+(r+2),'',ST.tot))});
     {const L=colL(TC+3);r1.push(cell(L+r,'',ST.sumCol));r2.push(fcell(L+(r+1),'SUM('+colL(TC)+(r+1)+':'+colL(TC+2)+(r+1)+')',SHIFT_NAMES.reduce((a,n)=>a+mo.mt[n],0),ST.sumCol));r3.push(cell(L+(r+2),'',ST.sumCol))}
-    }
     rows.push(row(r,r1,15),row(r+1,r2,16),row(r+2,r3,12));
   });
   const rE=4+36,totRef=n=>colL(TC+SHIFT_NAMES.indexOf(n))+rE,totR='$'+colL(TC)+'$'+rE+':$'+colL(TC+2)+'$'+rE,spF='MAX('+totR+')-MIN('+totR+')';
-  const re=[cell('A'+rE,HO?'סה״כ ימי חג':'סה״כ שנתי',ST.tot),cell('B'+rE,'',ST.tot)];
-  if(!HO){re.push(fcell(colL(D0)+rE,'"פער בין המשמרות: "&('+spF+')','פער בין המשמרות: '+m.spread,m.spread>1?ST.bad:ST.ok));cf(colL(D0)+rE,[[spF+'>1',0],[spF+'<=1',2]])}
+  const re=[cell('A'+rE,'סה״כ שנתי',ST.tot),cell('B'+rE,'',ST.tot),fcell(colL(D0)+rE,'"פער בין המשמרות: "&('+spF+')','פער בין המשמרות: '+m.spread,m.spread>1?ST.bad:ST.ok)];
+  cf(colL(D0)+rE,[[spF+'>1',0],[spF+'<=1',2]]);
   SHIFT_NAMES.forEach((n,j)=>{const L=colL(TC+j);re.push(fcell(L+rE,'SUM('+L+'4:'+L+(rE-1)+')',m.tot[n],ST.tot))});
   re.push(fcell(colL(TC+3)+rE,'SUM('+colL(TC)+rE+':'+colL(TC+2)+rE+')',SHIFT_NAMES.reduce((a,n)=>a+m.tot[n],0),ST.sumCol));
   rows.push(row(rE,re,18));merges.push('A'+rE+':B'+rE);
   // שתי טבלאות הסיכום באותן שורות, כמו בייצוא ל־PDF: טבלת החגים מימין (כל חג על פני 3 עמודות) — מי סגר כל חג בשנים
   // הקודמות ומי סוגר השנה, ומשמאל לה, אחרי עמודת רווח, טבלת סה״כ המשמרות. כל שנה באותה שורה בשתי הטבלאות.
-  // בחגים בלבד טבלת החגים לבד — רחבה יותר (כל חג על פני 4 עמודות), עד רוחב הסידור
-  const hr0=rE+2,HS=m.tblHols,span=HO?Math.max(3,Math.floor(m.cols/Math.max(1,HS.length))):3,hcS=i=>colL(D0+i*span),hcE=i=>colL(D0+i*span+span-1);
+  const hr0=rE+2,HS=m.tblHols,span=3,hcS=i=>colL(D0+i*span),hcE=i=>colL(D0+i*span+span-1);
   // טבלת סה״כ לפי שנה (משמאל, אחרי עמודת רווח): ימי עבודה וסופי שבוע של כל משמרת. תווית ברוחב 4 עמודות, 2 עמודות לכל ערך
   const T0=D0+HS.length*span+1,TL=4,tw=(g,k)=>T0+TL+(g*3+k)*2;
   // valFn מחזירה [ערך, סגנון, נוסחה?]
@@ -3098,25 +3094,21 @@ function makeXlsx(m){
   const curR=hr0+5;
   HS.forEach((h,i)=>{if(!holF(h))return;const X=hcS(i)+curR,P1=hcS(i)+(curR-1),P2=hcS(i)+(curR-2);
     cf(X,[['AND('+P1+'<>"—",'+P1+'<>"",LEFT('+X+',2)='+P1+')',0],['AND('+P2+'<>"—",'+P2+'<>"",LEFT('+X+',2)='+P2+')',1],['TRUE',3]])});
-  // טבלת ימי העבודה וסופי השבוע — רק בסידור המלא
-  let yHead1=[],yHead2=[];
-  if(!HO){
   // השנה: המשמרת עם הכי הרבה ימים / סופי שבוע — בכתום (מתעדכן עם הנוסחאות)
   [0,1].forEach(g=>{const V=SHIFT_NAMES.map((n,k)=>colL(tw(g,k))+curR).join(',');
     SHIFT_NAMES.forEach((n,k)=>{const X=colL(tw(g,k))+curR;cf(X,[['AND(MAX('+V+')>MIN('+V+'),'+X+'=MAX('+V+'))',1],['TRUE',3]])})});
-  yHead1=tLab(hr0,'שנה',ST.thR,2);
+  const yHead1=tLab(hr0,'שנה',ST.thR,2);
   ['ימי עבודה','סופי שבוע'].forEach((t,g)=>{const c0=tw(g,0);for(let k=0;k<6;k++)yHead1.push(cell(colL(c0+k)+hr0,k?'':t,ST.head));merges.push(colL(c0)+hr0+':'+colL(c0+5)+hr0)});
-  yHead2=tLab(hr0+1,'',ST.thR,0);
+  const yHead2=tLab(hr0+1,'',ST.thR,0);
   [0,1].forEach(g=>SHIFT_NAMES.forEach((n,k)=>yHead2.push(...tVal(hr0+1,tw(g,k),n,ST.head))));
-  }
   rows.push(row(hr0,[...hCells(hr0,'שנה / חג',ST.thR,h=>[h.name+(h.est?' *':''),ST.headFit]),...yHead1],18));
   rows.push(row(hr0+1,[...hCells(hr0+1,'תאריכים '+m.y,ST.type,h=>[fmtDM(h.s)+(h.n>1?'–'+fmtDM(h.e):''),ST.small]),...yHead2],15));
   [m.y-3,m.y-2,m.y-1].forEach((yy,k)=>{const r=hr0+2+k,pr=m.pastRows.find(x=>x.y===yy),pw=m.pastWk.find(x=>x.y===yy);
-    rows.push(row(r,[...hCells(r,String(yy),ST.th,h=>[[h.p3,h.p2,h.p1][k]||'—',ST.tdB]),...(HO?[]:[...tLab(r,String(yy),ST.th),...yRow(r,[pr?pr.t:null,pw?wkO(pw.t):null])])],16))});
-  rows.push(row(curR,[...hCells(curR,m.y+' — השנה',ST.curLab,h=>{const rp=holRepeat(h);return[h.shifts.join('/')||'—',rp==='bad'?ST.curBad:rp==='warn'?ST.curWarn:ST.cur,holF(h)]}),...(HO?[]:[...tLab(curR,m.y+' — השנה',ST.curLab),...yRow(curR,[m.tot,wkO(m.wk)],1)])],18));
+    rows.push(row(r,[...hCells(r,String(yy),ST.th,h=>[[h.p3,h.p2,h.p1][k]||'—',ST.tdB]),...tLab(r,String(yy),ST.th),...yRow(r,[pr?pr.t:null,pw?wkO(pw.t):null])],16))});
+  rows.push(row(curR,[...hCells(curR,m.y+' — השנה',ST.curLab,h=>{const rp=holRepeat(h);return[h.shifts.join('/')||'—',rp==='bad'?ST.curBad:rp==='warn'?ST.curWarn:ST.cur,holF(h)]}),...tLab(curR,m.y+' — השנה',ST.curLab),...yRow(curR,[m.tot,wkO(m.wk)],1)],18));
   // רשימה נפתחת בכל יום: א / ב / ג (או ריק)
   const dvXml='<dataValidations count="1"><dataValidation type="list" allowBlank="1" showErrorMessage="1" errorTitle="'+xE('משמרת')+'" error="'+xE('אפשר לבחור רק א, ב או ג')+'" sqref="'+dvR.join(' ')+'"><formula1>'+xE('"'+SHIFT_NAMES.map(sh1).join(',')+'"')+'</formula1></dataValidation></dataValidations>';
-  const colsXml='<cols><col min="1" max="1" width="9" customWidth="1"/><col min="2" max="2" width="8.5" customWidth="1"/><col min="3" max="'+(2+m.cols)+'" width="3.7" customWidth="1"/><col min="'+(3+m.cols)+'" max="'+(5+m.cols)+'" width="5" customWidth="1"/><col min="'+(6+m.cols)+'" max="'+(6+m.cols)+'" width="6.5" customWidth="1"/>'+(!HO&&T0+TL+12>6+m.cols?'<col min="'+(7+m.cols)+'" max="'+(T0+TL+12)+'" width="5" customWidth="1"/>':'')+'</cols>';
+  const colsXml='<cols><col min="1" max="1" width="9" customWidth="1"/><col min="2" max="2" width="8.5" customWidth="1"/><col min="3" max="'+(2+m.cols)+'" width="3.7" customWidth="1"/><col min="'+(3+m.cols)+'" max="'+(5+m.cols)+'" width="5" customWidth="1"/><col min="'+(6+m.cols)+'" max="'+(6+m.cols)+'" width="6.5" customWidth="1"/>'+(T0+TL+12>6+m.cols?'<col min="'+(7+m.cols)+'" max="'+(T0+TL+12)+'" width="5" customWidth="1"/>':'')+'</cols>';
   // סדר האלמנטים לפי התקן: נתונים, מיזוגים, צבעים מותנים, אימות נתונים, שוליים, הגדרות הדפסה
   const ws=(views,cols,data,mg,setup,extra)=>'<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">'
     +(setup?'<sheetPr><pageSetUpPr fitToPage="1"/></sheetPr>':'')+'<sheetViews>'+views+'</sheetViews><sheetFormatPr defaultRowHeight="15"/>'+cols+'<sheetData>'+data.join('')+'</sheetData>'
@@ -3137,16 +3129,13 @@ function makeXlsx(m){
     [...m.bal.values()].sort((a,b)=>pd(a.iso)-pd(b.iso)).forEach(b=>{const d=pd(b.iso);r2.push(row(rr,[cell('A'+rr,fmtFull(d),ST.td),cell('B'+rr,DOW_FULL[d.getDay()],ST.td),cell('C'+rr,b.from,ST.tdB),cell('D'+rr,b.to,ST.tdB)]));rr++});
     rr++;
   }
-  // סה״כ המשמרות לפי שנה — רק בסידור המלא (בחגים בלבד הסה״כ הוא של ימי החג)
-  if(!HO){
   r2.push(row(rr,[cell('A'+rr,'סה״כ משמרות לפי שנה',ST.th),cell('B'+rr,'א׳',ST.th),cell('C'+rr,'ב׳',ST.th),cell('D'+rr,'ג׳',ST.th),cell('E'+rr,'פער',ST.th)]));rr++;
   const trow=(lbl,t,cur)=>{const R='B'+rr+':D'+rr;
     r2.push(row(rr,[cell('A'+rr,lbl,ST.td),...SHIFT_NAMES.map((n,i)=>cur?fcell(colL(1+i)+rr,S1+totRef(n),t[n],ST.tdB):cell(colL(1+i)+rr,t?t[n]:'—',ST.tdB)),cur?fcell('E'+rr,'MAX('+R+')-MIN('+R+')',spreadOf(t),ST.tdB):cell('E'+rr,t?spreadOf(t):'—',ST.tdB)]));rr++};
   m.pastRows.forEach(x=>trow(String(x.y),x.t));
   trow(String(T),m.tot,1);
-  }
   const sheet2=ws('<sheetView rightToLeft="1" workbookViewId="0"/>','<cols><col min="1" max="1" width="16" customWidth="1"/><col min="2" max="3" width="12" customWidth="1"/><col min="4" max="4" width="7" customWidth="1"/><col min="5" max="8" width="9" customWidth="1"/></cols>',r2,[],false);
-  const wb='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><bookViews><workbookView/></bookViews><sheets><sheet name="'+xE(SN1)+'" sheetId="1" r:id="rId1"/><sheet name="'+xE(SN2)+'" sheetId="2" r:id="rId2"/></sheets><calcPr calcId="191029" fullCalcOnLoad="1"/></workbook>';
+  const wb='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><bookViews><workbookView/></bookViews><sheets><sheet name="'+xE(SN1)+'" sheetId="1" r:id="rId1"/><sheet name="'+xE('חגים '+T)+'" sheetId="2" r:id="rId2"/></sheets><calcPr calcId="191029" fullCalcOnLoad="1"/></workbook>';
   const rel='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">';
   const OD='http://schemas.openxmlformats.org/officeDocument/2006/relationships/';
   return zipStore([
