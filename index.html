@@ -1146,7 +1146,7 @@ function communityHols(g){
   out.sort((a,b)=>pd(a.iso)-pd(b.iso));
   return(_cmCache[g]=out);
 }
-// חג שמסומן בצהוב: בלוק חג, חג עדה, או חג יהודי שהוא יום עבודה רגיל (פורים, חנוכה...). ימי זיכרון ותשעה באב — לא.
+// יום שמסומן בצהוב: בלוק חג, חג עדה, או מועד שהוא יום עבודה רגיל (פורים, חנוכה, ימי הזיכרון, תשעה באב...)
 const isHolDay=hl=>!!hl&&(!hl.minor||!!hl.com||!!hl.yel);
 // כמה ימים ברצף שייכים לאותו חג, מהיום d (עד max)
 function holRun(d,max){
@@ -1154,14 +1154,14 @@ function holRun(d,max){
   let n=1;while(n<max){const x=HOL_MAP[holKey(addDays(d,n))];if(!x||x.name!==h.name||x.startIso!==h.startIso)break;n++}
   return n;
 }
-// מועדים — יום עבודה רגיל בסבב, מסומנים בלוח. החגים שבהם (yel) מסומנים בצהוב כמו כל חג: ט״ו בשבט, פורים, ל״ג בעומר,
-// סיגד וכל שמונת ימי חנוכה. ימי הזיכרון ותשעה באב — מועד רגיל, בלי צהוב.
-const YEL_COM=new Set(['ט״ו בשבט','פורים','ל״ג בעומר','סיגד','חנוכה']);
+// מועדים — יום עבודה רגיל בסבב, מסומנים בלוח בצהוב כמו כל חג: ט״ו בשבט, פורים, ל״ג בעומר, סיגד, כל שמונת ימי חנוכה,
+// וגם ימי הזיכרון ותשעה באב (mem — בכותרת "המועד הקרוב" הם נשארים מועד ולא חג). המנוע לא מושפע: הם לא בלוק.
+const MEM_DAYS=new Set(['יום השואה','יום הזיכרון','תשעה באב']);
 const _comCache={};
 function commemorations(g){
   if(_comCache[g])return _comCache[g];
   const P=pesachOf(g),R=rhOf(g),out=[];
-  const put=(name,d,dur)=>out.push({name,iso:isoOf(d),dur:dur||24,yel:YEL_COM.has(name)});
+  const put=(name,d,dur)=>out.push({name,iso:isoOf(d),dur:dur||24,yel:true,mem:MEM_DAYS.has(name)});
   put('ט״ו בשבט',addDays(P,hebLeap(g+3760)?-89:-59));
   put('פורים',addDays(P,-30));
   let sh=addDays(P,12);sh=sh.getDay()===5?addDays(sh,-1):sh.getDay()===0?addDays(sh,1):sh;
@@ -1189,7 +1189,14 @@ function holShiftAuto(name,y){
 }
 function holShift(name,y){const e=HIST_EDITS[y];return(e&&e[name])||holShiftAuto(name,y)||'—'}
 const histEdited=(name,y)=>!!(HIST_EDITS[y]&&HIST_EDITS[y][name]);
-const HOL_NOLABEL=new Set(['יום הזיכרון']); // מסומן בלוח השנתי ללא תווית (מניעת חפיפה עם עצמאות)
+// שם היום בלוח: יום הזיכרון הוא היום הראשון של בלוק עצמאות — היום מקבל את שמו (sub), והבלוק נשאר עצמאות
+const holDayName=hl=>hl?(hl.sub||hl.name):'';
+// התווית בלוחות הצפופים (שנתי וייצוא): "זיכרון ועצמאות" על שני הימים כשהם באותה שורה, אחרת שם היום
+function holGridLabel(hl,dt){
+  if(!hl)return'';
+  if(hl.lab){const nx=addDays(dt,1),h2=HOL_MAP[holKey(nx)];if(nx.getMonth()===dt.getMonth()&&h2&&h2.name===hl.name&&h2.startIso===hl.startIso)return hl.lab}
+  return holDayName(hl);
+}
 let HOL_MAP={};
 let HOL_LOCKS={};
 function rebuildHolMap(){
@@ -1214,6 +1221,14 @@ function rebuildHolMap(){
     }
   });
   for(let y=MIN_YEAR;y<=MAX_YEAR;y++)commemorations(y).forEach(e=>put(e.name,e.iso,e.dur,true,false,null,e.yel));
+  // יום זיכרון שחל בתוך בלוק חג (בפועל: יום הזיכרון, היום הראשון של בלוק עצמאות) — שם היום ותווית לשני הימים.
+  // רק לתצוגה: הבלוק, שמו ותחילתו לא משתנים, כך שהמנוע והסידור לא מושפעים
+  for(let y=MIN_YEAR;y<=MAX_YEAR;y++)commemorations(y).forEach(e=>{
+    const h=HOL_MAP[holKey(pd(e.iso))];
+    if(!e.mem||!h||h.minor||h.com||h.name===e.name)return;
+    h.sub=e.name;h.lab=(e.name==='יום הזיכרון'?'זיכרון':e.name)+' ו'+h.name;
+    const nx=HOL_MAP[holKey(addDays(pd(e.iso),1))];if(nx&&nx.name===h.name&&nx.startIso===h.startIso&&!nx.sub)nx.lst=true;
+  });
 }
 // הכללים של גרסאות קודמות (עצמאות 24 שעות, בלי מגבלת 4 ימים בשבוע) — מופעלים רק בזמן מעבר נתונים
 function legacyRev5(on){_rev5=!!on;for(const k in _holCache)delete _holCache[k];buildHolidays();rebuildHolMap();bumpData()}
@@ -1238,7 +1253,7 @@ function allEvents(){
     hy.forEach(h=>ev.push({name:h.name,start:pd(h.iso),dur:h.dur,minor:false,est:!!h.est,com:h.com||null}));
     // חגי עדות שאינם בלוק (cw — יום עבודה רגיל). עיד אל-פיטר וחג הקורבן כבר ברשימה כבלוק של היום הראשון.
     communityHols(y).forEach(c=>{if(!hy.some(h=>h.name===c.name&&h.iso===c.iso))ev.push({name:c.name,start:pd(c.iso),dur:c.days*24,minor:false,cw:true,est:c.est,com:c.com})});
-    commemorations(y).forEach(e=>ev.push({name:e.name,start:pd(e.iso),dur:e.dur,minor:true,yel:!!e.yel}));
+    commemorations(y).forEach(e=>ev.push({name:e.name,start:pd(e.iso),dur:e.dur,minor:true,yel:!!e.yel,mem:!!e.mem}));
   }
   ev.forEach(e=>{e.days=Math.max(1,Math.round(e.dur/24));e.end=addDays(e.start,e.days-1)});
   ev.sort((a,b)=>a.start-b.start);
@@ -2106,20 +2121,20 @@ function renderOverview(){
     <div class="hero-i"><div class="eyebrow"><span class="live"></span>במשמרת עכשיו</div>
       <div class="hero-h">${now?'משמרת '+now:'ללא שיבוץ'}</div>
       <div class="hero-m">${dayName(TODAY)} · ${fmtFull(TODAY)}</div>
-      <div class="tags">${hol?`<span class="tag ${isHolDay(hol)?'hol':'gold'}">${ico('i-flag')}${esc(hol.name)}</span>`:''}<span class="tag">מחר: <b>${tom?'משמרת '+tom:'—'}</b></span>${isDraftDate(TODAY)?'<span class="tag amber">טיוטה</span>':''}</div>
+      <div class="tags">${hol?`<span class="tag ${isHolDay(hol)?'hol':'gold'}">${ico('i-flag')}${esc(holDayName(hol))}</span>`:''}<span class="tag">מחר: <b>${tom?'משמרת '+tom:'—'}</b></span>${isDraftDate(TODAY)?'<span class="tag amber">טיוטה</span>':''}</div>
     </div></div>`;
   h+=`<div class="card kpi c-3 click" ${md?`data-day="${isoOf(md)}" role="button" tabindex="0"`:''}><div class="ch"><span class="ibox olive">${ico('i-shield')}</span><h3>המשמרת הבאה שלי</h3></div>
     <div class="kpi-v${md&&mi>1?' num':''}">${!md?'—':mi===0?'היום':mi===1?'מחר':fmtDM(md)}</div>
     <div class="kpi-l">${md?dayName(md)+(mi>1?' · '+whenTxt(md):''):'לא נמצאה בחודשיים הקרובים'}</div>
     <div class="kpi-f">${ico('i-users')}משמרת ${my}</div></div>`;
-  h+=`<div class="card kpi c-3${ne?' click':''}" ${ne?`data-day="${isoOf(ne.start)}" role="button" tabindex="0"`:''}><div class="ch"><span class="ibox gold">${ico('i-flag')}</span><h3>${ne&&ne.minor&&!ne.yel?'המועד הקרוב':'החג הקרוב'}</h3></div>
+  h+=`<div class="card kpi c-3${ne?' click':''}" ${ne?`data-day="${isoOf(ne.start)}" role="button" tabindex="0"`:''}><div class="ch"><span class="ibox gold">${ico('i-flag')}</span><h3>${ne&&ne.minor&&(!ne.yel||ne.mem)?'המועד הקרוב':'החג הקרוב'}</h3></div>
     <div class="kpi-v">${ne?esc(ne.name):'—'}</div>
     <div class="kpi-l">${ne?fmtFull(ne.start)+' · '+(ne.start<=TODAY?'בעיצומו':whenTxt(ne.start)):'אין חגים בהמשך הלוח'}</div>
     <div class="kpi-f">${ne?(ne.minor||ne.cw?'יום עבודה רגיל':'בלוק '+ne.dur+' שעות')+' · משמרת '+(dutyFor(ne.start)||'—'):''}</div></div>`;
   h+=`<div class="card c-12"><div class="ch"><span class="ibox olive">${ico('i-cal')}</span><h3>השבוע</h3><span class="meta num">${fmtDM(wk0)}–${fmtDM(addDays(wk0,6))}</span><div class="end"><button class="link" data-nav="month">ללוח החודשי${ico('i-chevl')}</button></div></div><div class="wk">`;
   for(let i=0;i<7;i++){
     const d=addDays(wk0,i),k=isoOf(d),nm=dutyFor(d),hl=HOL_MAP[holKey(d)],t=d.getTime()===TODAY.getTime(),tr=trainingsOn(k).length;
-    h+=`<button class="wk-d${i>=5?' we':''}${isHolDay(hl)?' hol':''}${t?' today':''}" data-day="${k}" aria-label="${dayName(d)} ${fmtDM(d)}, משמרת ${nm||'ללא'}${hl?', '+esc(hl.name):''}"><span class="wk-dn"><span class="f">${DOW_FULL[i]}</span><span class="s">${DOW_S[i]}</span></span><span class="wk-n">${d.getDate()}</span><span class="wk-sh">${sh1(nm)||'—'}</span>${hl?`<span class="wk-lb">${esc(hl.name)}</span>`:''}${tr?'<i class="wk-tr"></i>':''}</button>`;
+    h+=`<button class="wk-d${i>=5?' we':''}${isHolDay(hl)?' hol':''}${t?' today':''}" data-day="${k}" aria-label="${dayName(d)} ${fmtDM(d)}, משמרת ${nm||'ללא'}${hl?', '+esc(holDayName(hl)):''}"><span class="wk-dn"><span class="f">${DOW_FULL[i]}</span><span class="s">${DOW_S[i]}</span></span><span class="wk-n">${d.getDate()}</span><span class="wk-sh">${sh1(nm)||'—'}</span>${hl?`<span class="wk-lb">${esc(holDayName(hl))}</span>`:''}${tr?'<i class="wk-tr"></i>':''}</button>`;
   }
   h+='</div></div>';
   h+=`<div class="card c-6"><div class="ch"><span class="ibox gold">${ico('i-flag')}</span><h3>חגים ומועדים קרובים</h3></div>`;
@@ -2163,14 +2178,14 @@ function renderMonth(){
     const nm=dutyFor(d),hl=HOL_MAP[holKey(d)],trs=trainingsOn(k),t=d.getTime()===TODAY.getTime();
     if(!out&&nm&&nm in cnt)cnt[nm]++;
     let c='mday';if(out)c+=' out';if(we)c+=' we';if(hl)c+=isHolDay(hl)?' hol':' holm';if(t)c+=' today';
-    g+=`<button class="${c}" data-day="${k}" aria-label="${dayName(d)} ${fmtFull(d)}, משמרת ${nm||'ללא'}${hl?', '+esc(hl.name):''}"><span class="md-top"><span class="md-n">${d.getDate()}</span>${nm?`<span class="md-sh">${sh1(nm)}</span>`:''}</span>${hl?`<span class="md-hl${hl.first?'':' cont'}">${esc(hl.name)}</span>`:''}${trs.length?`<span class="md-tr">${ico('i-target')}${esc(trs[0].name)}${trs.length>1?' +'+(trs.length-1):''}</span>`:''}</button>`;
+    g+=`<button class="${c}" data-day="${k}" aria-label="${dayName(d)} ${fmtFull(d)}, משמרת ${nm||'ללא'}${hl?', '+esc(holDayName(hl)):''}"><span class="md-top"><span class="md-n">${d.getDate()}</span>${nm?`<span class="md-sh">${sh1(nm)}</span>`:''}</span>${hl?`<span class="md-hl${hl.first||hl.lst?'':' cont'}">${esc(holDayName(hl))}</span>`:''}${trs.length?`<span class="md-tr">${ico('i-target')}${esc(trs[0].name)}${trs.length>1?' +'+(trs.length-1):''}</span>`:''}</button>`;
   }
   const draft=calY>2026&&!approvedOf(calY);
   v.innerHTML=`<div class="ph"><div><h1>${MONTHS[calM]} ${calY}</h1>${draft?`<p class="warn">סידור ${calY} טרם אושר — מוצג לפי הנוסחה</p>`:''}</div>
     <div class="nav-grp"><button class="nb" data-mnav="-1" ${atMin?'disabled':''} aria-label="החודש הקודם">${ico('i-chevr')}</button><button class="btn btn-gh btn-sm" data-mnav="0">היום</button><button class="nb" data-mnav="1" ${atMax?'disabled':''} aria-label="החודש הבא">${ico('i-chevl')}</button></div></div>
     <div class="card mcard"><div class="mgrid">${g}</div>
     <div class="msum">${SHIFT_NAMES.map(n=>`<span class="tag">משמרת ${n} <b class="num">${cnt[n]}</b></span>`).join('')}</div>
-    <div class="legend"><span><i style="background:rgba(var(--wkd-rgb),.5)"></i>סוף שבוע</span><span><i style="background:var(--hol);border-color:var(--hol)"></i>חג</span><span><i style="background:rgba(var(--gold-rgb),.45)"></i>מועד</span><span><i style="background:var(--indigo)"></i>אימון</span><span><i style="background:var(--olive-dim);border-color:var(--olive)"></i>היום</span></div></div>`;
+    <div class="legend"><span><i style="background:rgba(var(--wkd-rgb),.5)"></i>סוף שבוע</span><span><i style="background:var(--hol);border-color:var(--hol)"></i>חג ומועד</span><span><i style="background:var(--indigo)"></i>אימון</span><span><i style="background:var(--olive-dim);border-color:var(--olive)"></i>היום</span></div></div>`;
 }
 
 /* ============================================================
@@ -2200,9 +2215,9 @@ function renderYear(){
       r1+=`<td class="yd${wc?' we':''}${hd?' hl':''}">${d}</td>`;
       const bl=balM.get(k);
       let c2='ys';if(hd)c2+=' hl';else if(hl)c2+=' hlm';else if(wc)c2+=' we';if(trs.length)c2+=' tr';if(k===todayK)c2+=' td';if(bl)c2+=' bal';
-      r2+=`<td class="${c2}" data-day="${k}" title="${fmtDM(dt)} · משמרת ${nm||'—'}${hl?' · '+esc(hl.name)+(hl.com?' ('+COM_NAME[hl.com]+')':''):''}${bl?' · יום איזון':''}${trs.length?' · '+esc(trs.map(t=>t.name).join(', ')):''}">${sh1(nm)}</td>`;
+      r2+=`<td class="${c2}" data-day="${k}" title="${fmtDM(dt)} · משמרת ${nm||'—'}${hl?' · '+esc(holDayName(hl))+(hl.com?' ('+COM_NAME[hl.com]+')':''):''}${bl?' · יום איזון':''}${trs.length?' · '+esc(trs.map(t=>t.name).join(', ')):''}">${sh1(nm)}</td>`;
       let lbl='',lc='';
-      if(hl&&(hl.first||(d===1&&hd))&&!HOL_NOLABEL.has(hl.name))lbl=hl.name;else if(trs.length){lbl=trs[0].name;lc=' trl'}
+      if(hl&&(hl.first||(d===1&&hd)))lbl=holGridLabel(hl,dt);else if(trs.length){lbl=trs[0].name;lc=' trl'}
       r3+=`<td class="yh${yhClass(lbl)}${lc}${wc?' we':''}${hd?' hl':''}">${esc(lbl)}</td>`;
     }
     body+=`<tr class="mt"><th class="mn" rowspan="3" scope="row">${MONTHS[m]}</th><td class="rl">תאריך</td>${r1}<td class="tt"></td><td class="tt"></td><td class="tt"></td></tr>`;
@@ -2220,7 +2235,7 @@ function renderYear(){
   v.innerHTML=`<div class="ph"><div><h1>שנת ${y}</h1></div><div class="nav-grp">${badge}<button class="btn btn-gh btn-sm" data-act="export-year">${ico('i-download')}ייצוא</button><button class="nb" data-ynav="-1" ${y<=MIN_YEAR?'disabled':''} aria-label="השנה הקודמת">${ico('i-chevr')}</button><button class="nb" data-ynav="1" ${y>=MAX_YEAR?'disabled':''} aria-label="השנה הבאה">${ico('i-chevl')}</button></div></div>
     <div class="hint">${ico('i-chevr')}<span>החלק לצדדים לכל ימי החודש</span>${ico('i-chevl')}</div>
     <div class="mx"><table class="ym"><thead>${tableHead(cols)}</thead><tbody>${body}</tbody></table></div>
-    <div class="legend"><span><i style="background:rgba(var(--wkd-rgb),.5)"></i>סוף שבוע</span><span><i style="background:var(--hol);border-color:var(--hol)"></i>חג</span><span><i style="background:var(--gold-dim);border-color:var(--gold)"></i>מועד</span>${balM.size?'<span><i class="lg-bal"></i>יום איזון</span>':''}<span><i style="border-color:var(--indigo)"></i>אימון</span><span><i style="border-color:var(--olive);border-width:2px"></i>היום</span></div>
+    <div class="legend"><span><i style="background:rgba(var(--wkd-rgb),.5)"></i>סוף שבוע</span><span><i style="background:var(--hol);border-color:var(--hol)"></i>חג ומועד</span>${balM.size?'<span><i class="lg-bal"></i>יום איזון</span>':''}<span><i style="border-color:var(--indigo)"></i>אימון</span><span><i style="border-color:var(--olive);border-width:2px"></i>היום</span></div>
     <div class="gt"><span>סה״כ ${y}:</span><span>א׳ <b>${tot['א׳']}</b></span><span>ב׳ <b>${tot['ב׳']}</b></span><span>ג׳ <b>${tot['ג׳']}</b></span><span class="${sp>1?'st-bad':'st-ok'}">פער <b>${sp}</b></span><span>סך הכל <b>${sum}</b> ימים</span></div>
     <div class="gt gt2"><span>סופי שבוע ${y}:</span><span>א׳ <b>${wc[0]}</b></span><span>ב׳ <b>${wc[1]}</b></span><span>ג׳ <b>${wc[2]}</b></span><span class="${wsp>1?'st-bad':'st-ok'}">פער <b>${wsp}</b></span><span class="${wn?'st-warn':'st-ok'}"${wn?` title="${esc(wi.consec.map(c=>wkConsecText(y,c)).join(' · '))}"`:''}>${wn?(wn===1?'סוף שבוע אחד ברצף':wn+' סופי שבוע ברצף'):'בלי סוף שבוע ברצף'}</span></div>`;
 }
@@ -2348,9 +2363,9 @@ function renderNext(keep){
       const hd=isHolDay(hl);
       r1+=`<td class="yd${wc?' we':''}${hd?' hl':''}">${d}</td>`;
       let c2='ys dc';if(hd)c2+=' hl';else if(wc)c2+=' we';if(!nm)c2+=' gap';if(nm!==(base[k]||null))c2+=' chg';if(bl)c2+=' bal';
-      r2+=`<td class="${c2}" data-draftday="${k}" title="${fmtDM(dt)} · ${nm?'משמרת '+nm:'ללא משמרת'}${hl?' · '+esc(hl.name)+(hl.com?' ('+COM_NAME[hl.com]+')':''):''}${bl?' · יום איזון: ממשמרת '+bl.from+' למשמרת '+bl.to:''}${pkM.has(k)?' · '+esc(pkM.get(k)):''}">${sh1(nm)}</td>`;
+      r2+=`<td class="${c2}" data-draftday="${k}" title="${fmtDM(dt)} · ${nm?'משמרת '+nm:'ללא משמרת'}${hl?' · '+esc(holDayName(hl))+(hl.com?' ('+COM_NAME[hl.com]+')':''):''}${bl?' · יום איזון: ממשמרת '+bl.from+' למשמרת '+bl.to:''}${pkM.has(k)?' · '+esc(pkM.get(k)):''}">${sh1(nm)}</td>`;
       let lbl='',lc='';
-      if(hl&&(hl.first||(d===1&&hd))&&!HOL_NOLABEL.has(hl.name))lbl=hl.name;else if(trs.length){lbl=trs[0].name;lc=' trl'}
+      if(hl&&(hl.first||(d===1&&hd)))lbl=holGridLabel(hl,dt);else if(trs.length){lbl=trs[0].name;lc=' trl'}
       r3+=`<td class="yh${yhClass(lbl)}${lc}${wc?' we':''}${hd?' hl':''}">${esc(lbl)}</td>`;
     }
     body+=`<tr class="mt"><th class="mn" rowspan="3" scope="row">${MONTHS[m]}</th><td class="rl">תאריך</td>${r1}<td class="tt"></td><td class="tt"></td><td class="tt"></td></tr>`;
@@ -2361,7 +2376,7 @@ function renderNext(keep){
   h+=`<div class="card c-12"><div class="ch"><span class="ibox olive">${ico('i-cal')}</span><h3>טיוטת ${TARGET_YEAR}</h3><span class="meta">לחיצה על יום מחליפה משמרת (א׳ ← ב׳ ← ג׳ ← ריק)</span><div class="end"><button class="btn btn-gh btn-sm" data-act="export-draft">${ico('i-download')}ייצוא</button></div></div>
     <div class="hint">${ico('i-chevr')}<span>החלק לצדדים לכל ימי החודש</span>${ico('i-chevl')}</div>
     <div class="mx" id="dwScroll"><table class="ym"><thead>${tableHead(cols)}</thead><tbody>${body}</tbody></table></div>
-    <div class="legend"><span><i style="background:rgba(var(--wkd-rgb),.5)"></i>סוף שבוע</span><span><i style="background:var(--hol);border-color:var(--hol)"></i>חג</span><span><i class="lg-bal"></i>יום איזון</span><span><i style="border-color:transparent;box-shadow:inset 0 -2px 0 var(--steel)"></i>שונה מהנוסחה</span><span><i style="background:var(--red-dim);border-color:var(--red-border)"></i>ללא משמרת</span></div>
+    <div class="legend"><span><i style="background:rgba(var(--wkd-rgb),.5)"></i>סוף שבוע</span><span><i style="background:var(--hol);border-color:var(--hol)"></i>חג ומועד</span><span><i class="lg-bal"></i>יום איזון</span><span><i style="border-color:transparent;box-shadow:inset 0 -2px 0 var(--steel)"></i>שונה מהנוסחה</span><span><i style="background:var(--red-dim);border-color:var(--red-border)"></i>ללא משמרת</span></div>
     <div class="gt"><span>סה״כ טיוטה:</span><span>א׳ <b>${tot['א׳']}</b></span><span>ב׳ <b>${tot['ב׳']}</b></span><span>ג׳ <b>${tot['ג׳']}</b></span><span class="${sp>1?'st-bad':'st-ok'}">פער <b>${sp}</b>${sp>1?' — מעל המותר':''}</span></div></div>`;
   h+=totalsCard(ds);
   h+=`<div class="card c-12"><div class="ch"><span class="ibox gold">${ico('i-flag')}</span><h3>חגים בטיוטה — בדיקת הוגנות</h3><div class="end leg-in"><span class="st-ok">${ico('i-check')}הוגן</span><span class="st-warn">${ico('i-alert')}חזרה אחרי שנתיים</span><span class="st-bad">${ico('i-x')}שנתיים ברצף</span></div></div>
@@ -2573,9 +2588,9 @@ function renderDay(){
       }
       if(hl.com){const r=holRun(s,7);if(r>1)tail+=' · החג נמשך '+r+' ימים, עד '+fmtDM(addDays(s,r-1))}
     }
-    // מועד שחל בתוך בלוק חג (למשל יום הזיכרון בערב עצמאות) — מוצג כאן כי הלוח מסמן את הבלוק
-    const also=allEvents().filter(ev=>ev.name!==hl.name&&ev.start<=d&&ev.end>=d).map(ev=>ev.name);
-    h+=`<div class="note ${isHolDay(hl)?'hol':'gold'}">${ico('i-flag')}<div><b>${esc(hl.name)}${hl.com?' · '+COM_NAME[hl.com]:''}</b><span>${when}${tail}</span>${also.length?`<span>באותו יום: ${esc(also.join(' · '))}</span>`:''}</div></div>`;
+    // יום הזיכרון (היום הראשון של בלוק עצמאות) — בכותרת שם היום, ובשורה שמתחת פרטי הבלוק. מועד נוסף באותו יום — בשורה נפרדת
+    const also=allEvents().filter(ev=>ev.name!==hl.name&&ev.name!==hl.sub&&ev.start<=d&&ev.end>=d).map(ev=>ev.name);
+    h+=`<div class="note ${isHolDay(hl)?'hol':'gold'}">${ico('i-flag')}<div><b>${esc(holDayName(hl))}${hl.com?' · '+COM_NAME[hl.com]:''}</b><span>${hl.sub?'בלוק '+esc(hl.name)+' · ':''}${when}${tail}</span>${also.length?`<span>באותו יום: ${esc(also.join(' · '))}</span>`:''}</div></div>`;
   }
   h+='<div class="sec">אימונים וכשירויות</div>';
   h+=trs.length?trs.map(t=>`<div class="trl">${ico('i-target')}<b>${esc(t.name)}</b><button class="xb" data-trdel="${t.id}" aria-label="מחיקת ${esc(t.name)}">${ico('i-trash')}</button></div>`).join(''):'<div class="empty">אין אימונים ביום זה</div>';
@@ -2625,7 +2640,7 @@ function exportModel(y,src){
       const dt=new Date(y,mo,d),k=isoOf(dt),nm=get(k),hl=HOL_MAP[holKey(dt)],trs=trainingsOn(k);
       if(nm&&nm in mt){mt[nm]++;tot[nm]++}
       let lbl='',lt='',span=1;const hd=isHolDay(hl);
-      if(hl&&(hl.first||(d===1&&hd))&&!HOL_NOLABEL.has(hl.name)){lbl=hl.name;lt='hol';if(hd)span=holRun(dt,n-d+1)}
+      if(hl&&(hl.first||(d===1&&hd))){lbl=holGridLabel(hl,dt);lt='hol';if(hd)span=holRun(dt,n-d+1)}
       else if(trs.length){lbl=trs[0].name;lt='tr'}
       cells.push({d,col:sd+d-1,w:dt.getDay(),k,nm,hol:hd,lbl,lt,span,bal:bal.get(k)||null});
     }
@@ -2681,14 +2696,17 @@ function drawSheet(m){
       if(ce.nm)txt(sh1(ce.nm),xx+wD/2,yS+hShift/2+0.15,3.05,800,ce.hol?C.holInk:C.ink);
       if(ce.bal){x.fillStyle=C.bal;x.beginPath();x.arc(P(xx+wD-0.75),P(yS+0.75),P(0.5),0,Math.PI*2);x.fill()}
     });
-    // שמות החגים (ואימונים) — ממורכזים על ימי החג. שם של יום אחד יכול לגלוש קצת לשני הצדדים, בלי לצאת מהטבלה
+    // שמות החגים (ואימונים) — ממורכזים על ימי החג. שם ארוך יכול לגלוש עד כמעט יום שלם לכל צד — רק לצד שאין בו
+    // שם אחר, ובלי לצאת מהטבלה
+    const lblAt={};mo.cells.forEach(ce=>{if(ce.lbl)for(let i=0;i<ce.span;i++)lblAt[ce.col+i]=1});
     mo.cells.forEach(ce=>{
       if(!ce.lbl)return;
-      const spanW=ce.span*wD,xr=xDay(ce.col)+wD,aw=spanW+(ce.span===1?wD*1.8:0);
+      const spanW=ce.span*wD,xr=xDay(ce.col)+wD,ex=wD*0.9;
+      const aR=Math.min(gR,xr+(lblAt[ce.col-1]?0:ex)),aL=Math.max(gL,xr-spanW-(lblAt[ce.col+ce.span]?0:ex));
       let sz=2.05;x.font=F(sz,700);
-      while(sz>1.35&&x.measureText(ce.lbl).width>P(aw-0.4)){sz-=0.1;x.font=F(sz,700)}
-      const tw=x.measureText(ce.lbl).width/S,xc=Math.min(gR-tw/2-0.25,Math.max(gL+tw/2+0.25,xr-spanW/2));
-      x.save();x.beginPath();x.rect(P(Math.max(gL,xc-aw/2)),P(yL),P(Math.min(gR,xc+aw/2)-Math.max(gL,xc-aw/2)),P(hLab));x.clip();
+      while(sz>1.35&&x.measureText(ce.lbl).width>P(aR-aL-0.4)){sz-=0.1;x.font=F(sz,700)}
+      const tw=x.measureText(ce.lbl).width/S,xc=Math.min(aR-tw/2-0.2,Math.max(aL+tw/2+0.2,xr-spanW/2));
+      x.save();x.beginPath();x.rect(P(aL),P(yL),P(aR-aL),P(hLab));x.clip();
       txt(ce.lbl,xc,yL+hLab/2+0.1,sz,700,ce.lt==='tr'?C.tr:C.holInk);
       x.restore();
     });
@@ -2829,8 +2847,8 @@ const xE=s=>String(s).replace(/[<>&"]/g,ch=>({'<':'&lt;','>':'&gt;','&':'&amp;',
 const colL=i=>{let s='';i++;while(i>0){const r=(i-1)%26;s=String.fromCharCode(65+r)+s;i=Math.floor((i-1)/26)}return s};
 function makeXlsx(m){
   // סגנונות: [גופן, מילוי, גבול, יישור]
-  const XF=[[0,0,0,''],[2,0,0,'right'],[3,0,0,'right'],[1,4,1,'center'],[1,6,1,'center'],[6,0,1,'center'],[7,2,1,'center'],[1,0,1,'center'],[1,2,1,'center'],[1,3,1,'center'],[1,5,1,'center'],[4,0,1,'center'],[4,2,1,'center'],[5,0,1,'center'],[5,2,1,'center'],[1,7,1,'center'],[3,7,1,'center'],[1,4,1,'center'],[0,0,1,''],[0,2,1,''],[1,4,1,'right'],[0,0,1,'right'],[1,0,1,'center'],[3,0,0,'right'],[8,0,0,'right'],[9,0,0,'right'],[1,8,1,'center'],[8,8,1,'center'],[10,8,1,'center'],[6,0,1,'center'],[1,8,1,'right'],[1,4,1,'right'],[1,4,1,'center',1],[10,0,1,'center'],[10,4,1,'center'],[0,0,1,'center'],[0,8,1,'center'],[3,0,1,'center'],[8,4,1,'center',1],[10,4,1,'center',1],[6,9,1,'center'],[4,9,1,'center'],[5,9,1,'center'],[11,10,1,'center'],[12,6,1,'center'],[6,11,1,'center'],[1,11,1,'center']];
-  const ST={title:1,sub:2,head:3,headWe:4,date:5,dateWe:6,sh:7,shWe:8,shHol:9,shBal:10,lab:11,labWe:12,tr:13,trWe:14,mon:15,type:16,tot:17,empty:18,emptyWe:19,th:20,td:21,tdB:22,note:23,bad:24,ok:25,cur:26,curBad:27,curWarn:28,small:29,curLab:30,thR:31,headFit:32,amb:33,ambHead:34,tdC:35,tdCcur:36,muteC:37,headBad:38,headWarn:39,dateHol:40,labHol:41,trHol:42,gridHead:43,gridHeadWe:44,typeB:45,sumCol:46};
+  const XF=[[0,0,0,''],[2,0,0,'right'],[3,0,0,'right'],[1,4,1,'center'],[1,6,1,'center'],[6,0,1,'center'],[7,2,1,'center'],[1,0,1,'center'],[1,2,1,'center'],[1,3,1,'center'],[1,5,1,'center'],[4,0,1,'center'],[4,2,1,'center'],[5,0,1,'center'],[5,2,1,'center'],[1,7,1,'center'],[3,7,1,'center'],[1,4,1,'center'],[0,0,1,''],[0,2,1,''],[1,4,1,'right'],[0,0,1,'right'],[1,0,1,'center'],[3,0,0,'right'],[8,0,0,'right'],[9,0,0,'right'],[1,8,1,'center'],[8,8,1,'center'],[10,8,1,'center'],[6,0,1,'center'],[1,8,1,'right'],[1,4,1,'right'],[1,4,1,'center',1],[10,0,1,'center'],[10,4,1,'center'],[0,0,1,'center'],[0,8,1,'center'],[3,0,1,'center'],[8,4,1,'center',1],[10,4,1,'center',1],[6,9,1,'center'],[4,9,1,'center'],[5,9,1,'center'],[11,10,1,'center'],[12,6,1,'center'],[6,11,1,'center'],[1,11,1,'center'],[4,9,1,'center',1]];
+  const ST={title:1,sub:2,head:3,headWe:4,date:5,dateWe:6,sh:7,shWe:8,shHol:9,shBal:10,lab:11,labWe:12,tr:13,trWe:14,mon:15,type:16,tot:17,empty:18,emptyWe:19,th:20,td:21,tdB:22,note:23,bad:24,ok:25,cur:26,curBad:27,curWarn:28,small:29,curLab:30,thR:31,headFit:32,amb:33,ambHead:34,tdC:35,tdCcur:36,muteC:37,headBad:38,headWarn:39,dateHol:40,labHol:41,trHol:42,gridHead:43,gridHeadWe:44,typeB:45,sumCol:46,labHolFit:47};
   const fill=c=>'<fill><patternFill patternType="solid"><fgColor rgb="FF'+c+'"/><bgColor indexed="64"/></patternFill></fill>';
   const font=(sz,b,col)=>'<font>'+(b?'<b/>':'')+'<sz val="'+sz+'"/>'+(col?'<color rgb="FF'+col+'"/>':'')+'<name val="Arial"/></font>';
   const styles='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">'
@@ -2866,7 +2884,7 @@ function makeXlsx(m){
       if(!ce){[r1,r2,r3].forEach((a,q)=>a.push(cell(L+(r+q),'',we?ST.emptyWe:ST.empty)));continue}
       r1.push(cell(L+r,ce.d,ce.hol?ST.dateHol:we?ST.dateWe:ST.date));
       r2.push(cell(L+(r+1),sh1(ce.nm),ce.hol?ST.shHol:ce.bal?ST.shBal:we?ST.shWe:ST.sh));shRef[ce.k]=L+(r+1);
-      r3.push(cell(L+(r+2),ce.lbl||'',ce.lt==='tr'?(ce.hol?ST.trHol:we?ST.trWe:ST.tr):(ce.hol?ST.labHol:we?ST.labWe:ST.lab)));
+      r3.push(cell(L+(r+2),ce.lbl||'',ce.lt==='tr'?(ce.hol?ST.trHol:we?ST.trWe:ST.tr):(ce.hol?(ce.span>1?ST.labHolFit:ST.labHol):we?ST.labWe:ST.lab)));
       if(ce.lbl&&ce.span>1)merges.push(L+(r+2)+':'+colL(D0+i+ce.span-1)+(r+2));
     }
     // ימי החודש ברצף בשורת המשמרת — טווח הספירה והרשימה הנפתחת
