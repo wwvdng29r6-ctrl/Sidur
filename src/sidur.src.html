@@ -2874,14 +2874,25 @@ const holRepeat=h=>{const s0=h.shifts[0];return s0&&s0===h.p1?'bad':s0&&s0===h.p
 const isExtra=(t,n)=>{if(!t)return false;const v=SHIFT_NAMES.map(k=>t[k]);return Math.max(...v)>Math.min(...v)&&t[n]===Math.max(...v)};
 // החגים שמוצגים בטבלה שמתחת לסידור בקבצי הייצוא
 const EXPORT_TABLE_HOLS=FAIR_HOLS;
-// ייצוא "חגים בלבד" (רק במנהל): כל התאריכים של השנה, אבל משמרת ושם חג רק בימי החגים שהמשמרות סוגרות כבלוק
+// ייצוא "חגים בלבד" (רק במנהל): כל התאריכים של השנה; משמרת רק בימי החגים שהמשמרות סוגרות כבלוק, ושאר החגים
+// היהודיים וימי הזיכרון מסומנים בצהוב בלי משמרת. חגי העדות (המוסלמים והדרוזים) ואימונים לא מופיעים
 let _expHol=false;
 // ימי החגים שהמשמרות סוגרות: 8 חגי ההוגנות, כל ימי הבלוק — ערב החג, השבת הצמודה, ויום הזיכרון שפותח את בלוק עצמאות.
 // לא כולל חגי העדות (המוסלמים והדרוזים), ולא מועדים וימי זיכרון שהם יום עבודה רגיל (פורים, חנוכה, יום השואה...)
 const isFairDay=hl=>!!hl&&!hl.minor&&!hl.com&&FAIR_HOLS.includes(hl.name);
+// שאר החגים היהודיים וימי הזיכרון בשנה y (חנוכה, ט״ו בשבט, פורים, יום השואה, ל״ג בעומר, תשעה באב, סיגד): iso -> {name,startIso,first}.
+// מחושב ישר מהלוח ולא מ-HOL_MAP — כדי שיום כזה יסומן גם כשחג עדה נופל באותו יום. כולל ימי חנוכה של השנה הקודמת שגולשים לינואר
+function jewDaysOf(y){
+  const mp=new Map();
+  [y-1,y].forEach(g=>commemorations(g).forEach(e=>{
+    const s=pd(e.iso),n=Math.max(1,Math.round(e.dur/24));
+    for(let i=0;i<n;i++){const d=addDays(s,i);if(d.getFullYear()!==y)continue;const k=isoOf(d);if(!mp.has(k))mp.set(k,{name:e.name,startIso:e.iso,first:i===0})}
+  }));
+  return mp;
+}
 function expNoteSet(m){
   const el=$('#expNote');if(!el)return;
-  if(_expHol){el.textContent='כל התאריכים של השנה, ומשמרות רק בימי החגים שהמשמרות סוגרות (פסח, יום הזיכרון ועצמאות, שבועות, ראש השנה, יום כיפור וסוכות) — בשאר הימים המשמרת ריקה. בתחתית: מי סגר כל חג ב־3 השנים הקודמות ומי סוגר השנה.';return}
+  if(_expHol){el.textContent='כל התאריכים של השנה. משמרות רק בחגים שהמשמרות סוגרות (פסח, יום הזיכרון ועצמאות, שבועות, ראש השנה, יום כיפור וסוכות). שאר החגים וימי הזיכרון — חנוכה, ט״ו בשבט, פורים, יום השואה, ל״ג בעומר, תשעה באב וסיגד — בצהוב, בלי משמרת. בתחתית: מי סגר כל חג ב־3 השנים הקודמות ומי סוגר השנה.';return}
   if(!m)m=exportModel(_exp.y,_exp.src);
   el.textContent='כולל שורת חגים, סה״כ ימים לכל חודש ולשנה, וטבלת ימי עבודה וסופי שבוע של כל משמרת לפי שנה'+(m.bal.size?' · '+m.bal.size+' ימי איזון מסומנים':'')+'.';
 }
@@ -2911,19 +2922,21 @@ function exportModel(y,src,holOnly){
   else if(draft)status=ap?(diffCount(ap,DRAFT_MAP)?'טיוטה — שינויים שלא אושרו':'מאושר'):'טיוטה — טרם אושר';
   else status=ap?'מאושר':'לפי הנוסחה — טרם אושר';
   const bal=balanceDaysOf(y,draft?'draft':'view');
-  const cols=colsFor(y),months=[],tot={'א׳':0,'ב׳':0,'ג׳':0};
+  const cols=colsFor(y),months=[],tot={'א׳':0,'ב׳':0,'ג׳':0},JD=holOnly?jewDaysOf(y):null;
   for(let mo=0;mo<12;mo++){
     const n=new Date(y,mo+1,0).getDate(),sd=new Date(y,mo,1).getDay(),cells=[],mt={'א׳':0,'ב׳':0,'ג׳':0};
     for(let d=1;d<=n;d++){
       const dt=new Date(y,mo,d),k=isoOf(dt),hl=HOL_MAP[holKey(dt)];
-      // חגים בלבד: ביום שאינו יום חג נשאר רק התאריך — בלי משמרת, בלי צבע ובלי שם (גם לא חגי העדות, מועדים ואימונים)
-      const off=holOnly&&!isFairDay(hl);
+      // חגים בלבד: משמרת רק ביום חג שהמשמרות סוגרות. חג או יום זיכרון אחר (jd) — צהוב ושם, בלי משמרת (nos).
+      // כל יום אחר — רק התאריך (גם חגי העדות ואימונים לא מופיעים)
+      const off=holOnly&&!isFairDay(hl),jd=off?JD.get(k)||null:null;
       const nm=off?null:get(k),trs=holOnly?[]:trainingsOn(k);
       if(nm&&nm in mt){mt[nm]++;tot[nm]++}
-      let lbl='',lt='',span=1;const hd=!off&&isHolDay(hl);
-      if(hl&&!off&&(hl.first||(d===1&&hd))){lbl=holGridLabel(hl,dt);lt='hol';if(hd)span=holRun(dt,n-d+1)}
+      let lbl='',lt='',span=1;const hd=jd?true:!off&&isHolDay(hl);
+      if(jd){if(jd.first||d===1){lbl=jd.name;lt='hol';while(d+span<=n){const x=JD.get(isoOf(new Date(y,mo,d+span)));if(!x||x.name!==jd.name||x.startIso!==jd.startIso)break;span++}}}
+      else if(hl&&!off&&(hl.first||(d===1&&hd))){lbl=holGridLabel(hl,dt);lt='hol';if(hd)span=holRun(dt,n-d+1)}
       else if(trs.length){lbl=trShort(trs[0]);lt='tr'}
-      cells.push({d,col:sd+d-1,w:dt.getDay(),k,nm,hol:hd,lbl,lt,span,bal:holOnly?null:bal.get(k)||null});
+      cells.push({d,col:sd+d-1,w:dt.getDay(),k,nm,hol:hd,nos:!!jd,lbl,lt,span,bal:holOnly?null:bal.get(k)||null});
     }
     months.push({name:MONTHS[mo],cells,mt});
   }
@@ -2972,7 +2985,7 @@ function drawSheet(m){
     mo.cells.forEach(ce=>{
       const xx=xDay(ce.col),we=ce.w>=5;
       // יום חג: כל העמודה בצהוב בהיר, והמשמרת שעובדת בצהוב מלא
-      if(ce.hol){rect(xx,y0,wD,hMonth,C.holT);rect(xx,yS,wD,hShift,C.hol)}else if(we)rect(xx,y0,wD,hMonth,C.we);
+      if(ce.hol){rect(xx,y0,wD,hMonth,C.holT);if(!ce.nos)rect(xx,yS,wD,hShift,C.hol)}else if(we)rect(xx,y0,wD,hMonth,C.we);
       txt(String(ce.d),xx+wD/2,y0+hDate/2+0.15,2.75,800,ce.hol?C.holInk:we?C.weInk:C.date);
       if(ce.nm)txt(sh1(ce.nm),xx+wD/2,yS+hShift/2+0.15,3.05,800,ce.hol?C.holInk:C.ink);
       if(ce.bal){x.fillStyle=C.bal;x.beginPath();x.arc(P(xx+wD-0.75),P(yS+0.75),P(0.5),0,Math.PI*2);x.fill()}
@@ -2996,7 +3009,7 @@ function drawSheet(m){
     txt('תאריך',R-wMon-wType/2,y0+hDate/2+0.1,2.25,700,C.ink);
     txt('משמרת',R-wMon-wType/2,yS+hShift/2+0.1,2.45,800,C.ink);
     txt('חגים',R-wMon-wType/2,yL+hLab/2+0.1,2.1,700,C.ink);
-    if(!m.holOnly||mo.cells.some(ce=>ce.hol)){
+    if(!m.holOnly||mo.cells.some(ce=>ce.hol&&!ce.nos)){
       rect(xTot(3),yS,NT*wTot,hShift,C.head);rect(xTot(3),yS,wTot,hShift,C.sum);
       SHIFT_NAMES.forEach((n,j)=>txt(String(mo.mt[n]),xTot(j)+wTot/2,yS+hShift/2+0.15,2.7,800,C.ink));
       txt(String(sum3(mo.mt)),xTot(3)+wTot/2,yS+hShift/2+0.15,2.7,800,C.ink);
@@ -3150,7 +3163,7 @@ function makeXlsx(m){
   const cfs=[];let cfP=1;
   const cf=(ref,rules)=>cfs.push('<conditionalFormatting sqref="'+ref+'">'+rules.map(([f,d])=>'<cfRule type="expression" dxfId="'+d+'" priority="'+(cfP++)+'"><formula>'+xE(f)+'</formula></cfRule>').join('')+'</conditionalFormatting>');
   // גיליון 1 — הסידור. הסיכומים הם נוסחאות מתאי המשמרות: שינוי משמרת ביום מעדכן את הסה״כ, הפער וטבלאות הסיכום.
-  // HO — חגים בלבד: כל התאריכים, משמרות רק בימי החגים; בלי פער ובלי טבלת ימי עבודה וסופי שבוע
+  // HO — חגים בלבד: כל התאריכים, משמרות רק בחגים שהמשמרות סוגרות (שאר החגים בצהוב בלי משמרת); בלי פער ובלי טבלת ימי עבודה וסופי שבוע
   const HO=!!m.holOnly,SN1=(HO?'סידור חגים ':'סידור ')+m.y,SN2=(HO?'פירוט החגים ':'חגים ')+m.y;
   const D0=2,TC=D0+m.cols,rows=[],merges=[],shRef={},dvR=[];
   rows.push(row(1,[cell('A1',(HO?'סידור חגים ':'סידור עבודה ')+m.y,ST.title)],24));
@@ -3168,17 +3181,17 @@ function makeXlsx(m){
       const L=colL(D0+i),we=i%7>=5,ce=byCol[i];
       if(!ce){[r1,r2,r3].forEach((a,q)=>a.push(cell(L+(r+q),'',we?ST.emptyWe:ST.empty)));continue}
       r1.push(cell(L+r,ce.d,ce.hol?ST.dateHol:we?ST.dateWe:ST.date));
-      r2.push(cell(L+(r+1),sh1(ce.nm),ce.hol?ST.shHol:ce.bal?ST.shBal:we?ST.shWe:ST.sh));shRef[ce.k]=L+(r+1);
+      r2.push(cell(L+(r+1),sh1(ce.nm),ce.hol?(ce.nos?ST.dateHol:ST.shHol):ce.bal?ST.shBal:we?ST.shWe:ST.sh));shRef[ce.k]=L+(r+1);
       r3.push(cell(L+(r+2),ce.lbl||'',ce.lt==='tr'?(ce.hol?ST.trHol:we?ST.trWe:ST.tr):(ce.hol?(ce.span>1?ST.labHolFit:ST.labHol):we?ST.labWe:ST.lab)));
       if(ce.lbl&&ce.span>1)merges.push(L+(r+2)+':'+colL(D0+i+ce.span-1)+(r+2));
     }
-    if(HO&&!mo.cells.some(ce=>ce.hol)){
+    if(HO&&!mo.cells.some(ce=>ce.hol&&!ce.nos)){
       // חגים בלבד, חודש בלי חגים — עמודות הסה״כ ריקות
       for(let j=0;j<4;j++){const L=colL(TC+j);[r1,r2,r3].forEach((a,q)=>a.push(cell(L+(r+q),'',ST.empty)))}
     }else{
     // ימי החודש ברצף בשורת המשמרת — טווח הספירה והרשימה הנפתחת (בחגים בלבד הרשימה רק בימי החג)
     const c0=Math.min(...mo.cells.map(ce=>ce.col)),c1=Math.max(...mo.cells.map(ce=>ce.col)),rng=colL(D0+c0)+(r+1)+':'+colL(D0+c1)+(r+1);
-    dvR.push(HO?mo.cells.filter(ce=>ce.hol).map(ce=>colL(D0+ce.col)+(r+1)).join(' '):rng);
+    dvR.push(HO?mo.cells.filter(ce=>ce.hol&&!ce.nos).map(ce=>colL(D0+ce.col)+(r+1)).join(' '):rng);
     SHIFT_NAMES.forEach((n,j)=>{const L=colL(TC+j);r1.push(cell(L+r,'',ST.tot));r2.push(fcell(L+(r+1),'COUNTIF('+rng+',"'+sh1(n)+'*")',mo.mt[n],ST.tot));r3.push(cell(L+(r+2),'',ST.tot))});
     {const L=colL(TC+3);r1.push(cell(L+r,'',ST.sumCol));r2.push(fcell(L+(r+1),'SUM('+colL(TC)+(r+1)+':'+colL(TC+2)+(r+1)+')',SHIFT_NAMES.reduce((a,n)=>a+mo.mt[n],0),ST.sumCol));r3.push(cell(L+(r+2),'',ST.sumCol))}
     }
