@@ -840,6 +840,49 @@ p.onb-err{color:var(--red);font-weight:700;font-size:12.5px;margin:10px 0 0}
 .ned-tx{min-height:55vh;outline:none;font-size:16px;line-height:1.6;white-space:pre-wrap;overflow-wrap:anywhere;color:var(--text);caret-color:var(--amber);-webkit-user-select:text;user-select:text}
 .ned-tx::first-line{font-size:22px;font-weight:800;line-height:1.5}
 .ned-tx:empty::before{content:attr(data-ph);color:var(--dim);font-size:16px;font-weight:500;pointer-events:none}
+/* סד״כ — טאב בתוך הפתקים */
+.seg.n-tabs{grid-template-columns:repeat(2,minmax(0,1fr));margin-bottom:14px}
+.seg.n-tabs .seg-b{display:inline-flex;align-items:center;justify-content:center;gap:7px}
+.seg.n-tabs .seg-b .ic{width:16px;height:16px}
+.sd-top{padding:12px;margin-bottom:12px}
+.sd-date{display:flex;align-items:center;gap:8px}
+.sd-dpk{flex:1 1 0;min-width:0}
+.sd-dpk span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:14px;font-weight:800;color:var(--text)}
+.sd-quick{display:flex;gap:6px;flex:none}
+.sd-quick .pre{min-height:44px;padding:0 12px;font-size:12.5px}
+.pre.on{background:var(--olive-dim);border-color:var(--olive-border);color:var(--olive-2)}
+.sd-st{display:flex;flex-wrap:wrap;align-items:center;gap:4px 7px;min-height:36px;margin-top:8px;font-size:12px;font-weight:600;color:var(--dim)}
+.sd-st>.ic{width:14px;height:14px;color:var(--olive-2)}
+.sd-st>span{flex:1 1 auto;min-width:0}
+.sd-st .link{margin-inline-start:auto;font-size:12px}
+.sd-st .sd-del{color:var(--red)}
+.sd-st .link .ic{width:13px;height:13px}
+.sd-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:10px}
+.sd-g{min-width:0;background:linear-gradient(155deg,var(--s2),var(--s1));border:1px solid var(--border);border-radius:16px;padding:12px}
+.sd-gh{display:flex;align-items:center;gap:8px;margin-bottom:9px}
+.sd-gh .ic{width:17px;height:17px;color:var(--amber)}
+.sd-gh b{flex:1;min-width:0;font-size:14px;font-weight:800}
+.sd-cnt{min-width:24px;height:22px;padding:0 7px;border-radius:11px;display:grid;place-items:center;font-size:11.5px;font-weight:800;background:var(--s3);color:var(--muted)}
+.sd-cnt.on{background:var(--amber-dim);color:var(--amber)}
+.inp.sd-ta{display:block;height:auto;min-height:46px;padding:10px 13px;line-height:1.5;resize:none;overflow:hidden;font-family:inherit}
+.sd-two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.sd-sw{display:flex;flex-direction:column;gap:8px}
+.sd-swr{display:flex;align-items:center;gap:6px}
+.sd-swr .inp{flex:1 1 0}
+.sd-swi{display:grid;place-items:center;color:var(--dim);flex:none}
+.sd-swi .ic{width:16px;height:16px}
+.sd-sw-e{font-size:12px;color:var(--dim)}
+.sd-add{margin-top:9px}
+.sd-g.sd-tot{margin-top:10px}
+.sd-nums{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.sd-num{display:flex;flex-direction:column;gap:5px;min-width:0}
+.sd-num span{font-size:11.5px;font-weight:700;color:var(--muted)}
+.sd-num .inp{text-align:center;font-family:var(--mono);font-size:16px;font-weight:700}
+.sd-act{margin:12px 0 4px}
+.sd-act .btn{flex:1 1 auto}
+.n-row.cur{background:var(--olive-dim)}
+.n-row.cur .n-t span{color:var(--muted)}
+@media(min-width:900px){.sd-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:899px){
   .note-fab.show{display:grid;bottom:calc(80px + env(safe-area-inset-bottom));width:50px;height:50px;border-radius:16px}
   body.nfab-on .content{padding-bottom:calc(150px + env(safe-area-inset-bottom))}
@@ -849,6 +892,8 @@ p.onb-err{color:var(--red);font-weight:700;font-size:12.5px;margin:10px 0 0}
   .ned-b{padding:10px 16px calc(40px + env(safe-area-inset-bottom))}
   .onb-p{padding:22px 16px 18px}
   .onb-code{font-size:23px}
+  .sd-g .inp{font-size:16px}
+  .sd-act .btn{flex:1 1 100%}
 }
 
 </style>
@@ -902,6 +947,17 @@ p.onb-err{color:var(--red);font-weight:700;font-size:12.5px;margin:10px 0 0}
 <symbol id="i-sync" viewBox="0 0 24 24"><path d="M20 12a8 8 0 0 0-14.93-4"/><path d="M4.6 3.8v4.4H9"/><path d="M4 12a8 8 0 0 0 14.93 4"/><path d="M19.4 20.2v-4.4H15"/></symbol>
 <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8.5" y="8.5" width="12" height="12" rx="2.5"/><path d="M15.5 5.5V5A1.5 1.5 0 0 0 14 3.5H5A1.5 1.5 0 0 0 3.5 5v9A1.5 1.5 0 0 0 5 15.5h.5"/></symbol>
 <symbol id="i-share" viewBox="0 0 24 24"><path d="M12 15V3.5"/><path d="m7.5 8 4.5-4.5L16.5 8"/><path d="M8 11H6.5A1.5 1.5 0 0 0 5 12.5v7A1.5 1.5 0 0 0 6.5 21h11a1.5 1.5 0 0 0 1.5-1.5v-7a1.5 1.5 0 0 0-1.5-1.5H16"/></symbol>
+
+<symbol id="i-clipboard" viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="17" rx="2.5"/><path d="M9 4V2.8h6V4"/><path d="M9 10h6M9 14h6M9 17.5h3.5"/></symbol>
+<symbol id="i-rank" viewBox="0 0 24 24"><path d="m5 11 7-5 7 5"/><path d="m5 18 7-5 7 5"/></symbol>
+<symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/></symbol>
+<symbol id="i-exit" viewBox="0 0 24 24"><path d="M13 3H6.5A2.5 2.5 0 0 0 4 5.5v13A2.5 2.5 0 0 0 6.5 21H13"/><path d="M9.5 12H21"/><path d="m17 8 4 4-4 4"/></symbol>
+<symbol id="i-thermo" viewBox="0 0 24 24"><path d="M10 13.6V5a2 2 0 0 1 4 0v8.6a4 4 0 1 1-4 0z"/><path d="M12 10v6.5"/></symbol>
+<symbol id="i-userplus" viewBox="0 0 24 24"><circle cx="9" cy="8" r="4"/><path d="M2.5 21v-1a5.5 5.5 0 0 1 5.5-5.5h2a5.5 5.5 0 0 1 5.5 5.5v1"/><path d="M19 8v6M16 11h6"/></symbol>
+<symbol id="i-briefcase" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2.5"/><path d="M8.5 7V5.5A1.5 1.5 0 0 1 10 4h4a1.5 1.5 0 0 1 1.5 1.5V7"/><path d="M3 12.5h18"/></symbol>
+<symbol id="i-book" viewBox="0 0 24 24"><path d="M4 19V5.5A2.5 2.5 0 0 1 6.5 3H20v13.5H6.5A2.5 2.5 0 0 0 4 19a2.5 2.5 0 0 0 2.5 2.5H20"/><path d="M9 7.5h7"/></symbol>
+<symbol id="i-hash" viewBox="0 0 24 24"><path d="M5 9h15M4 15h15M10.5 3.5 8.5 20.5M15.5 3.5l-2 17"/></symbol>
+
 <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 13.5a4.5 4.5 0 0 0 6.4.4l3-3a4.5 4.5 0 0 0-6.4-6.4l-1.6 1.6"/><path d="M14 10.5a4.5 4.5 0 0 0-6.4-.4l-3 3a4.5 4.5 0 0 0 6.4 6.4l1.6-1.6"/></symbol>
 </svg>
 
@@ -1989,7 +2045,7 @@ const VIEWS={
   year:{title:'סידור שנתי',render:()=>renderYear()},
   
   train:{title:'אימונים וכשירויות',render:()=>renderTrain()},
-  notes:{title:'פתקים',render:()=>renderNotes()},
+  notes:{title:'פתקים',render:s=>renderNotes(s)},
 };
 let curView='overview';
 function go(v){
@@ -1998,7 +2054,7 @@ function go(v){
   $$('.view').forEach(s=>s.classList.toggle('active',s.id==='v-'+v));
   $$('.sb-item[data-nav],.bn-it[data-nav]').forEach(b=>b.classList.toggle('active',b.dataset.nav===v));
   
-  const nf=$('#noteFab');if(nf)nf.classList.toggle('show',v==='notes');document.body.classList.toggle('nfab-on',v==='notes');
+  noteFabSync();
   const t=$('#hdTitle');if(t)t.textContent=VIEWS[v].title;
   document.title=VIEWS[v].title+(MEMBER?' · סידור מפקדים':' · סידור עבודה');
   VIEWS[v].render(false);
@@ -2906,11 +2962,11 @@ function fbListen(A,path,onEvt,onFail){
    גרסת המפקדים — הצטרפות, הסידור מהמנהל, אימונים משותפים, פתקים וגיבוי מוצפן
    ============================================================ */
 // הסידור מגיע מהענן — רק מה שהמנהל פרסם (רשמי ומאושר) — ונשמר בטלפון, כך שרואים אותו גם בלי אינטרנט.
-// הפתקים, המשמרת וקוד ההצטרפות נשמרים בטלפון, ועותק מוצפן שלהם נשמר בענן תחת קוד השחזור האישי.
+// הפתקים, הסד״כ, המשמרת וקוד ההצטרפות נשמרים בטלפון, ועותק מוצפן שלהם נשמר בענן תחת קוד השחזור האישי.
 // ההצפנה נעשית בטלפון (AES-GCM, מפתח שנגזר מקוד השחזור) — בענן נשמר רק מידע מוצפן, שאף אחד אחר לא יכול לקרוא.
 // בטלפון חדש: "יש לי קוד שחזור" מחזיר הכל — כולל ההרשאה למחוק אימונים שנרשמו מהטלפון הקודם.
 const MEM_STORE='sidur-mefakdim-v1',MEM_AUTH='sidur-mefakdim-auth',APP_VER='m1';
-let MEM={jc:'',shift:'',rc:'',notes:[],pub:null,tr:{},pend:[],at:0,bkAt:0,bkDirty:0,lost:0};
+let MEM={jc:'',shift:'',rc:'',notes:[],sd:{},nt:'notes',pub:null,tr:{},pend:[],at:0,bkAt:0,bkDirty:0,lost:0};
 let MEMA=null,PUB_MAP={},MEM_YEARS=[],_mSaveT=null,_mBkT=null,_mBkBusy=false,_mFlT=null,_mFlBusy=false,_mL=null,_mTree=null,_mSt='init',_mErr='',_mKeys=null,_mPresAt=0,_mBusy=false,_mRetry=0,_mRetryT=null,_bip=null;
 function memLoad(){
   MEMA=fbAuth(MEM_AUTH,true);
@@ -2920,6 +2976,8 @@ function memLoad(){
     if(SHIFT_NAMES.includes(o.shift))MEM.shift=o.shift;
     if(scShort(o.rc))MEM.rc=o.rc;
     if(Array.isArray(o.notes))MEM.notes=o.notes.map(noteNorm).filter(Boolean);
+    sdMerge(o.sd,true);
+    if(o.nt==='sd')MEM.nt='sd';
     if(o.pub&&typeof o.pub==='object')MEM.pub=o.pub;
     if(o.tr&&typeof o.tr==='object'&&!Array.isArray(o.tr))MEM.tr=o.tr;
     if(Array.isArray(o.pend))MEM.pend=o.pend.filter(x=>x&&typeof x.g==='string'&&((x.op==='put'&&trOk(x.t))||x.op==='del'));
@@ -3019,6 +3077,7 @@ function memWatch(){
 }
 function memKick(){if(MEM.jc&&!MEM.lost)memConnect()}
 function memFlushAll(){
+  sdFlush();
   memSave();
   if(_mFlT){clearTimeout(_mFlT);_mFlT=null}
   memFlushPend().catch(()=>{});
@@ -3081,7 +3140,7 @@ async function memBackup(){
   try{
     const k=await memKeys(),iv=crypto.getRandomValues(new Uint8Array(12));
     await MEMA.token();
-    const at=Date.now(),body={v:1,jc:MEM.jc,shift:MEM.shift,notes:MEM.notes,rt:MEMA.rt,uid:MEMA.uid,at};
+    const at=Date.now(),body={v:1,jc:MEM.jc,shift:MEM.shift,notes:MEM.notes,sd:MEM.sd,rt:MEMA.rt,uid:MEMA.uid,at};
     const c=new Uint8Array(await crypto.subtle.encrypt({name:'AES-GCM',iv},k.key,new TextEncoder().encode(JSON.stringify(body))));
     await MEMA.req('PUT','m/'+k.pk,{v:1,at,iv:u8b64(iv),c:u8b64(c)});
     MEM.bkAt=at;MEM.bkDirty=0;memSave();return true;
@@ -3142,7 +3201,7 @@ function onbRender(){
     h+=st==='join'?`<button class="link onb-alt" data-act="onb-to" data-to="restore">${ico('i-key')}יש לי קוד שחזור</button>`
       :`<button class="link onb-alt" data-act="onb-later">אחר כך</button>`;
   }else if(st==='restore'){
-    h+=`<h1 id="onbTitle">שחזור עם קוד אישי</h1><p>מקלידים את קוד השחזור האישי — מטלפון קודם, או מהדפדפן לפני שהאפליקציה נוספה למסך הבית. הפתקים, המשמרת וקוד ההצטרפות יחזרו.</p>
+    h+=`<h1 id="onbTitle">שחזור עם קוד אישי</h1><p>מקלידים את קוד השחזור האישי — מטלפון קודם, או מהדפדפן לפני שהאפליקציה נוספה למסך הבית. הפתקים, הסד״כ, המשמרת וקוד ההצטרפות יחזרו.</p>
 <label class="fl" for="onbRc">קוד שחזור</label><input class="inp onb-in" id="onbRc" dir="ltr" autocomplete="off" autocapitalize="characters" autocorrect="off" spellcheck="false" enterkeyhint="go" placeholder="12345-67890-AB">${err}
 <button class="btn btn-ok onb-go" data-act="onb-restore" ${_onb.busy?'disabled':''}>${_onb.busy?'משחזר…':'שחזור'}</button>
 <button class="link onb-alt" data-act="onb-to" data-to="join">${ico('i-chevr')}חזרה לקוד הצטרפות</button>`;
@@ -3159,7 +3218,7 @@ function onbRender(){
   }else if(st==='code'){
     const share=typeof navigator!=='undefined'&&typeof navigator.share==='function';
     const bk=MEM.bkAt&&!MEM.bkDirty?`<div class="onb-bk ok">${ico('i-check')}<span>נשמר בענן (מוצפן)</span></div>`:`<div class="onb-bk">${ico('i-sync')}<span>${memCryptoOk()?'שומר בענן…':'הדפדפן הזה לא תומך בגיבוי מוצפן'}</span></div>`;
-    h+=`<h1 id="onbTitle">קוד השחזור האישי שלך</h1><p>שומרים את הקוד במקום בטוח — למשל צילום מסך או הודעה לעצמך. בטלפון חדש, הקוד מחזיר את הפתקים, המשמרת וקוד ההצטרפות.</p>
+    h+=`<h1 id="onbTitle">קוד השחזור האישי שלך</h1><p>שומרים את הקוד במקום בטוח — למשל צילום מסך או הודעה לעצמך. בטלפון חדש, הקוד מחזיר את הפתקים, הסד״כ, המשמרת וקוד ההצטרפות.</p>
 <div class="onb-code" dir="ltr" id="onbRcOut">${esc(scFmt(MEM.rc))}</div>${bk}
 <div class="row-btns onb-row"><button class="btn btn-gh" data-act="m-rc-copy">${ico('i-copy')}העתקה</button>${share?`<button class="btn btn-gh" data-act="m-rc-share">${ico('i-share')}שליחה לעצמי</button>`:''}</div>
 <button class="btn btn-ok onb-go" data-act="onb-done">סיום</button>`;
@@ -3197,6 +3256,7 @@ async function onbRestore(){
   if(scShort(bd.jc))MEM.jc=bd.jc;
   if(SHIFT_NAMES.includes(bd.shift))MEM.shift=bd.shift;
   if(Array.isArray(bd.notes)){const have=new Set(MEM.notes.map(n=>n.id));bd.notes.map(noteNorm).filter(Boolean).forEach(n=>{if(!have.has(n.id))MEM.notes.push(n)})}
+  sdMerge(bd.sd);
   if(typeof bd.rt==='string'&&bd.rt){MEMA.rt=bd.rt;MEMA.it='';MEMA.exp=0;MEMA.uid=typeof bd.uid==='string'?bd.uid:'';MEMA.save()}
   MEM.bkAt=+bd.at||0;MEM.bkDirty=0;MEM.lost=0;memSave();
   if(!MEM.jc){_onb.step='join';onbRender();return}
@@ -3232,19 +3292,20 @@ function memRenderSettings(){
   h+=`<div class="sec">המשמרת שלי</div><div class="seg" role="radiogroup" aria-label="המשמרת שלי">${SHIFT_NAMES.map(n=>`<button class="seg-b${MEM.shift===n?' on':''}" role="radio" aria-checked="${MEM.shift===n}" data-myshift="${n}">משמרת ${n}</button>`).join('')}</div>`;
   h+=`<div class="sec">קוד שחזור אישי</div>`;
   if(MEM.rc)h+=`<div class="sy-code"><input class="inp sy-in" id="mRcOut" readonly dir="ltr" value="${scFmt(MEM.rc)}"><button class="btn btn-gh" data-act="m-rc-copy">${ico('i-copy')}העתקה</button>${share?`<button class="btn btn-gh" data-act="m-rc-share">${ico('i-share')}שליחה לעצמי</button>`:''}</div>
-<p class="fn">בטלפון חדש: "יש לי קוד שחזור" ← הקוד הזה. הוא מחזיר את הפתקים, המשמרת וקוד ההצטרפות. אל תשלח אותו לאחרים.</p>`;
+<p class="fn">בטלפון חדש: "יש לי קוד שחזור" ← הקוד הזה. הוא מחזיר את הפתקים, הסד״כ, המשמרת וקוד ההצטרפות. אל תשלח אותו לאחרים.</p>`;
   else h+=`<div class="row-btns"><button class="btn btn-gh" data-act="m-rc-new">${ico('i-key')}יצירת קוד שחזור</button></div>`;
   h+=`<div class="set" style="margin-top:12px"><div><b>גיבוי בענן (מוצפן)</b><span>${!memCryptoOk()?'הדפדפן הזה לא תומך בגיבוי מוצפן':!MEM.rc?'כבוי — צריך קוד שחזור':MEM.bkDirty?'יש שינויים שעוד לא נשמרו בענן':MEM.bkAt?'נשמר '+fmtWhen(MEM.bkAt):'עוד לא נשמר'}</span></div>${MEM.rc&&memCryptoOk()?`<button class="btn btn-gh btn-sm" data-act="m-backup">${ico('i-upload')}שמירה עכשיו</button>`:''}</div>`;
   h+=`<div class="set"><div><b>קוד הצטרפות</b><span>${MEM.jc?'מחובר לקוד שמסתיים ב־'+esc(MEM.jc.slice(-4)):'לא מחובר'}</span></div><button class="btn btn-gh btn-sm" data-act="m-rejoin">${ico('i-swap')}החלפה</button></div>`;
   h+=`<div class="set"><div><b>הוספה למסך הבית</b><span>${isStandalone()?'האפליקציה פתוחה ממסך הבית':'כך הנתונים נשמרים בטלפון לאורך זמן'}</span></div><button class="btn btn-gh btn-sm" data-act="m-home">${ico('i-plusbox')}הסבר</button></div>`;
-  h+=`<div class="set"><div><b>גיבוי לקובץ</b><span>הורדת קובץ עם הפתקים וההגדרות</span></div><button class="btn btn-gh btn-sm" data-act="m-file">${ico('i-download')}הורדה</button></div>`;
+  h+=`<div class="set"><div><b>גיבוי לקובץ</b><span>הורדת קובץ עם הפתקים, הסד״כ וההגדרות</span></div><button class="btn btn-gh btn-sm" data-act="m-file">${ico('i-download')}הורדה</button></div>`;
   b.innerHTML=h;
 }
 function memRejoin(){closeModal('msetOv');onbOpen('rejoin')}
 function memFileBackup(){
   try{
     memSave();
-    const blob=new Blob([JSON.stringify({app:'sidur-mefakdim',v:1,shift:MEM.shift,notes:MEM.notes,savedAt:Date.now()},null,1)],{type:'application/json'});
+    sdFlush();
+    const blob=new Blob([JSON.stringify({app:'sidur-mefakdim',v:1,shift:MEM.shift,notes:MEM.notes,sd:MEM.sd,savedAt:Date.now()},null,1)],{type:'application/json'});
     const url=URL.createObjectURL(blob),a=document.createElement('a');
     a.href=url;a.download='sidur-mefakdim-gibui-'+inputVal(new Date())+'.json';document.body.appendChild(a);a.click();
     setTimeout(()=>{URL.revokeObjectURL(url);a.remove()},2000);toast('קובץ הגיבוי הורד');
@@ -3266,11 +3327,25 @@ function noteWhen(ms){
 }
 function noteGroup(ms){const d=new Date(ms),n=dayDiff(d,TODAY);if(n<=0)return 'היום';if(n===1)return 'אתמול';if(n<7)return '7 הימים הקודמים';if(n<30)return '30 הימים הקודמים';return MONTHS[d.getMonth()]+(d.getFullYear()!==TODAY.getFullYear()?' '+d.getFullYear():'')}
 function noteChanged(){MEM.notes.sort((a,b)=>b.u-a.u);memSave();memBackupSoon()}
-function renderNotes(){
+// מסך הפתקים — שני טאבים: פתקים וסד״כ (הבחירה נשמרת בטלפון)
+function noteTabs(){
+  return `<div class="seg n-tabs" role="tablist" aria-label="פתקים וסד״כ">${[['notes','פתקים','i-note'],['sd','סד״כ','i-clipboard']].map(([k,l,ic])=>`<button class="seg-b${MEM.nt===k?' on':''}" role="tab" aria-selected="${MEM.nt===k}" data-ntab="${k}">${ico(ic)}${l}</button>`).join('')}</div>`;
+}
+function noteFabSync(){const on=curView==='notes'&&MEM.nt!=='sd',nf=$('#noteFab');if(nf)nf.classList.toggle('show',on);document.body.classList.toggle('nfab-on',on)}
+function noteTab(k){
+  k=k==='sd'?'sd':'notes';if(MEM.nt===k)return;
+  sdFlush();MEM.nt=k;memSaveSoon();noteFabSync();renderNotes();
+  try{window.scrollTo(0,0)}catch(e){}
+}
+function renderNotes(soft){
   const v=$('#v-notes');if(!v)return;
+  // הסד״כ הוא טופס מקומי — עדכון מהענן לא בונה אותו מחדש (כדי לא לקטוע הקלדה)
+  if(MEM.nt==='sd'){if(soft&&$('#sdDate'))return;renderSd(v);return}
+  const ae=document.activeElement;
+  if(soft&&ae&&ae.id==='noteQ'&&$('#noteList')){renderNoteList();return}
   const n=MEM.notes.length;
   v.innerHTML=`<div class="ph"><div><h1>פתקים</h1><p>${n?(n===1?'פתק אחד':n+' פתקים')+' · ':''}נשמרים בטלפון, ועותק מוצפן בענן</p></div><div class="nav-grp"><button class="btn btn-ok btn-sm n-new" data-act="note-new">${ico('i-compose')}פתק חדש</button></div></div>
-<div class="n-search">${ico('i-search')}<input id="noteQ" type="search" enterkeyhint="search" placeholder="חיפוש" aria-label="חיפוש בפתקים" autocomplete="off" value="${esc(_nq)}"></div>
+${noteTabs()}<div class="n-search">${ico('i-search')}<input id="noteQ" type="search" enterkeyhint="search" placeholder="חיפוש" aria-label="חיפוש בפתקים" autocomplete="off" value="${esc(_nq)}"></div>
 <div id="noteList"></div>`;
   renderNoteList();
 }
@@ -3335,6 +3410,184 @@ function noteDel(btn){
   const tx=$('#noteTx');if(tx)tx.textContent='';
   closeModal('noteOv');renderNoteList();if(n.t.trim())toast('הפתק נמחק');
 }
+/* ---- סד״כ — דוח כוח האדם של המשמרת ליום מסוים: פיקוד, חופשות, מחלות, קורסים... ובסוף הודעה לוואטסאפ ----
+   כל דוח נשמר לפי התאריך בטלפון ובגיבוי המוצפן (כמו הפתקים), ודוח לתאריך חדש מתחיל מהדוח הקודם — מעדכנים רק מה שהשתנה.
+   הסיכומים מוקלדים ידנית. ההודעה נבנית בדיוק בפורמט הקבוע של המפקד — כולל הסמלים שלו, שמופיעים רק בהודעה עצמה
+   (באפליקציה יש אייקונים). כל שם בשורה משלו; פיקוד משמרת — 2 שמות; החלפות — זוגות, שם ליד שם. */
+const SD_G=[
+  {k:'cmd',l:'פיקוד משמרת',h:'\u{1FAE1} פיקוד משמרת :',ic:'i-rank'},
+  {k:'vac',l:'חופשות',h:'\u{1F60E} חופשות:',ic:'i-sun'},
+  {k:'ret',l:'חופשת פרישה',h:'\u{1F9CB}חופשת פרישה:',ic:'i-exit'},
+  {k:'late',l:'מגיעים מאוחר',h:'\u{1F465} מגיעים מאוחר:',ic:'i-clock'},
+  {k:'res',l:'מילואים',h:'\u{1F482}\u200D\u2642\uFE0Fמילואים:',ic:'i-shield'},
+  {k:'sick',l:'מחלות',h:'\u{1F912} מחלות :',ic:'i-thermo'},
+  {k:'sw',l:'החלפות',h:'\u{1F501}החלפות:',ic:'i-swap'},
+  {k:'att',l:'סיפוחים',h:'\u{1F451}סיפוחים:',ic:'i-userplus'},
+  {k:'day',l:'עובד יום',h:'\u{1F46E}\u{1F3FC}\u200D\u2642\uFE0Fעובד יום :',ic:'i-briefcase'},
+  {k:'shd',l:'צל',h:'\u{1F464}צל :',ic:'i-users'},
+  {k:'crs',l:'קורסים',h:'\u{1F4DA}קורסים :',ic:'i-book'}
+];
+const SD_N=[
+  {k:'t',l:'סד״כ למחר',h:'\u{1F522} סה"כ סדכ למחר: '},
+  {k:'a',l:'מצבה פעילה',h:'\u{1FAAC} סה״כ מצבה פעילה :  '},
+  {k:'c',l:'מצבה כללית',h:'\u{1FAAC} סהכ מצבה כללי: '}
+];
+const SD_MAX=120;
+let _sdIso='',_sdRep=null,_sdFrom='',_sdT=null;
+const sdKeyOk=k=>/^\d{4}-\d{1,2}-\d{1,2}$/.test(k)&&!isNaN(pd(k));
+const sdLines=v=>String(v||'').split('\n').map(x=>x.trim().slice(0,60)).filter(Boolean).slice(0,80);
+function sdBlank(){const g={};SD_G.forEach(x=>{if(x.k!=='cmd'&&x.k!=='sw')g[x.k]=[]});return{u:0,g,cmd:['',''],sw:[],n:{t:'',a:'',c:''}}}
+function sdNorm(r){
+  if(!r||typeof r!=='object')return null;
+  const st=v=>typeof v==='string'?v.trim().slice(0,60):'',o=sdBlank();
+  o.u=+r.u||0;
+  const c=Array.isArray(r.cmd)?r.cmd:[];o.cmd=[st(c[0]),st(c[1])];
+  if(Array.isArray(r.sw))o.sw=r.sw.filter(Array.isArray).map(p=>[st(p[0]),st(p[1])]).filter(p=>p[0]||p[1]).slice(0,40);
+  const g=r.g&&typeof r.g==='object'?r.g:{};
+  for(const k in o.g)o.g[k]=Array.isArray(g[k])?g[k].map(st).filter(Boolean).slice(0,80):[];
+  const n=r.n&&typeof r.n==='object'?r.n:{};
+  SD_N.forEach(x=>{const v=n[x.k];o.n[x.k]=typeof v==='number'&&isFinite(v)?String(Math.round(v)):typeof v==='string'?v.replace(/\D/g,'').slice(0,5):''});
+  return o;
+}
+// דוחות מהטלפון או מגיבוי — לכל תאריך נשאר העדכני
+function sdMerge(o){
+  if(!o||typeof o!=='object'||Array.isArray(o))return;
+  for(const k in o){if(!sdKeyOk(k))continue;const r=sdNorm(o[k]);if(r&&(!MEM.sd[k]||r.u>(MEM.sd[k].u||0)))MEM.sd[k]=r}
+}
+// השמות של קבוצה, לפי הסדר — כל אחד בשורה. החלפה: שם ליד שם
+function sdNames(r,k){
+  if(k==='cmd')return r.cmd.map(x=>String(x||'').trim()).filter(Boolean);
+  if(k==='sw')return r.sw.map(p=>[String(p[0]||'').trim(),String(p[1]||'').trim()].filter(Boolean).join(' - ')).filter(Boolean);
+  return r.g[k]||[];
+}
+const sdDayTxt=r=>{const n=r.g.day.length;return n?(n>1?'+ '+n+' עובדי יום.':'+ עובד יום.'):''};
+// ההודעה לוואטסאפ — בדיוק בפורמט הקבוע
+function sdText(iso,r){
+  const d=pd(iso),L=[fmtFull(d)+' '+dayName(d),''];
+  SD_G.forEach(g=>{L.push(g.h);sdNames(r,g.k).forEach(x=>L.push(x));L.push('')});
+  const t=(r.n.t||'').trim(),dw=sdDayTxt(r);
+  L.push(SD_N[0].h+t+(dw?(t?' ':'')+dw:''));
+  L.push(SD_N[1].h+(r.n.a||'').trim());
+  L.push(SD_N[2].h+(r.n.c||'').trim());
+  return L.join('\n');
+}
+// פתיחת דוח לתאריך: הדוח השמור, ואם אין — עותק של הדוח הקודם (נשמר רק כשמשנים משהו)
+function sdOpen(iso){
+  _sdIso=iso;_sdFrom='';
+  if(MEM.sd[iso]){_sdRep=sdNorm(MEM.sd[iso]);return}
+  const ks=Object.keys(MEM.sd).filter(sdKeyOk).sort((a,b)=>pd(a)-pd(b)),t=pd(iso);
+  let src='';ks.forEach(k=>{if(pd(k)<t)src=k});
+  if(!src&&ks.length)src=ks[ks.length-1];
+  _sdRep=src?sdNorm(MEM.sd[src]):sdBlank();_sdFrom=src;
+}
+function sdCommit(){
+  if(!_sdRep||!_sdIso)return;
+  _sdRep.u=Date.now();MEM.sd[_sdIso]=sdNorm(_sdRep);_sdFrom='';
+  Object.keys(MEM.sd).sort((a,b)=>pd(b)-pd(a)).slice(SD_MAX).forEach(k=>{if(k!==_sdIso)delete MEM.sd[k]});
+  memSave();memBackupSoon();
+  const f=$('#sdFrom');if(f)f.innerHTML=sdFromHtml();
+  const hh=$('#sdHist');if(hh)hh.innerHTML=sdHistHtml();
+}
+function sdFlush(){if(_sdT){clearTimeout(_sdT);_sdT=null;sdCommit()}}
+function sdSoon(){clearTimeout(_sdT);_sdT=setTimeout(()=>{_sdT=null;sdCommit()},400)}
+function sdGo(iso){
+  if(!sdKeyOk(iso))return;
+  sdFlush();sdOpen(iso);renderNotes();
+  try{window.scrollTo(0,0)}catch(e){}
+}
+function sdFromHtml(){
+  const sv=MEM.sd[_sdIso];
+  if(sv)return `<div class="sd-st">${ico('i-check')}<span>הדוח נשמר · ${noteWhen(sv.u)}</span><button class="link sd-del" data-act="sd-del">${ico('i-trash')}מחיקת הדוח</button></div>`;
+  if(_sdFrom){const f=pd(_sdFrom);return `<div class="sd-st">${ico('i-info')}<span>מולא מהדוח של ${dayName(f)} ${fmtFull(f)} — מעדכנים רק מה שהשתנה</span><button class="link" data-act="sd-clear">ניקוי כל השמות</button></div>`}
+  return `<div class="sd-st">${ico('i-info')}<span>דוח חדש — נשמר לבד כשכותבים</span></div>`;
+}
+function sdDayHint(){const dw=sdDayTxt(_sdRep);return dw?'רשום עובד יום — בהודעה יופיע אחרי המספר של סד״כ למחר: '+dw:'כשרושמים עובד יום, בהודעה יופיע אחרי המספר של סד״כ למחר: + עובד יום.'}
+function sdSwRows(r){
+  if(!r.sw.length)return `<div class="sd-sw-e">אין החלפות</div>`;
+  return r.sw.map((p,i)=>`<div class="sd-swr"><input class="inp" data-sd="sw" data-i="${i}" data-j="0" value="${esc(p[0]||'')}" placeholder="שם" aria-label="החלפה ${i+1} — שם" autocomplete="off" enterkeyhint="next"><span class="sd-swi" aria-hidden="true">${ico('i-swap')}</span><input class="inp" data-sd="sw" data-i="${i}" data-j="1" value="${esc(p[1]||'')}" placeholder="החליף עם" aria-label="החלפה ${i+1} — עם מי" autocomplete="off" enterkeyhint="done"><button class="ov-x" data-act="sd-swdel" data-i="${i}" aria-label="מחיקת החלפה ${i+1}">${ico('i-x')}</button></div>`).join('');
+}
+function sdGroupHtml(g,r){
+  const n=sdNames(r,g.k).length;let body;
+  if(g.k==='cmd')body=`<div class="sd-two">${[0,1].map(i=>`<input class="inp" data-sd="cmd" data-i="${i}" value="${esc(r.cmd[i]||'')}" placeholder="${i?'שם שני':'שם ראשון'}" aria-label="פיקוד משמרת — ${i?'שם שני':'שם ראשון'}" autocomplete="off" enterkeyhint="next">`).join('')}</div>`;
+  else if(g.k==='sw')body=`<div class="sd-sw" id="sdSw">${sdSwRows(r)}</div><button class="btn btn-gh btn-sm sd-add" data-act="sd-swadd">${ico('i-plus')}הוספת החלפה</button>`;
+  else body=`<textarea class="inp sd-ta" data-sd="${g.k}" rows="1" placeholder="שם בכל שורה" aria-label="${esc(g.l)} — שם בכל שורה" autocomplete="off" spellcheck="false">${esc((r.g[g.k]||[]).join('\n'))}</textarea>`;
+  return `<section class="sd-g" aria-label="${esc(g.l)}"><div class="sd-gh">${ico(g.ic)}<b>${esc(g.l)}</b><span class="sd-cnt${n?' on':''}" id="sdc-${g.k}">${n}</span></div>${body}</section>`;
+}
+function sdHistHtml(){
+  const ks=Object.keys(MEM.sd).filter(sdKeyOk).sort((a,b)=>pd(b)-pd(a)).slice(0,40);
+  if(!ks.length)return '';
+  const row=k=>{const r=MEM.sd[k],d=pd(k);
+    const sum=SD_G.filter(g=>g.k!=='cmd').map(g=>[g.l,sdNames(r,g.k).length]).filter(x=>x[1]).map(x=>x[0]+' '+x[1]).join(' · ')||'בלי שמות';
+    return `<button class="n-row${k===_sdIso?' cur':''}" data-sdopen="${k}"${k===_sdIso?' aria-current="true"':''}><span class="n-t"><b>${dayName(d)} ${fmtFull(d)}</b><span>${esc(sum)}</span></span>${ico('i-chevl')}</button>`};
+  return `<div class="n-sec">${ico('i-clock')}דוחות שמורים</div><div class="n-group">${ks.map(row).join('')}</div>`;
+}
+function sdGrow(t){try{t.style.height='auto';t.style.height=(t.scrollHeight+2)+'px'}catch(e){}}
+function renderSd(v){
+  if(!_sdIso||!_sdRep)sdOpen(isoOf(addDays(TODAY,1)));
+  const d=pd(_sdIso),r=_sdRep,today=isoOf(TODAY),tom=isoOf(addDays(TODAY,1));
+  const share=typeof navigator!=='undefined'&&typeof navigator.share==='function';
+  let h=`<div class="ph"><div><h1>סד״כ</h1><p>דוח כוח אדם יומי · נשמר בטלפון, ועותק מוצפן בענן</p></div><div class="nav-grp"><button class="btn btn-ok btn-sm" data-act="sd-wa">${ico('i-send')}שליחה בוואטסאפ</button></div></div>${noteTabs()}`;
+  h+=`<div class="card sd-top"><div class="sd-date"><div class="dpk set sd-dpk">${ico('i-cal')}<span>${dayName(d)} · ${fmtFull(d)}</span><input type="date" id="sdDate" value="${inputVal(d)}" aria-label="תאריך הדוח"></div><div class="sd-quick"><button class="pre${_sdIso===today?' on':''}" data-act="sd-day" data-off="0">היום</button><button class="pre${_sdIso===tom?' on':''}" data-act="sd-day" data-off="1">מחר</button></div></div><div id="sdFrom">${sdFromHtml()}</div></div>`;
+  h+=`<div class="sd-grid">${SD_G.map(g=>sdGroupHtml(g,r)).join('')}</div>`;
+  h+=`<section class="sd-g sd-tot" aria-label="סיכומים"><div class="sd-gh">${ico('i-hash')}<b>סיכומים</b></div><div class="sd-nums">${SD_N.map(x=>`<label class="sd-num"><span>${esc(x.l)}</span><input class="inp" data-sd="n" data-n="${x.k}" value="${esc(r.n[x.k]||'')}" inputmode="numeric" pattern="[0-9]*" maxlength="5" autocomplete="off" enterkeyhint="done"></label>`).join('')}</div><p class="fn" id="sdDayHint">${esc(sdDayHint())}</p></section>`;
+  h+=`<div class="row-btns sd-act"><button class="btn btn-ok" data-act="sd-wa">${ico('i-send')}שליחה בוואטסאפ</button><button class="btn btn-gh" data-act="sd-copy">${ico('i-copy')}העתקת ההודעה</button>${share?`<button class="btn btn-gh" data-act="sd-share">${ico('i-share')}שיתוף</button>`:''}</div>`;
+  h+=`<div id="sdHist">${sdHistHtml()}</div>`;
+  v.innerHTML=h;
+  v.querySelectorAll('.sd-ta').forEach(sdGrow);
+}
+function sdCounts(){
+  SD_G.forEach(g=>{const el=$('#sdc-'+g.k);if(!el)return;const n=sdNames(_sdRep,g.k).length;el.textContent=n;el.classList.toggle('on',n>0)});
+  const hn=$('#sdDayHint');if(hn)hn.textContent=sdDayHint();
+}
+function sdInput(t){
+  if(!_sdRep)return;
+  const k=t.dataset.sd;
+  if(k==='cmd')_sdRep.cmd[t.dataset.i==='1'?1:0]=t.value.slice(0,60);
+  else if(k==='sw'){const p=_sdRep.sw[+t.dataset.i];if(!p)return;p[t.dataset.j==='1'?1:0]=t.value.slice(0,60)}
+  else if(k==='n'){const c=t.value.replace(/\D/g,'').slice(0,5);if(c!==t.value)t.value=c;_sdRep.n[t.dataset.n]=c}
+  else if(_sdRep.g[k]){_sdRep.g[k]=sdLines(t.value);sdGrow(t)}
+  else return;
+  sdCounts();sdSoon();
+}
+function sdSwRender(focusLast){
+  const el=$('#sdSw');if(!el)return;el.innerHTML=sdSwRows(_sdRep);
+  if(focusLast){const ins=el.querySelectorAll('input');const f=ins[ins.length-2];if(f){try{f.focus()}catch(e){}}}
+}
+function sdSwAdd(){if(!_sdRep)return;if(_sdRep.sw.length>=40){toast('אפשר עד 40 החלפות');return}_sdRep.sw.push(['','']);sdSwRender(true);sdCounts();sdSoon()}
+function sdSwDel(i){if(!_sdRep||!_sdRep.sw[i])return;_sdRep.sw.splice(i,1);sdSwRender(false);sdCounts();sdSoon()}
+function sdClear(){
+  if(!_sdRep)return;
+  const a=_sdRep.n.a,c=_sdRep.n.c;_sdRep=sdBlank();_sdRep.n.a=a;_sdRep.n.c=c;
+  clearTimeout(_sdT);_sdT=null;sdCommit();renderNotes();toast('השמות נוקו — מצבה פעילה וכללית נשארו');
+}
+function sdDel(btn){
+  if(!MEM.sd[_sdIso])return;
+  if(!armTap('sd-del',btn,ico('i-trash')+'לחץ שוב למחיקה')){return}
+  clearTimeout(_sdT);_sdT=null;delete MEM.sd[_sdIso];memSave();memBackupSoon();
+  sdOpen(_sdIso);renderNotes();toast('הדוח נמחק');
+}
+async function sdCopy(t){
+  let ok=false;
+  try{if(navigator.clipboard&&navigator.clipboard.writeText){await navigator.clipboard.writeText(t);ok=true}}catch(e){}
+  if(!ok){try{const ta=document.createElement('textarea');ta.value=t;ta.setAttribute('readonly','');ta.style.cssText='position:fixed;top:0;left:0;opacity:0';document.body.appendChild(ta);ta.select();ok=document.execCommand('copy');ta.remove()}catch(e){}}
+  toast(ok?'ההודעה הועתקה — מדביקים בוואטסאפ':'לא הצלחתי להעתיק');
+}
+// שליחה: וואטסאפ (בטלפון — האפליקציה, במחשב — וואטסאפ ווב), העתקה או שיתוף. מה שנשלח — נשמר
+function sdSend(kind){
+  if(!_sdRep)return;
+  clearTimeout(_sdT);_sdT=null;sdCommit();
+  const t=sdText(_sdIso,_sdRep);
+  if(kind==='copy'){sdCopy(t);return}
+  if(kind==='share'){try{navigator.share({text:t}).catch(e=>{if(!e||e.name!=='AbortError')sdCopy(t)})}catch(e){sdCopy(t)}return}
+  const w=sdWaUrl(t);
+  try{if(w.mob)location.href=w.url;else{const a=document.createElement('a');a.href=w.url;a.target='_blank';a.rel='noopener';document.body.appendChild(a);a.click();a.remove()}}
+  catch(e){sdCopy(t)}
+}
+// בטלפון — ישר לאפליקציית וואטסאפ (בוחרים קבוצה או איש קשר); במחשב — וואטסאפ ווב בלשונית חדשה
+function sdWaUrl(t){
+  let mob=false;try{mob=isIOS()||/Android/i.test(navigator.userAgent)||matchMedia('(pointer:coarse)').matches}catch(e){}
+  return{mob,url:(mob?'whatsapp://send?text=':'https://wa.me/?text=')+encodeURIComponent(t)};
+}
 
 /* ============================================================
    אירועים
@@ -3353,6 +3606,14 @@ const ACTIONS={
   'note-close':()=>closeModal('noteOv'),
   'note-pin':()=>notePin(),
   'note-del':el=>noteDel(el),
+  'sd-wa':()=>sdSend('wa'),
+  'sd-copy':()=>sdSend('copy'),
+  'sd-share':()=>sdSend('share'),
+  'sd-day':el=>sdGo(isoOf(addDays(TODAY,+el.dataset.off||0))),
+  'sd-swadd':()=>sdSwAdd(),
+  'sd-swdel':el=>sdSwDel(+el.dataset.i),
+  'sd-del':el=>sdDel(el),
+  'sd-clear':()=>sdClear(),
   'onb-join':()=>onbJoin(),
   'onb-restore':()=>onbRestore(),
   'onb-shift':el=>onbShift(el.dataset.s),
@@ -3381,6 +3642,8 @@ document.addEventListener('click',e=>{
   
   
   if((el=t.closest('[data-note]'))){noteOpen(el.dataset.note);return}
+  if((el=t.closest('[data-ntab]'))){noteTab(el.dataset.ntab);return}
+  if((el=t.closest('[data-sdopen]'))){sdGo(el.dataset.sdopen);return}
   if((el=t.closest('[data-myshift]'))){memSetShift(el.dataset.myshift);return}
   
   if((el=t.closest('[data-exp]'))){doExport(el.dataset.exp,el);return}
@@ -3422,9 +3685,12 @@ document.addEventListener('change',e=>{
   if(t.id==='jumpDate'){if(t.value){const d=pd(t.value);t.value='';openDay(isoOf(d))}return}
   if(t.id==='trDate'){_trDate=t.value?isoOf(pd(t.value)):'';renderTrain();return}
   
+  if(t.id==='sdDate'){if(t.value)sdGo(isoOf(pd(t.value)));return}
+  
+  
 });
 
-document.addEventListener('input',e=>{const t=e.target;if(!t)return;if(t.id==='noteTx')noteInput();else if(t.id==='noteQ'){_nq=t.value;renderNoteList()}});
+document.addEventListener('input',e=>{const t=e.target;if(!t)return;if(t.id==='noteTx')noteInput();else if(t.id==='noteQ'){_nq=t.value;renderNoteList()}else if(t.dataset&&t.dataset.sd)sdInput(t)});
 
 
 

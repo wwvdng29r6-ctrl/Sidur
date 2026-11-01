@@ -827,6 +827,7 @@ svg.ic{width:17px;height:17px;flex:none;fill:none;stroke:currentColor;stroke-wid
 <symbol id="i-sync" viewBox="0 0 24 24"><path d="M20 12a8 8 0 0 0-14.93-4"/><path d="M4.6 3.8v4.4H9"/><path d="M4 12a8 8 0 0 0 14.93 4"/><path d="M19.4 20.2v-4.4H15"/></symbol>
 <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8.5" y="8.5" width="12" height="12" rx="2.5"/><path d="M15.5 5.5V5A1.5 1.5 0 0 0 14 3.5H5A1.5 1.5 0 0 0 3.5 5v9A1.5 1.5 0 0 0 5 15.5h.5"/></symbol>
 <symbol id="i-share" viewBox="0 0 24 24"><path d="M12 15V3.5"/><path d="m7.5 8 4.5-4.5L16.5 8"/><path d="M8 11H6.5A1.5 1.5 0 0 0 5 12.5v7A1.5 1.5 0 0 0 6.5 21h11a1.5 1.5 0 0 0 1.5-1.5v-7a1.5 1.5 0 0 0-1.5-1.5H16"/></symbol>
+
 <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 13.5a4.5 4.5 0 0 0 6.4.4l3-3a4.5 4.5 0 0 0-6.4-6.4l-1.6 1.6"/><path d="M14 10.5a4.5 4.5 0 0 0-6.4-.4l-3 3a4.5 4.5 0 0 0 6.4 6.4l1.6-1.6"/></symbol>
 </svg>
 
@@ -4953,6 +4954,7 @@ document.addEventListener('change',e=>{
   const t=e.target;if(!t)return;
   if(t.id==='jumpDate'){if(t.value){const d=pd(t.value);t.value='';openDay(isoOf(d))}return}
   if(t.id==='trDate'){_trDate=t.value?isoOf(pd(t.value)):'';renderTrain();return}
+  
   
   if(t.id==='restoreFile'){const f=t.files&&t.files[0];t.value='';if(f)doRestore(f);return}
   if(t.id==='aiBackup'){aiBackup(t.checked);return}
