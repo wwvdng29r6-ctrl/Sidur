@@ -878,7 +878,8 @@ p.onb-err{color:var(--red);font-weight:700;font-size:12.5px;margin:10px 0 0}
 .sd-num{display:flex;flex-direction:column;gap:5px;min-width:0}
 .sd-num span{font-size:11.5px;font-weight:700;color:var(--muted)}
 .sd-num .inp{text-align:center;font-family:var(--mono);font-size:16px;font-weight:700}
-.sd-act{margin:12px 0 4px}
+.sd-fn{margin:12px 2px 0}
+.sd-act{margin:10px 0 4px}
 .sd-act .btn{flex:1 1 auto}
 .n-row.cur{background:var(--olive-dim)}
 .n-row.cur .n-t span{color:var(--muted)}
@@ -3472,12 +3473,12 @@ function sdTomTxt(r){
   return t?t+' + '+w:'+ '+w;
 }
 // ההודעה לוואטסאפ — בדיוק בפורמט הקבוע
+// קבוצה בלי שמות ושורת סיכום ריקה לא נכנסות להודעה
 function sdText(iso,r){
   const d=pd(iso),L=[fmtFull(d)+' '+dayName(d),''];
-  SD_G.forEach(g=>{L.push(g.h);sdNames(r,g.k).forEach(x=>L.push(x));L.push('')});
-  L.push(SD_N[0].h+sdTomTxt(r));
-  L.push(SD_N[1].h+sdNumFmt(r.n.a));
-  L.push(SD_N[2].h+sdNumFmt(r.n.c));
+  SD_G.forEach(g=>{const ns=sdNames(r,g.k);if(!ns.length)return;L.push(g.h);ns.forEach(x=>L.push(x));L.push('')});
+  [[SD_N[0].h,sdTomTxt(r)],[SD_N[1].h,sdNumFmt(r.n.a)],[SD_N[2].h,sdNumFmt(r.n.c)]].forEach(([h,v])=>{if(v)L.push(h+v)});
+  while(L.length>1&&L[L.length-1]==='')L.pop();
   return L.join('\n');
 }
 // פתיחת דוח לתאריך: הדוח השמור, ואם אין — עותק של הדוח הקודם (נשמר רק כשמשנים משהו)
@@ -3539,7 +3540,7 @@ function renderSd(v){
   h+=`<div class="card sd-top"><div class="sd-date"><div class="dpk set sd-dpk">${ico('i-cal')}<span>${dayName(d)} · ${fmtFull(d)}</span><input type="date" id="sdDate" value="${inputVal(d)}" aria-label="תאריך הדוח"></div><div class="sd-quick"><button class="pre${_sdIso===today?' on':''}" data-act="sd-day" data-off="0">היום</button><button class="pre${_sdIso===tom?' on':''}" data-act="sd-day" data-off="1">מחר</button></div></div><div id="sdFrom">${sdFromHtml()}</div></div>`;
   h+=`<div class="sd-grid">${SD_G.map(g=>sdGroupHtml(g,r)).join('')}</div>`;
   h+=`<section class="sd-g sd-tot" aria-label="סיכומים"><div class="sd-gh">${ico('i-hash')}<b>סיכומים</b></div><div class="sd-nums">${SD_N.map(x=>`<label class="sd-num"><span>${esc(x.l)}</span><input class="inp" data-sd="n" data-n="${x.k}" value="${esc(r.n[x.k]||'')}" inputmode="tel" maxlength="14" autocomplete="off" enterkeyhint="done"></label>`).join('')}</div><p class="fn" id="sdDayHint">${esc(sdDayHint())}</p></section>`;
-  h+=`<div class="row-btns sd-act"><button class="btn btn-ok" data-act="sd-wa">${ico('i-send')}שליחה בוואטסאפ</button><button class="btn btn-gh" data-act="sd-copy">${ico('i-copy')}העתקת ההודעה</button>${share?`<button class="btn btn-gh" data-act="sd-share">${ico('i-share')}שיתוף</button>`:''}</div>`;
+  h+=`<p class="fn sd-fn">קבוצה בלי שמות ושורת סיכום ריקה לא נכנסות להודעה.</p><div class="row-btns sd-act"><button class="btn btn-ok" data-act="sd-wa">${ico('i-send')}שליחה בוואטסאפ</button><button class="btn btn-gh" data-act="sd-copy">${ico('i-copy')}העתקת ההודעה</button>${share?`<button class="btn btn-gh" data-act="sd-share">${ico('i-share')}שיתוף</button>`:''}</div>`;
   h+=`<div id="sdHist">${sdHistHtml()}</div>`;
   v.innerHTML=h;
   v.querySelectorAll('.sd-ta').forEach(sdGrow);
