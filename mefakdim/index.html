@@ -3436,6 +3436,9 @@ const SD_MAX=120;
 let _sdIso='',_sdRep=null,_sdFrom='',_sdT=null;
 const sdKeyOk=k=>/^\d{4}-\d{1,2}-\d{1,2}$/.test(k)&&!isNaN(pd(k));
 const sdLines=v=>String(v||'').split('\n').map(x=>x.trim().slice(0,60)).filter(Boolean).slice(0,80);
+// סיכום: מספרים ופלוס, למשל 30 + 1. בהודעה — רווח אחד משני צדי כל פלוס (גם כשמקלידים 30+1 במקלדת המספרים)
+const sdNumClean=v=>String(v||'').replace(/[^\d+ ]/g,'').replace(/ {2,}/g,' ').slice(0,14);
+const sdNumFmt=v=>sdNumClean(v).split('+').map(x=>x.trim()).filter(Boolean).join(' + ');
 function sdBlank(){const g={};SD_G.forEach(x=>{if(x.k!=='cmd'&&x.k!=='sw')g[x.k]=[]});return{u:0,g,cmd:['',''],sw:[],n:{t:'',a:'',c:''}}}
 function sdNorm(r){
   if(!r||typeof r!=='object')return null;
@@ -3446,7 +3449,7 @@ function sdNorm(r){
   const g=r.g&&typeof r.g==='object'?r.g:{};
   for(const k in o.g)o.g[k]=Array.isArray(g[k])?g[k].map(st).filter(Boolean).slice(0,80):[];
   const n=r.n&&typeof r.n==='object'?r.n:{};
-  SD_N.forEach(x=>{const v=n[x.k];o.n[x.k]=typeof v==='number'&&isFinite(v)?String(Math.round(v)):typeof v==='string'?v.replace(/\D/g,'').slice(0,5):''});
+  SD_N.forEach(x=>{const v=n[x.k];o.n[x.k]=typeof v==='number'&&isFinite(v)?String(Math.round(v)):typeof v==='string'?sdNumClean(v).trim():''});
   return o;
 }
 // דוחות מהטלפון או מגיבוי — לכל תאריך נשאר העדכני
@@ -3465,10 +3468,10 @@ const sdDayTxt=r=>{const n=r.g.day.length;return n?(n>1?'+ '+n+' עובדי יו
 function sdText(iso,r){
   const d=pd(iso),L=[fmtFull(d)+' '+dayName(d),''];
   SD_G.forEach(g=>{L.push(g.h);sdNames(r,g.k).forEach(x=>L.push(x));L.push('')});
-  const t=(r.n.t||'').trim(),dw=sdDayTxt(r);
+  const t=sdNumFmt(r.n.t),dw=sdDayTxt(r);
   L.push(SD_N[0].h+t+(dw?(t?' ':'')+dw:''));
-  L.push(SD_N[1].h+(r.n.a||'').trim());
-  L.push(SD_N[2].h+(r.n.c||'').trim());
+  L.push(SD_N[1].h+sdNumFmt(r.n.a));
+  L.push(SD_N[2].h+sdNumFmt(r.n.c));
   return L.join('\n');
 }
 // פתיחת דוח לתאריך: הדוח השמור, ואם אין — עותק של הדוח הקודם (נשמר רק כשמשנים משהו)
@@ -3529,7 +3532,7 @@ function renderSd(v){
   let h=`<div class="ph"><div><h1>סד״כ</h1><p>דוח כוח אדם יומי · נשמר בטלפון, ועותק מוצפן בענן</p></div><div class="nav-grp"><button class="btn btn-ok btn-sm" data-act="sd-wa">${ico('i-send')}שליחה בוואטסאפ</button></div></div>${noteTabs()}`;
   h+=`<div class="card sd-top"><div class="sd-date"><div class="dpk set sd-dpk">${ico('i-cal')}<span>${dayName(d)} · ${fmtFull(d)}</span><input type="date" id="sdDate" value="${inputVal(d)}" aria-label="תאריך הדוח"></div><div class="sd-quick"><button class="pre${_sdIso===today?' on':''}" data-act="sd-day" data-off="0">היום</button><button class="pre${_sdIso===tom?' on':''}" data-act="sd-day" data-off="1">מחר</button></div></div><div id="sdFrom">${sdFromHtml()}</div></div>`;
   h+=`<div class="sd-grid">${SD_G.map(g=>sdGroupHtml(g,r)).join('')}</div>`;
-  h+=`<section class="sd-g sd-tot" aria-label="סיכומים"><div class="sd-gh">${ico('i-hash')}<b>סיכומים</b></div><div class="sd-nums">${SD_N.map(x=>`<label class="sd-num"><span>${esc(x.l)}</span><input class="inp" data-sd="n" data-n="${x.k}" value="${esc(r.n[x.k]||'')}" inputmode="numeric" pattern="[0-9]*" maxlength="5" autocomplete="off" enterkeyhint="done"></label>`).join('')}</div><p class="fn" id="sdDayHint">${esc(sdDayHint())}</p></section>`;
+  h+=`<section class="sd-g sd-tot" aria-label="סיכומים"><div class="sd-gh">${ico('i-hash')}<b>סיכומים</b></div><div class="sd-nums">${SD_N.map(x=>`<label class="sd-num"><span>${esc(x.l)}</span><input class="inp" data-sd="n" data-n="${x.k}" value="${esc(r.n[x.k]||'')}" inputmode="tel" maxlength="14" autocomplete="off" enterkeyhint="done"></label>`).join('')}</div><p class="fn" id="sdDayHint">${esc(sdDayHint())}</p></section>`;
   h+=`<div class="row-btns sd-act"><button class="btn btn-ok" data-act="sd-wa">${ico('i-send')}שליחה בוואטסאפ</button><button class="btn btn-gh" data-act="sd-copy">${ico('i-copy')}העתקת ההודעה</button>${share?`<button class="btn btn-gh" data-act="sd-share">${ico('i-share')}שיתוף</button>`:''}</div>`;
   h+=`<div id="sdHist">${sdHistHtml()}</div>`;
   v.innerHTML=h;
@@ -3544,7 +3547,7 @@ function sdInput(t){
   const k=t.dataset.sd;
   if(k==='cmd')_sdRep.cmd[t.dataset.i==='1'?1:0]=t.value.slice(0,60);
   else if(k==='sw'){const p=_sdRep.sw[+t.dataset.i];if(!p)return;p[t.dataset.j==='1'?1:0]=t.value.slice(0,60)}
-  else if(k==='n'){const c=t.value.replace(/\D/g,'').slice(0,5);if(c!==t.value)t.value=c;_sdRep.n[t.dataset.n]=c}
+  else if(k==='n'){const c=sdNumClean(t.value);if(c!==t.value)t.value=c;_sdRep.n[t.dataset.n]=c}
   else if(_sdRep.g[k]){_sdRep.g[k]=sdLines(t.value);sdGrow(t)}
   else return;
   sdCounts();sdSoon();
