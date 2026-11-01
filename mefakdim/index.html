@@ -3463,13 +3463,19 @@ function sdNames(r,k){
   if(k==='sw')return r.sw.map(p=>[String(p[0]||'').trim(),String(p[1]||'').trim()].filter(Boolean).join(' - ')).filter(Boolean);
   return r.g[k]||[];
 }
-const sdDayTxt=r=>{const n=r.g.day.length;return n?(n>1?'+ '+n+' עובדי יום.':'+ עובד יום.'):''};
+// סד״כ למחר בהודעה: המספר כמו שהוקלד. כשרשום עובד יום: "30 + עובד יום." — וכשכבר הוקלד פלוס: "30 + 1 עובד יום."
+function sdTomTxt(r){
+  const t=sdNumFmt(r.n.t),n=r.g.day.length;
+  if(!n)return t;
+  if(t.includes('+')){const last=+t.split('+').pop().trim();return t+' '+(last>1?'עובדי יום.':'עובד יום.')}
+  const w=n>1?n+' עובדי יום.':'עובד יום.';
+  return t?t+' + '+w:'+ '+w;
+}
 // ההודעה לוואטסאפ — בדיוק בפורמט הקבוע
 function sdText(iso,r){
   const d=pd(iso),L=[fmtFull(d)+' '+dayName(d),''];
   SD_G.forEach(g=>{L.push(g.h);sdNames(r,g.k).forEach(x=>L.push(x));L.push('')});
-  const t=sdNumFmt(r.n.t),dw=sdDayTxt(r);
-  L.push(SD_N[0].h+t+(dw?(t?' ':'')+dw:''));
+  L.push(SD_N[0].h+sdTomTxt(r));
   L.push(SD_N[1].h+sdNumFmt(r.n.a));
   L.push(SD_N[2].h+sdNumFmt(r.n.c));
   return L.join('\n');
@@ -3504,7 +3510,7 @@ function sdFromHtml(){
   if(_sdFrom){const f=pd(_sdFrom);return `<div class="sd-st">${ico('i-info')}<span>מולא מהדוח של ${dayName(f)} ${fmtFull(f)} — מעדכנים רק מה שהשתנה</span><button class="link" data-act="sd-clear">ניקוי כל השמות</button></div>`}
   return `<div class="sd-st">${ico('i-info')}<span>דוח חדש — נשמר לבד כשכותבים</span></div>`;
 }
-function sdDayHint(){const dw=sdDayTxt(_sdRep);return dw?'רשום עובד יום — בהודעה יופיע אחרי המספר של סד״כ למחר: '+dw:'כשרושמים עובד יום, בהודעה יופיע אחרי המספר של סד״כ למחר: + עובד יום.'}
+function sdDayHint(){return _sdRep.g.day.length?'בהודעה: סה"כ סדכ למחר: '+sdTomTxt(_sdRep):'כשרושמים עובד יום, בהודעה יתווסף "עובד יום" אחרי המספר של סד״כ למחר.'}
 function sdSwRows(r){
   if(!r.sw.length)return `<div class="sd-sw-e">אין החלפות</div>`;
   return r.sw.map((p,i)=>`<div class="sd-swr"><input class="inp" data-sd="sw" data-i="${i}" data-j="0" value="${esc(p[0]||'')}" placeholder="שם" aria-label="החלפה ${i+1} — שם" autocomplete="off" enterkeyhint="next"><span class="sd-swi" aria-hidden="true">${ico('i-swap')}</span><input class="inp" data-sd="sw" data-i="${i}" data-j="1" value="${esc(p[1]||'')}" placeholder="החליף עם" aria-label="החלפה ${i+1} — עם מי" autocomplete="off" enterkeyhint="done"><button class="ov-x" data-act="sd-swdel" data-i="${i}" aria-label="מחיקת החלפה ${i+1}">${ico('i-x')}</button></div>`).join('');
