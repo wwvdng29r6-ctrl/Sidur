@@ -627,7 +627,8 @@ dialog.ovd>.ov{position:absolute}
 .shp-g{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
 .shp-o{min-height:44px;border-radius:var(--r-sm);font-size:16px;font-weight:800;background:var(--s3);border:1px solid var(--border2);color:var(--text)}
 .shp-o:last-child{font-size:13px;font-weight:700;color:var(--muted)}
-.shp-o.on{background:var(--olive);border-color:var(--olive);color:var(--on-acc)}
+.shp-o.sh-a,.shp-o.sh-b,.shp-o.sh-c{background:var(--mk);border-color:transparent;color:var(--mk-ink);border-radius:3px 10px 4px 11px / 9px 3px 10px 4px}
+.shp-o.on{box-shadow:inset 0 0 0 2px var(--text),inset 0 0 0 4px var(--s2)}
 .shp-base{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;min-height:40px;margin-top:8px;border-radius:var(--r-sm);font-size:12.5px;font-weight:700;color:var(--olive-2);background:var(--olive-dim);border:1px solid var(--olive-border)}
 .shp-base .ic{width:15px;height:15px}
 .ym .dc:focus-visible{outline:2px solid var(--olive);outline-offset:-2px}
@@ -783,6 +784,7 @@ dialog.ovd>.ov{position:absolute}
   .inp{font-size:16px}
   .ov-f .btn{flex:1 1 100%}
   #toast{bottom:calc(92px + env(safe-area-inset-bottom))}
+  body.fab-on #toast{bottom:calc(144px + env(safe-area-inset-bottom))}
   .bell{top:calc(env(safe-area-inset-top) + 64px);inset-inline-end:12px}
 }
 @media(max-width:600px){
@@ -3105,17 +3107,23 @@ function dpkOpen(iso,cell){
   if(!curDraft())newDraft();
   _dpkIso=iso;_dfIso=iso;
   const d=pd(iso),cur=DRAFT_MAP[iso]||null,base=planOf(TARGET_YEAR).map[iso]||null;
-  const opt=(v,l)=>`<button class="shp-o${(v||null)===cur?' on':''}" data-dpk="${v||''}" aria-pressed="${(v||null)===cur}"${v?` data-sh="${sh1(v)}"`:''}>${l}</button>`;
+  const opt=(v,l)=>`<button class="shp-o${shk(v)}${(v||null)===cur?' on':''}" data-dpk="${v||''}" aria-pressed="${(v||null)===cur}">${l}</button>`;
   p.innerHTML=`<div class="shp-h"><b>${DOW_FULL[d.getDay()]} ${fmtDM(d)}</b><span>${cur?'עכשיו: משמרת '+cur:'עכשיו: ריק'}</span></div>
     <div class="shp-g">${SHIFT_NAMES.map(s=>opt(s,s)).join('')}${opt(null,'ריק')}</div>
     ${cur!==base?`<button class="shp-base" data-dpk="${base||''}">${ico('i-undo')}חזרה לנוסחה · ${base?'משמרת '+base:'ריק'}</button>`:''}`;
   p.hidden=false;p.setAttribute('aria-label','בחירת משמרת ל־'+DOW_FULL[d.getDay()]+' '+fmtDM(d));
+  dpkPlace();
+  const on=p.querySelector('.shp-o.on')||p.querySelector('.shp-o');if(on)on.focus({preventScroll:true});
+}
+// הבורר נצמד לתא שלו גם בגלילה; נסגר רק כשהתא יוצא מהמסך
+function dpkPlace(){
+  const p=$('#dpk'),cell=_dpkIso&&$('[data-draftday="'+_dpkIso+'"]');if(!p||!cell)return dpkClose();
   const r=cell.getBoundingClientRect(),pw=p.offsetWidth,ph=p.offsetHeight,vw=innerWidth,vh=innerHeight;
+  if(r.bottom<0||r.top>vh||r.right<0||r.left>vw)return dpkClose();
   let x=r.left+r.width/2-pw/2,y=r.bottom+6;
   if(y+ph>vh-8)y=Math.max(8,r.top-ph-6);
   x=Math.min(Math.max(8,x),vw-pw-8);
   p.style.left=x+'px';p.style.top=y+'px';
-  const on=p.querySelector('.shp-o.on')||p.querySelector('.shp-o');if(on)on.focus({preventScroll:true});
 }
 function dpkClose(back){
   const p=$('#dpk');if(!p||p.hidden)return;
@@ -6231,7 +6239,7 @@ document.addEventListener('click',e=>{
   if((el=t.closest('[data-day]'))){if(bell)bell.classList.remove('show');openDay(el.dataset.day);return}
   if((el=t.closest('[data-nav]'))){if(bell)bell.classList.remove('show');closeAll();go(el.dataset.nav);return}
 });
-/*@admin*/addEventListener('scroll',()=>{if(_dpkIso)dpkClose()},{capture:true,passive:true});addEventListener('resize',()=>{if(_dpkIso)dpkClose()});/*/@admin*/
+/*@admin*/addEventListener('scroll',()=>{if(_dpkIso)dpkPlace()},{capture:true,passive:true});addEventListener('resize',()=>{if(_dpkIso)dpkPlace()});/*/@admin*/
 document.addEventListener('keydown',e=>{
   /*@admin*/
   if(_dpkIso&&e.key==='Escape'){e.preventDefault();dpkClose(true);return}
