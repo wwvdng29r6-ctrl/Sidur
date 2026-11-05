@@ -1,0 +1,723 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-05T06:18:05+00:00",
+  "title": "Design System: סידור עבודה",
+  "extensions": {
+    "colorMeta": {
+      "ballpoint-blue": {
+        "role": "primary",
+        "displayName": "Ballpoint Blue",
+        "canonical": "oklch(42.7% 0.166 266)",
+        "tonalRamp": [
+          "#030823",
+          "#0d1d54",
+          "#1c368b",
+          "#3253ba",
+          "#4f75df",
+          "#7199ff",
+          "#a3c2ff",
+          "#dceeff"
+        ],
+        "cssVar": "--olive"
+      },
+      "ballpoint-blue-deep": {
+        "role": "primary",
+        "displayName": "Ballpoint Blue Deep",
+        "canonical": "oklch(38.8% 0.152 266)",
+        "tonalRamp": [
+          "#030921",
+          "#0f1f50",
+          "#1e3885",
+          "#3556b2",
+          "#5277d7",
+          "#749af7",
+          "#a6c3ff",
+          "#deefff"
+        ],
+        "cssVar": "--olive-2"
+      },
+      "highlighter-yellow": {
+        "role": "secondary",
+        "displayName": "Highlighter Yellow (shift א׳)",
+        "canonical": "oklch(90.9% 0.165 98)",
+        "tonalRamp": [
+          "#120a00",
+          "#322200",
+          "#553c00",
+          "#785a00",
+          "#997b00",
+          "#b99d00",
+          "#d7c56f",
+          "#f9f0c3"
+        ],
+        "cssVar": "--mk-a"
+      },
+      "highlighter-pink": {
+        "role": "secondary",
+        "displayName": "Highlighter Pink (shift ב׳)",
+        "canonical": "oklch(84.7% 0.100 350)",
+        "tonalRamp": [
+          "#16050d",
+          "#391628",
+          "#612a46",
+          "#864466",
+          "#a96386",
+          "#cb86a7",
+          "#e6b3ca",
+          "#ffe5f2"
+        ],
+        "cssVar": "--mk-b"
+      },
+      "highlighter-green": {
+        "role": "secondary",
+        "displayName": "Highlighter Green (shift ג׳)",
+        "canonical": "oklch(85.8% 0.110 142)",
+        "tonalRamp": [
+          "#020f02",
+          "#0d2c0b",
+          "#1c4c18",
+          "#346d30",
+          "#548e4f",
+          "#78af72",
+          "#a9d1a5",
+          "#e0f6de"
+        ],
+        "cssVar": "--mk-c"
+      },
+      "holiday-red": {
+        "role": "tertiary",
+        "displayName": "Holiday Red",
+        "canonical": "oklch(53.0% 0.207 22)",
+        "tonalRamp": [
+          "#220000",
+          "#510002",
+          "#860007",
+          "#b6001f",
+          "#de3040",
+          "#ff6064",
+          "#ff9f9b",
+          "#ffdcd8"
+        ],
+        "cssVar": "--hol"
+      },
+      "holiday-ink": {
+        "role": "tertiary",
+        "displayName": "Holiday Ink",
+        "canonical": "oklch(48.4% 0.187 22)",
+        "tonalRamp": [
+          "#200001",
+          "#4e0007",
+          "#810012",
+          "#af0d29",
+          "#d63f48",
+          "#f9696c",
+          "#ffa3a0",
+          "#ffdedb"
+        ],
+        "cssVar": "--hol-tx"
+      },
+      "minor-holiday-ochre": {
+        "role": "tertiary",
+        "displayName": "Minor-Holiday Ochre",
+        "canonical": "oklch(47.6% 0.133 46)",
+        "tonalRamp": [
+          "#1a0400",
+          "#421300",
+          "#6e2500",
+          "#973f02",
+          "#bc6030",
+          "#de8457",
+          "#f5b394",
+          "#ffe6d4"
+        ],
+        "cssVar": "--gold"
+      },
+      "training-violet": {
+        "role": "tertiary",
+        "displayName": "Training Violet",
+        "canonical": "oklch(47.7% 0.190 289)",
+        "tonalRamp": [
+          "#0c0425",
+          "#251157",
+          "#42238f",
+          "#5f3fbf",
+          "#7d62e5",
+          "#9c87ff",
+          "#c1b7ff",
+          "#ece8ff"
+        ],
+        "cssVar": "--indigo"
+      },
+      "warning-amber": {
+        "role": "tertiary",
+        "displayName": "Warning Amber",
+        "canonical": "oklch(51.7% 0.141 48)",
+        "tonalRamp": [
+          "#1b0400",
+          "#431100",
+          "#702200",
+          "#9a3d00",
+          "#bf5e25",
+          "#e18250",
+          "#f7b28f",
+          "#ffe5d2"
+        ],
+        "cssVar": "--amber"
+      },
+      "error-red": {
+        "role": "tertiary",
+        "displayName": "Error Red",
+        "canonical": "oklch(51.2% 0.198 22)",
+        "tonalRamp": [
+          "#210001",
+          "#500005",
+          "#84000d",
+          "#b30024",
+          "#da3744",
+          "#fd6467",
+          "#ffa19d",
+          "#ffddd9"
+        ],
+        "cssVar": "--red"
+      },
+      "success-green": {
+        "role": "tertiary",
+        "displayName": "Success Green",
+        "canonical": "oklch(49.0% 0.118 153)",
+        "tonalRamp": [
+          "#001004",
+          "#002d11",
+          "#004e23",
+          "#0f703b",
+          "#3b915a",
+          "#64b37c",
+          "#9ed3ac",
+          "#daf7e1"
+        ],
+        "cssVar": "--green"
+      },
+      "wall-gray": {
+        "role": "neutral",
+        "displayName": "Wall Gray",
+        "canonical": "oklch(94.2% 0.005 248)",
+        "tonalRamp": [
+          "#0b0b0c",
+          "#232425",
+          "#3e4042",
+          "#5b5e60",
+          "#7b7e80",
+          "#9c9fa1",
+          "#c2c4c6",
+          "#edeef0"
+        ],
+        "cssVar": "--bg"
+      },
+      "sheet-white": {
+        "role": "neutral",
+        "displayName": "Sheet White",
+        "canonical": "oklch(100.0% 0.000 90)",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#242424",
+          "#404040",
+          "#5d5d5d",
+          "#7d7d7d",
+          "#9e9e9e",
+          "#c4c4c4",
+          "#eeeeee"
+        ],
+        "cssVar": "--s1"
+      },
+      "sheet-tint": {
+        "role": "neutral",
+        "displayName": "Sheet Tint",
+        "canonical": "oklch(97.9% 0.002 248)",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#242424",
+          "#3f4040",
+          "#5d5e5e",
+          "#7c7d7e",
+          "#9d9e9f",
+          "#c3c4c5",
+          "#eeeeef"
+        ],
+        "cssVar": "--s2"
+      },
+      "sheet-shade": {
+        "role": "neutral",
+        "displayName": "Sheet Shade",
+        "canonical": "oklch(95.4% 0.005 258)",
+        "tonalRamp": [
+          "#0b0b0c",
+          "#232425",
+          "#3e4042",
+          "#5c5e60",
+          "#7c7d80",
+          "#9d9ea1",
+          "#c3c4c6",
+          "#eeeeef"
+        ],
+        "cssVar": "--s3"
+      },
+      "sheet-shade-deep": {
+        "role": "neutral",
+        "displayName": "Sheet Shade Deep",
+        "canonical": "oklch(92.3% 0.007 248)",
+        "tonalRamp": [
+          "#0a0b0c",
+          "#222426",
+          "#3d4043",
+          "#5b5e61",
+          "#7a7e81",
+          "#9b9fa2",
+          "#c2c4c7",
+          "#edeff0"
+        ],
+        "cssVar": "--s4"
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "oklch(22.0% 0.016 257)",
+        "tonalRamp": [
+          "#0a0b0e",
+          "#212429",
+          "#3b4047",
+          "#585e67",
+          "#777e87",
+          "#999fa8",
+          "#c0c4cb",
+          "#eceff2"
+        ],
+        "cssVar": "--text / --mk-ink"
+      },
+      "ink-muted": {
+        "role": "neutral",
+        "displayName": "Ink Muted",
+        "canonical": "oklch(42.1% 0.023 256)",
+        "tonalRamp": [
+          "#090b0f",
+          "#20242b",
+          "#39404b",
+          "#555e6b",
+          "#747e8b",
+          "#969fac",
+          "#bec5ce",
+          "#ebeff4"
+        ],
+        "cssVar": "--muted"
+      },
+      "ink-dim": {
+        "role": "neutral",
+        "displayName": "Ink Dim",
+        "canonical": "oklch(49.3% 0.022 256)",
+        "tonalRamp": [
+          "#090b0e",
+          "#20242b",
+          "#39404a",
+          "#555e6a",
+          "#757e8b",
+          "#969fac",
+          "#bec5ce",
+          "#ebeff4"
+        ],
+        "cssVar": "--dim"
+      },
+      "rail-ink": {
+        "role": "neutral",
+        "displayName": "Rail Ink",
+        "canonical": "oklch(25.1% 0.046 265)",
+        "tonalRamp": [
+          "#080b12",
+          "#1d2432",
+          "#353f55",
+          "#515d78",
+          "#707d99",
+          "#919eba",
+          "#bbc4d9",
+          "#e9effa"
+        ],
+        "cssVar": "--rail"
+      },
+      "rail-ink-raised": {
+        "role": "neutral",
+        "displayName": "Rail Ink Raised",
+        "canonical": "oklch(29.6% 0.052 265)",
+        "tonalRamp": [
+          "#080b13",
+          "#1c2434",
+          "#343f58",
+          "#4f5d7c",
+          "#6e7d9d",
+          "#909ebe",
+          "#b9c4db",
+          "#e8effb"
+        ],
+        "cssVar": "--rail-2"
+      },
+      "rail-text": {
+        "role": "neutral",
+        "displayName": "Rail Text",
+        "canonical": "oklch(95.7% 0.007 261)",
+        "tonalRamp": [
+          "#0a0b0c",
+          "#232426",
+          "#3e4043",
+          "#5b5e62",
+          "#7b7d82",
+          "#9c9ea3",
+          "#c2c4c7",
+          "#edeef0"
+        ],
+        "cssVar": "--rail-tx"
+      },
+      "rail-muted": {
+        "role": "neutral",
+        "displayName": "Rail Muted",
+        "canonical": "oklch(76.8% 0.028 262)",
+        "tonalRamp": [
+          "#090b0f",
+          "#20242d",
+          "#39404d",
+          "#555e6e",
+          "#747e8e",
+          "#969faf",
+          "#bec4d1",
+          "#ebeff5"
+        ],
+        "cssVar": "--rail-mut"
+      },
+      "on-accent": {
+        "role": "neutral",
+        "displayName": "On Accent",
+        "canonical": "oklch(100.0% 0.000 90)",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#242424",
+          "#404040",
+          "#5d5d5d",
+          "#7d7d7d",
+          "#9e9e9e",
+          "#c4c4c4",
+          "#eeeeee"
+        ],
+        "cssVar": "--on-acc"
+      },
+      "ballpoint-wash": {
+        "role": "primary",
+        "displayName": "Ballpoint Wash",
+        "canonical": "rgba(37,67,168,0.09)",
+        "cssVar": "--olive-dim"
+      },
+      "hairline": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "canonical": "rgba(23,32,46,0.12)",
+        "cssVar": "--border"
+      },
+      "hairline-strong": {
+        "role": "neutral",
+        "displayName": "Hairline Strong",
+        "canonical": "rgba(23,32,46,0.2)",
+        "cssVar": "--border2"
+      },
+      "weekend-band": {
+        "role": "neutral",
+        "displayName": "Weekend Band",
+        "canonical": "rgba(23,32,46,0.055)",
+        "cssVar": "--wkd-bg"
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "The on-duty shift letter on its marker in the now hero only (44px under 900px, 34px small ring)."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Hero line naming the shift (22px on phone)."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Page headings (19px under 600px)."
+      },
+      "card-title": {
+        "displayName": "Card Title",
+        "purpose": "Card and list heads; dialog heads use 16px/800."
+      },
+      "figure": {
+        "displayName": "Figure",
+        "purpose": "KPI numbers, tabular (22px on phone); footnote figures 17px/800."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Running text; explanatory copy 12.5px/1.55."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Meta, legends, weekday names, hints; no tracking."
+      },
+      "grid-cell": {
+        "displayName": "Grid Cell",
+        "purpose": "Year-grid shift letters; grid dates and holiday labels at the 10px floor."
+      }
+    },
+    "shadows": [
+      {
+        "name": "sheet-contact",
+        "value": "0 1px 2px rgba(17,24,39,.06)",
+        "purpose": "Every card at rest, board theme only."
+      },
+      {
+        "name": "sheet-lift",
+        "value": "0 4px 14px rgba(17,24,39,.08)",
+        "purpose": "Hover on clickable cards (pointer devices); no movement."
+      },
+      {
+        "name": "floating-layer",
+        "value": "0 12px 32px rgba(17,24,39,.16), 0 2px 6px rgba(17,24,39,.08)",
+        "purpose": "Dialogs, shift picker, toast."
+      },
+      {
+        "name": "floating-layer-night",
+        "value": "0 18px 44px rgba(0,0,0,.5)",
+        "purpose": "Floating layers in the night theme; cards carry no shadow there."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out",
+        "value": "cubic-bezier(.23,1,.32,1)",
+        "purpose": "State changes (.15s), press feedback (.16s, scale .97/.95), view enter (.2s, 4px rise), desktop dialog (.22-.24s)."
+      },
+      {
+        "name": "ease-drawer",
+        "value": "cubic-bezier(.32,.72,0,1)",
+        "purpose": "Bottom sheets rising on phones (.3s out, .44s in)."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "opacity .2s ease",
+        "purpose": "Reduced motion keeps short fades only; no slides, scales or loops."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "xs",
+        "value": "380px"
+      },
+      {
+        "name": "sm",
+        "value": "600px"
+      },
+      {
+        "name": "rail",
+        "value": "900px"
+      },
+      {
+        "name": "rail-narrow",
+        "value": "1100px"
+      },
+      {
+        "name": "bento-full",
+        "value": "1060px"
+      },
+      {
+        "name": "bento-half",
+        "value": "1180px"
+      }
+    ],
+    "highlighterStrokes": {
+      "note": "SVG masks, viewBox 0 0 120 40, preserveAspectRatio none, one fixed variant per shift; defined as --stroke-a/b/c on :root in src/sidur.src.html.",
+      "a": "M4 8 C30 4 80 3 116 6 L118 11 L115 16 L119 22 L116 28 L118 33 C80 37 35 38 5 35 L2 29 L5 23 L1 17 L4 12 Z",
+      "b": "M2 6 C35 3 85 5 117 8 L115 14 L119 19 L116 25 L118 31 C82 35 38 37 3 33 L5 27 L1 21 L4 15 L2 10 Z",
+      "c": "M5 9 C38 5 78 2 115 5 L119 10 L116 17 L118 23 L115 30 C78 34 40 38 4 34 L1 28 L4 22 L2 15 Z"
+    },
+    "themes": {
+      "board": {
+        "label": "יום",
+        "default": true,
+        "source": "frontmatter colors"
+      },
+      "night": {
+        "label": "לילה",
+        "attribute": "data-theme=\"night\" (data-tone removed)",
+        "colors": {
+          "wall-gray": "#0e1218",
+          "sheet-white": "#161b24",
+          "sheet-tint": "#1b212c",
+          "sheet-shade": "#232a37",
+          "sheet-shade-deep": "#2c3443",
+          "ink": "#e9edf3",
+          "ink-muted": "#aeb7c4",
+          "ink-dim": "#929cab",
+          "ballpoint-blue": "#7fa2ff",
+          "ballpoint-blue-deep": "#a9c0ff",
+          "on-accent": "#0b1020",
+          "hairline": "rgba(255,255,255,.08)",
+          "hairline-strong": "rgba(255,255,255,.14)",
+          "weekend-band": "rgba(255,255,255,.05)",
+          "holiday-red": "rgb(248,113,113)",
+          "holiday-ink": "#fca5a5",
+          "minor-holiday-ochre": "rgb(232,170,90)",
+          "training-violet": "rgb(176,160,250)",
+          "warning-amber": "rgb(240,160,70)",
+          "error-red": "rgb(248,113,113)",
+          "success-green": "rgb(74,208,135)",
+          "highlighter-yellow": "#f5d33d",
+          "highlighter-pink": "#f5a3c9",
+          "highlighter-green": "#94d68e",
+          "marker-ink": "#161b22",
+          "rail-ink": "#161b24",
+          "rail-ink-raised": "#232a37",
+          "rail-text": "#e9edf3",
+          "rail-muted": "#aeb7c4",
+          "rail-accent": "#a9c0ff"
+        },
+        "notes": "Same board in light ink on dark sheets; markers keep dark ink; card shadows removed; rail joins the sheet tone with a hairline edge."
+      }
+    }
+  },
+  "components": [
+    {
+      "name": "Shift Highlighter",
+      "kind": "custom",
+      "refersTo": "shift-marker-a",
+      "description": "Signature: the shift letter in ink on its own irregular marker stroke, at every scale.",
+      "html": "<span class=\"ds-mk ds-a\">א׳</span> <span class=\"ds-mk ds-b\">ב׳</span> <span class=\"ds-mk ds-c\">ג׳</span> <span class=\"ds-mk ds-c ds-hero\">ג</span>",
+      "css": ".ds-mk{position:relative;isolation:isolate;display:inline-grid;place-items:center;min-width:30px;height:26px;padding:0 8px;margin:0 6px;font-family:var(--font);font-size:13px;font-weight:800;color:var(--mk-ink)} .ds-mk::before{content:'';position:absolute;inset:0 -4px;z-index:-1;background:var(--mk);-webkit-mask:var(--stroke) 0 0/100% 100% no-repeat;mask:var(--stroke) 0 0/100% 100% no-repeat} .ds-a{--mk:var(--mk-a);--stroke:var(--stroke-a)} .ds-b{--mk:var(--mk-b);--stroke:var(--stroke-b)} .ds-c{--mk:var(--mk-c);--stroke:var(--stroke-c)} .ds-hero{width:96px;height:112px;font-size:56px;font-weight:900;line-height:1} .ds-hero::before{inset:6px -18px}"
+    },
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The pen: the single filled action per context.",
+      "html": "<button class=\"ds-btn-primary\">אישור והחלה</button>",
+      "css": ".ds-btn-primary{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:42px;padding:0 16px;border-radius:var(--r-sm);border:1px solid transparent;background:var(--olive);color:var(--on-acc);font-family:var(--font);font-size:13px;font-weight:700;cursor:pointer;transition:background .15s,transform .16s var(--ease-out)} .ds-btn-primary:hover{background:var(--olive-2)} .ds-btn-primary:focus-visible{outline:2px solid var(--olive);outline-offset:2px} .ds-btn-primary:active{transform:scale(.97)}"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Default secondary action: a white sheet with a strong hairline.",
+      "html": "<button class=\"ds-btn-ghost\">ייצוא</button>",
+      "css": ".ds-btn-ghost{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:42px;padding:0 16px;border-radius:var(--r-sm);border:1px solid var(--border2);background:var(--s1);color:var(--text);font-family:var(--font);font-size:13px;font-weight:700;cursor:pointer;transition:background .15s,transform .16s var(--ease-out)} .ds-btn-ghost:hover{background:var(--s3)} .ds-btn-ghost:focus-visible{outline:2px solid var(--olive);outline-offset:2px} .ds-btn-ghost:active{transform:scale(.97)}"
+    },
+    {
+      "name": "Input",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "White sheet field, strong hairline, pen-tinted focus halo.",
+      "html": "<input class=\"ds-inp\" dir=\"rtl\" placeholder=\"קוד הצטרפות\">",
+      "css": ".ds-inp{width:100%;height:44px;padding:0 13px;border-radius:var(--r-sm);background:var(--s1);border:1px solid var(--border2);color:var(--text);caret-color:var(--olive);font-family:var(--font);font-size:14px} .ds-inp::placeholder{color:var(--dim)} .ds-inp:focus{outline:none;border-color:var(--olive-border);box-shadow:0 0 0 3px rgba(var(--olive-rgb),.15)}"
+    },
+    {
+      "name": "Nav Rail",
+      "kind": "nav",
+      "refersTo": "nav-rail",
+      "description": "Desktop dark-ink rail; active item gets the yellow tick and icon.",
+      "html": "<nav class=\"ds-rail\" dir=\"rtl\"><a class=\"ds-rail-i\">סקירה</a><a class=\"ds-rail-i ds-on\">סידור שנתי</a><a class=\"ds-rail-i\">אימונים</a></nav>",
+      "css": ".ds-rail{display:flex;flex-direction:column;gap:3px;width:240px;padding:12px;background:var(--rail);font-family:var(--font)} .ds-rail-i{position:relative;display:flex;align-items:center;padding:11px 12px;border-radius:var(--r-sm);font-size:14px;font-weight:600;color:var(--rail-mut);cursor:pointer;transition:background .15s,color .15s} .ds-rail-i:hover{background:var(--rail-2);color:var(--rail-tx)} .ds-rail-i:focus-visible{outline:2px solid var(--olive);outline-offset:2px} .ds-rail-i.ds-on{background:var(--rail-2);color:var(--rail-tx)} .ds-rail-i.ds-on::before{content:'';position:absolute;inset-inline-start:-12px;top:22%;bottom:22%;width:4px;border-radius:3px;background:var(--rail-acc)}"
+    },
+    {
+      "name": "Card (sheet)",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "A printed sheet on the wall: hairline, 11px, contact shadow, plain ink head.",
+      "html": "<div class=\"ds-card\" dir=\"rtl\"><h3>החג הקרוב</h3><p>סיגד · 9.11.2026 · בעוד 4 ימים</p></div>",
+      "css": ".ds-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r-lg);padding:16px;box-shadow:0 1px 2px rgba(17,24,39,.06);font-family:var(--font);color:var(--text);transition:box-shadow .15s,border-color .15s} .ds-card:hover{border-color:var(--border2);box-shadow:0 4px 14px rgba(17,24,39,.08)} .ds-card h3{margin:0 0 14px;font-size:13.5px;font-weight:800} .ds-card p{margin:0;font-size:12px;color:var(--muted)}"
+    },
+    {
+      "name": "Year Grid Cells",
+      "kind": "custom",
+      "refersTo": "shift-marker-b",
+      "description": "Frame vocabulary over the marker: plain, weekend, holiday, today, training, draft change.",
+      "html": "<div class=\"ds-yg\" dir=\"rtl\"><span class=\"ds-ys\" style=\"--mk:var(--mk-a)\">א</span><span class=\"ds-ys ds-we\" style=\"--mk:var(--mk-b)\">ב</span><span class=\"ds-ys ds-hl\" style=\"--mk:var(--mk-c)\">ג</span><span class=\"ds-ys ds-td\" style=\"--mk:var(--mk-a)\">א</span><span class=\"ds-ys ds-tr\" style=\"--mk:var(--mk-b)\">ב</span><span class=\"ds-ys ds-chg\" style=\"--mk:var(--mk-c)\">ג</span></div>",
+      "css": ".ds-yg{display:flex;gap:2px;padding:8px;background:var(--s1);border:1px solid var(--border);border-radius:var(--r-md)} .ds-ys{display:grid;place-items:center;width:24px;height:15px;background:var(--mk);color:var(--mk-ink);font-family:var(--font);font-size:11px;font-weight:700;cursor:pointer} .ds-ys:hover{outline:2px solid var(--olive);outline-offset:-2px} .ds-hl{box-shadow:inset 0 0 0 2px var(--hol)} .ds-td{box-shadow:inset 0 0 0 2px var(--text),inset 0 0 0 3px var(--s1)} .ds-tr{box-shadow:inset 0 0 0 2px var(--indigo)} .ds-chg{box-shadow:inset 0 -3px 0 var(--text)}"
+    },
+    {
+      "name": "Segmented Control",
+      "kind": "chip",
+      "refersTo": "segmented-option-on",
+      "description": "Equal options on a sheet; the active one is filled with the pen.",
+      "html": "<div class=\"ds-seg\" dir=\"rtl\"><button class=\"ds-seg-b ds-on\">יום</button><button class=\"ds-seg-b\">לילה</button><button class=\"ds-seg-b\">אוטומטי</button></div>",
+      "css": ".ds-seg{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:4px;border-radius:var(--r-md);background:var(--s1);border:1px solid var(--border)} .ds-seg-b{min-height:42px;border:0;border-radius:10px;background:none;font-family:var(--font);font-size:13px;font-weight:700;color:var(--muted);cursor:pointer;transition:background .15s,color .15s} .ds-seg-b:hover{color:var(--text)} .ds-seg-b:focus-visible{outline:2px solid var(--olive);outline-offset:2px} .ds-seg-b.ds-on{background:var(--olive);color:var(--on-acc)}"
+    },
+    {
+      "name": "Fairness Footnote",
+      "kind": "custom",
+      "refersTo": "",
+      "description": "Totals as a footnote line of tabular figures; only the bad value turns red.",
+      "html": "<p class=\"ds-foot\" dir=\"rtl\">סה״כ 2026: <span><span class=\"ds-w\" style=\"--mk:var(--mk-a);--stroke:var(--stroke-a)\">א׳</span><b>122</b></span><span><span class=\"ds-w\" style=\"--mk:var(--mk-b);--stroke:var(--stroke-b)\">ב׳</span><b>122</b></span><span class=\"ds-bad\">פער<b>2</b></span></p>",
+      "css": ".ds-foot{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 20px;margin:0;font-family:var(--font);font-size:13px;color:var(--muted)} .ds-foot b{font-size:17px;font-weight:800;color:var(--text);font-variant-numeric:tabular-nums;margin-inline-start:4px} .ds-foot .ds-bad b{color:var(--red)} .ds-w{position:relative;isolation:isolate;padding:0 .3em;font-weight:800;color:var(--mk-ink)} .ds-w::before{content:'';position:absolute;inset:-1px -3px 0;z-index:-1;background:var(--mk);-webkit-mask:var(--stroke) 0 0/100% 100% no-repeat;mask:var(--stroke) 0 0/100% 100% no-repeat}"
+    },
+    {
+      "name": "Toast with Undo",
+      "kind": "custom",
+      "refersTo": "toast",
+      "description": "Floating confirmation with a way back.",
+      "html": "<div class=\"ds-toast\" dir=\"rtl\"><span>המשמרת ב־12.3 שונתה ל־ב׳</span><button class=\"ds-toast-a\">ביטול</button></div>",
+      "css": ".ds-toast{display:inline-flex;align-items:center;gap:14px;padding:6px 6px 6px 18px;padding-inline:18px 6px;background:var(--s3);border:1px solid var(--border2);border-radius:var(--r-md);box-shadow:var(--shadow);font-family:var(--font);font-size:13px;font-weight:600;color:var(--text)} .ds-toast-a{min-height:36px;padding:0 14px;border-radius:var(--r-sm);font-family:inherit;font-weight:800;color:var(--olive-2);background:var(--olive-dim);border:1px solid var(--olive-border);cursor:pointer} .ds-toast-a:hover{background:rgba(var(--olive-rgb),.16)} .ds-toast-a:focus-visible{outline:2px solid var(--olive);outline-offset:2px}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Duty Roster on the Notice Board",
+    "overview": "The schedule is a printed roster: white sheets pinned to a cool light-gray wall, set in black ink, with a ballpoint-blue pen for anything the user acts on and a dark-ink rail at the inline start. The one loud material is the highlighter. Each of the three shifts owns one marker colour (א׳ yellow, ב׳ pink, ג׳ green), and every place a shift appears, from the large \"on duty now\" letter to each of the 365 cells in the year grid, the letter sits on an irregular, hand-swiped marker stroke. The data is the colour; the chrome stays paper and ink.\n\nDensity follows the printed original. The year view is a tight table of 10–11px tabular figures. The phone overview is spacious and answers \"whose shift is it\" before any reading. Calendar conventions come from a printed Hebrew calendar: holidays in red ink, weekends as a faint gray column band, today framed in black ink. Fairness numbers sit beside the roster as footnote lines, never as coloured alert tiles. The build rejects the dark command-center dashboard it replaced: no glows, background grids, radial spotlights or corner brackets.\n\nThe world ships in two themes. \"יום\" (board, default, light) is the canonical sheet. \"לילה\" (night) is the same board in light ink on dark sheets, and the highlighters stay.",
+    "keyCharacteristics": [
+      "Three fixed highlighter colours own the shifts, and the letter is always printed on the marker.",
+      "Paper-and-ink chrome: white sheets, hairline rules, small radii, one ballpoint-blue accent.",
+      "Calendar marks are drawn as ink frames and underlines on top of the marker, never as replacement fills.",
+      "RTL Hebrew throughout. One family (Heebo) carries every role, with tabular figures for every number.",
+      "Flat print: one barely-there sheet shadow, and real elevation only for floating layers."
+    ],
+    "rules": [
+      {
+        "name": "The Highlighter Monopoly Rule",
+        "body": "Yellow, pink and green belong to shifts א׳, ב׳ and ג׳ and to nothing else. Never use them for status, categories, charts or decoration. The only allowed reuse is the app mark and the rail's tick and pip, which are the roster's own pen.",
+        "section": "colors"
+      },
+      {
+        "name": "The Letter-On-Marker Rule",
+        "body": "A shift colour never appears without its letter printed on it in ink (#161b22). Colour is the fast read and the letter is the accessible one.",
+        "section": "colors"
+      },
+      {
+        "name": "The One Pen Rule",
+        "body": "Ballpoint blue is the only accent for action and selection. Status colours mark text and thin frames, never buttons or large fills.",
+        "section": "colors"
+      },
+      {
+        "name": "The Ten-Pixel Floor Rule",
+        "body": "No text is set below 10px. The year grid is the densest surface and stops there.",
+        "section": "typography"
+      },
+      {
+        "name": "The Tabular Everywhere Rule",
+        "body": "Every number (dates, counts, clock, KPIs, totals) uses tabular figures in Heebo, so columns of numbers line up like a printed table.",
+        "section": "typography"
+      },
+      {
+        "name": "The No-Glow Rule",
+        "body": "Nothing emits light. No outer glows, inner glows, text shadows, pulsing dots or radial spotlights. A state is shown by an ink frame, a tone change or the pen colour.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** put every shift letter on its own highlighter stroke (א׳ #ffe14a, ב׳ #ffb2d6, ג׳ #a6e3a0) in ink #161b22, at every scale from the hero to the year grid.",
+      "**Do** draw calendar state as ink frames and underlines over the marker: today 2px ink, holiday 2px red, training 2px violet, minor holiday ochre underline, draft change 3px ink underline.",
+      "**Do** keep chrome paper-and-ink: white sheets on wall gray, 1px hairlines, 5–11px radii, ballpoint blue as the single action colour.",
+      "**Do** write status in words and fairness as footnote lines with tabular figures, and turn only the offending number red.",
+      "**Do** separate content inside a sheet with hairline rows rather than boxes inside boxes.",
+      "**Do** keep holidays in red ink and weekends in the faint gray band, like a printed Hebrew calendar."
+    ],
+    "donts": [
+      "**Don't** use glow, pulsing, text-shadow, radial spotlights, background grids or corner brackets. That is the command-center dashboard this world replaced.",
+      "**Don't** use the highlighter colours for anything but the three shifts, and don't show a shift colour without its letter.",
+      "**Don't** fill a holiday or weekend cell with red or gray instead of its shift marker. The marker stays and the calendar mark goes on top.",
+      "**Don't** put coloured icon tiles in card heads or coloured status pills. Icons are plain ink line icons, and status is a word.",
+      "**Don't** set text below 10px.",
+      "**Don't** add decorative gradients. The only radial gradients in the system draw printed dots (the balance-day dot and the holiday legend dot)."
+    ]
+  }
+}

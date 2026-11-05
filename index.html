@@ -122,9 +122,7 @@ svg.ic{width:17px;height:17px;flex:none;fill:none;stroke:currentColor;stroke-wid
 .sb-cnt{margin-inline-start:auto;font-family:var(--mono);font-size:11px;font-weight:700;color:var(--muted);background:var(--s3);border-radius:8px;padding:1px 7px}
 .sb-foot{padding:12px 12px max(14px,env(safe-area-inset-bottom));border-top:1px solid var(--border)}
 .now-card{background:var(--s2);border:1px solid var(--border);border-radius:var(--r-md);padding:12px 14px}
-.eyebrow{display:flex;align-items:center;gap:7px;font-size:10.5px;font-weight:700;color:var(--dim);letter-spacing:.05em}
-.hero .eyebrow{color:var(--muted)}
-.live{width:7px;height:7px;border-radius:50%;background:var(--green);flex:none}
+.hero .live{width:7px;height:7px;border-radius:50%;background:var(--green);flex:none}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.45}}
 .now-v{font-size:19px;font-weight:800;margin-top:6px}
 .now-s{font-size:11px;color:var(--muted);margin-top:2px}
@@ -781,7 +779,7 @@ dialog.ovd>.ov{position:absolute}
   .md-top{flex-direction:column;align-items:flex-start;gap:3px}
   .md-n{font-size:11.5px}
   .md-sh{min-width:20px;height:19px;font-size:11px;border-radius:6px;padding:0 4px}
-  .md-hl,.md-tr{font-size:8.5px}
+  .md-hl,.md-tr{font-size:10px}
   .md-tr .ic{display:none}
   .ht-h,.ht-r{grid-template-columns:minmax(0,1fr) 31px 31px 31px 35px 18px;gap:5px;padding:8px 7px}
   .sc{min-width:29px}
@@ -797,7 +795,6 @@ dialog.ovd>.ov{position:absolute}
   .bento>.c-3{grid-column:1/-1}
 }
 /* בהיר — התאמות רכיבים */
-:root[data-tone="light"] .card{box-shadow:0 1px 2px rgba(28,34,24,.05)}
 :root[data-tone="light"] .ring b{text-shadow:none}
 :root[data-tone="light"] .sb-item.active::before,:root[data-tone="light"] .bn-it.active::before{box-shadow:none}
 .bn-it{font-size:11.5px}
@@ -860,11 +857,9 @@ input,textarea{caret-color:var(--olive)}
 .sb-cnt{background:var(--rail-2);color:var(--rail-tx);font-family:var(--font);font-variant-numeric:tabular-nums}
 .sb-foot{border-top-color:rgba(255,255,255,.1)}
 .now-card{background:var(--rail-2);border-color:transparent;color:var(--rail-tx)}
-.now-card .eyebrow{color:var(--rail-mut)}
-.now-card .now-s{color:var(--rail-mut)}
+.now-card .now-card .now-s{color:var(--rail-mut)}
 :root:not([data-tone="light"]) .sb{border-inline-end:1px solid var(--border)}
 :root:not([data-tone="light"]) .sb-foot{border-top-color:var(--border)}
-.eyebrow{font-size:12px;letter-spacing:0;font-weight:600}
 .live{box-shadow:none;animation:none}
 
 /* כותרת עליונה */
@@ -1073,7 +1068,7 @@ input,textarea{caret-color:var(--olive)}
 /* ניגודיות מוגברת לפי הגדרת המערכת: מסגרות ברורות יותר */
 @media(prefers-contrast:more){
   :root{--border:rgba(255,255,255,.22);--border2:rgba(255,255,255,.34)}
-  :root[data-tone="light"]{--border:rgba(28,34,24,.32);--border2:rgba(28,34,24,.46)}
+  :root[data-tone="light"]{--border:rgba(23,32,46,.32);--border2:rgba(23,32,46,.46)}
 }
 </style>
 <script>(function(){try{var t=localStorage.getItem('sidur-avoda-theme');if(!t||!/^(night|olive|navy|teal|sand)$/.test(t))return;var d=document.documentElement;d.setAttribute('data-theme','night');{d.removeAttribute('data-tone');var cs=document.querySelector('meta[name="color-scheme"]');if(cs)cs.setAttribute('content','dark')}var mc=document.querySelector('meta[name="theme-color"]');if(mc)mc.setAttribute('content',getComputedStyle(d).getPropertyValue('--bg').trim())}catch(e){}})()</script>
