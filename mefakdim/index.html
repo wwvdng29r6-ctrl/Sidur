@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="he" dir="rtl">
+<html lang="he" dir="rtl" data-tone="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#090b08">
-<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#e9ecef">
+<meta name="color-scheme" content="light">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -12,41 +12,66 @@
 <title>סידור מפקדים</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 /* ============================================================
    טוקנים — Tactical / Command Center
    ============================================================ */
+/* עולם: שבצ״ק על לוח המודעות — גיליון לבן על קיר אפור-קריר, דיו שחור, עט כחול לפעולות,
+   ומרקר בצבע קבוע לכל משמרת: א׳ צהוב · ב׳ ורוד · ג׳ ירוק (האות תמיד מודפסת עליו) */
 :root{
-  --bg:#090b08;--bg2:#0c0f0a;
-  --s1:#111410;--s2:#161a13;--s3:#1d2219;--s4:#262c20;
-  --bg-rgb:12,15,10;--s1-rgb:17,20,16;--ov-rgb:4,5,3;
-  --border:rgba(255,255,255,.06);--border2:rgba(255,255,255,.11);--grid:rgba(255,255,255,.022);--sbar:transparent;
-  --text:#e8ebdf;--muted:#a3aa94;--dim:#7d8673;
-  --olive:#8ba25a;--olive-2:#afc67e;--olive-rgb:139,162,90;--olive2-rgb:175,198,126;--on-acc:#10150a;
-  --green-rgb:65,207,128;--amber-rgb:227,154,50;--red-rgb:234,100,92;--gold-rgb:217,176,79;--steel-rgb:126,163,186;--indigo-rgb:161,150,228;
+  --bg:#e9ecef;--bg2:#e1e5e9;
+  --s1:#ffffff;--s2:#f7f8f9;--s3:#eef0f3;--s4:#e2e6ea;
+  --bg-rgb:233,236,239;--s1-rgb:255,255,255;--ov-rgb:17,24,39;
+  --border:rgba(23,32,46,.12);--border2:rgba(23,32,46,.2);--grid:transparent;--sbar:#172138;
+  --text:#161b22;--muted:#454e5a;--dim:#59626e;
+  --olive:#2543a8;--olive-2:#1e3a94;--olive-rgb:37,67,168;--olive2-rgb:30,58,148;--on-acc:#ffffff;
+  --green-rgb:21,115,62;--amber-rgb:166,72,0;--red-rgb:190,18,45;--gold-rgb:150,62,0;--steel-rgb:32,92,128;--indigo-rgb:94,62,190;
   --green:rgb(var(--green-rgb));--amber:rgb(var(--amber-rgb));--red:rgb(var(--red-rgb));--gold:rgb(var(--gold-rgb));--steel:rgb(var(--steel-rgb));--indigo:rgb(var(--indigo-rgb));
+  --olive-dim:rgba(var(--olive-rgb),.09);--olive-border:rgba(var(--olive-rgb),.3);
+  --green-dim:rgba(var(--green-rgb),.09);--green-border:rgba(var(--green-rgb),.3);
+  --amber-dim:rgba(var(--amber-rgb),.09);--amber-border:rgba(var(--amber-rgb),.32);
+  --red-dim:rgba(var(--red-rgb),.08);--red-border:rgba(var(--red-rgb),.32);
+  --we-rgb:var(--gold-rgb);
+  --gold-dim:rgba(var(--gold-rgb),.09);--gold-border:rgba(var(--gold-rgb),.3);
+  --steel-dim:rgba(var(--steel-rgb),.09);--steel-border:rgba(var(--steel-rgb),.3);
+  --indigo-dim:rgba(var(--indigo-rgb),.09);--indigo-border:rgba(var(--indigo-rgb),.3);
+  --r-xs:5px;--r-sm:7px;--r-md:9px;--r-lg:11px;
+  --font:'Heebo',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:'Heebo',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --shadow:0 12px 32px rgba(17,24,39,.16),0 2px 6px rgba(17,24,39,.08);
+  --sb-w:240px;
+  --ease-out:cubic-bezier(.23,1,.32,1);--ease-drawer:cubic-bezier(.32,.72,0,1);
+  /* חגים — דיו אדום כמו בלוח שנה מודפס. hol-tx: טקסט אדום על הגיליון */
+  --hol-rgb:200,16,46;--hol:rgb(var(--hol-rgb));--hol-ink:#ffffff;--hol-tx:#b0102a;
+  /* סופי שבוע — פס אפור עדין */
+  --wkd-rgb:23,32,46;--wkd-tx:#454e5a;--wkd-bg:rgba(23,32,46,.055);
+  /* מרקרים של המשמרות + דיו עליהם */
+  --mk-a:#ffe14a;--mk-b:#ffb2d6;--mk-c:#a6e3a0;--mk-ink:#161b22;
+  /* סרגל הניווט: לוח כתיבה בדיו כהה */
+  --rail:#172138;--rail-2:#202c47;--rail-tx:#eef1f6;--rail-mut:#aab4c6;--rail-acc:#ffe14a;
+  color-scheme:light;
+}
+:root[data-theme="olive"]{
+  --bg:#090b08;--bg2:#0c0f0a;--s1:#111410;--s2:#161a13;--s3:#1d2219;--s4:#262c20;--bg-rgb:12,15,10;--s1-rgb:17,20,16;--ov-rgb:4,5,3;
+  --text:#e8ebdf;--muted:#a3aa94;--dim:#8a927f;
+  --olive:#8ba25a;--olive-2:#afc67e;--olive-rgb:139,162,90;--olive2-rgb:175,198,126;--on-acc:#10150a;
+  --green-rgb:65,207,128;--amber-rgb:227,154,50;--red-rgb:234,100,92;--gold-rgb:217,176,79;--steel-rgb:126,163,186;--indigo-rgb:161,150,228}
+/* ערכות כהות — משותף */
+:root:not([data-tone="light"]){
+  --border:rgba(255,255,255,.08);--border2:rgba(255,255,255,.14);--sbar:transparent;--shadow:0 18px 44px rgba(0,0,0,.5);
   --olive-dim:rgba(var(--olive-rgb),.14);--olive-border:rgba(var(--olive-rgb),.36);
   --green-dim:rgba(var(--green-rgb),.13);--green-border:rgba(var(--green-rgb),.32);
   --amber-dim:rgba(var(--amber-rgb),.14);--amber-border:rgba(var(--amber-rgb),.36);
   --red-dim:rgba(var(--red-rgb),.14);--red-border:rgba(var(--red-rgb),.36);
-  --we-rgb:var(--gold-rgb);
-  --gold-dim:rgba(var(--we-rgb),.15);--gold-border:rgba(var(--we-rgb),.38);
+  --gold-dim:rgba(var(--gold-rgb),.15);--gold-border:rgba(var(--gold-rgb),.38);
   --steel-dim:rgba(var(--steel-rgb),.13);--steel-border:rgba(var(--steel-rgb),.34);
   --indigo-dim:rgba(var(--indigo-rgb),.15);--indigo-border:rgba(var(--indigo-rgb),.38);
-  --r-xs:8px;--r-sm:11px;--r-md:14px;--r-lg:18px;
-  --font:'Heebo',system-ui,-apple-system,'Segoe UI',sans-serif;
-  --mono:'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,monospace;
-  --shadow:0 18px 44px rgba(0,0,0,.5);
-  --sb-w:240px;
-  /* עקומות תנועה: ease-out חזק לממשק, ועקומת גיליון בסגנון iOS */
-  --ease-out:cubic-bezier(.23,1,.32,1);--ease-drawer:cubic-bezier(.32,.72,0,1);
-  /* חגים — צהוב בולט, שונה מגוון סופי השבוע. hol-ink: טקסט על צהוב מלא · hol-tx: טקסט צהוב על רקע הכרטיס */
-  --hol-rgb:250,204,21;--hol:rgb(var(--hol-rgb));--hol-ink:#1a1500;--hol-tx:#fde047;
-  /* סופי שבוע (שישי ושבת) — כתום. wkd-tx: טקסט כתום על הרקע */
-  --wkd-rgb:249,115,22;--wkd-tx:#fdba74;
-  color-scheme:dark;
-}
+  --hol-rgb:248,113,113;--hol-ink:#1a0505;--hol-tx:#fca5a5;
+  --wkd-rgb:255,255,255;--wkd-tx:var(--muted);--wkd-bg:rgba(255,255,255,.05);
+  --mk-a:#f5d33d;--mk-b:#f5a3c9;--mk-c:#94d68e;
+  --rail:var(--s1);--rail-2:var(--s3);--rail-tx:var(--text);--rail-mut:var(--muted);--rail-acc:var(--olive-2);
+  color-scheme:dark}
 /* ערכות צבעים — כל הצירופים עברו בדיקת ניגודיות (WCAG AA, לפחות 4.5:1 לטקסט)
    ובדיקת הבחנה בין צבעי המשמעות (חג/אזהרה/שינוי/אימון/מבטא) */
 :root[data-theme="navy"]{--bg:#070a10;--bg2:#0a0e16;--s1:#0e131c;--s2:#121925;--s3:#18212f;--s4:#202b3c;--bg-rgb:10,14,22;--s1-rgb:14,19,28;--ov-rgb:2,4,8;
@@ -65,8 +90,7 @@
 :root[data-theme="day"]{--bg:#eef1f5;--bg2:#e5e9ef;--s1:#ffffff;--s2:#f7f9fb;--s3:#e9edf2;--s4:#dde3ea;--bg-rgb:238,241,245;--s1-rgb:255,255,255;--ov-rgb:16,22,32;
   --text:#16202c;--muted:#46515f;--dim:#58636f;--olive:#1f5fbf;--olive-2:#1b52a6;--olive-rgb:31,95,191;--olive2-rgb:27,82,166;--on-acc:#ffffff;
   --gold-rgb:112,75,0;--amber-rgb:147,60,0;--red-rgb:180,42,37;--green-rgb:20,106,59;--steel-rgb:29,91,107;--indigo-rgb:91,69,194;--we-rgb:232,176,36;--sbar:#18212e}
-:root[data-tone="light"]{--border:rgba(28,34,24,.10);--border2:rgba(28,34,24,.17);--grid:rgba(28,34,24,.045);--shadow:0 16px 40px rgba(28,34,24,.18);color-scheme:light;
-  --hol-rgb:250,204,21;--hol-ink:#241c00;--hol-tx:#5c4600;--wkd-tx:#9a3412}
+:root[data-theme="paper"],:root[data-theme="day"]{--border:rgba(28,34,24,.12);--border2:rgba(28,34,24,.2);--shadow:0 12px 32px rgba(28,34,24,.16),0 2px 6px rgba(28,34,24,.08);color-scheme:light}
 *,*::before,*::after{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%;text-size-adjust:100%;-webkit-tap-highlight-color:transparent;overscroll-behavior-y:none}
 body{
@@ -802,6 +826,7 @@ dialog.ovd>.ov{position:absolute}
 :root[data-tone="light"] .card{box-shadow:0 1px 2px rgba(28,34,24,.05)}
 :root[data-tone="light"] .ring b{text-shadow:none}
 :root[data-tone="light"] .sb-item.active::before,:root[data-tone="light"] .bn-it.active::before{box-shadow:none}
+.bn-it{font-size:11.5px}
 :root[data-tone="light"] .ov::before{background:rgba(var(--ov-rgb),.42)}
 .sbar{display:none}
 :root[data-tone="light"] .sbar{display:block;position:fixed;top:0;left:0;right:0;height:env(safe-area-inset-top);background:var(--sbar);z-index:1000;pointer-events:none}
@@ -953,6 +978,174 @@ p.onb-err{color:var(--red);font-weight:700;font-size:12.5px;margin:10px 0 0}
   .sd-act .btn{flex:1 1 100%}
 }
 
+/* ============================================================
+   עולם: שבצ״ק על לוח המודעות
+   גיליונות לבנים על קיר, דיו, עט כחול, ומרקר קבוע לכל משמרת.
+   בלי זוהר, בלי רשת רקע ובלי הדגשות רדיאליות — הנתונים הם הצבע.
+   ============================================================ */
+body{background-image:none}
+body::before{content:none}
+::selection{background:var(--mk-a);color:var(--mk-ink)}
+:focus-visible{outline:2px solid var(--olive);outline-offset:2px}
+::-webkit-scrollbar-thumb{background:rgba(var(--wkd-rgb),.28)}
+input,textarea{caret-color:var(--olive)}
+/* מרקר — תנועת מכחול לא סימטרית מאחורי האות. בכל מקום שמופיעה משמרת */
+.sh-a{--mk:var(--mk-a)}.sh-b{--mk:var(--mk-b)}.sh-c{--mk:var(--mk-c)}
+.wk-sh.sh-a,.wk-sh.sh-b,.wk-sh.sh-c,.md-sh.sh-a,.md-sh.sh-b,.md-sh.sh-c,.hd-av.sh-a,.hd-av.sh-b,.hd-av.sh-c{
+  background:var(--mk);border-color:transparent;color:var(--mk-ink);
+  border-radius:3px 9px 4px 10px / 8px 3px 9px 3px}
+
+/* קרטיסים = גיליונות מודפסים */
+.card{background:var(--s1);border-color:var(--border);box-shadow:0 1px 2px rgba(17,24,39,.06)}
+.card::before{content:none}
+:root:not([data-tone="light"]) .card{box-shadow:none}
+@media(hover:hover) and (pointer:fine){.click:hover{transform:none;border-color:var(--border2);box-shadow:0 4px 14px rgba(17,24,39,.08)}}
+.ibox{border-radius:var(--r-sm)}
+
+/* סרגל הניווט — לוח כתיבה בדיו כהה */
+.sb{background:var(--rail);border-inline-end:0;color:var(--rail-tx)}
+.sb-brand b{color:var(--rail-tx)}
+.sb-brand span{font-size:11.5px;color:var(--rail-mut)}
+.sb-mark{background:var(--mk-a);border:0;box-shadow:none;color:var(--mk-ink);border-radius:4px 11px 5px 12px / 10px 4px 11px 4px}
+.sb-sect{font-size:11.5px;letter-spacing:0;color:var(--rail-mut);font-weight:600}
+.sb-item{color:var(--rail-mut);font-size:14px}
+.sb-item .ic{color:var(--rail-mut)}
+@media(hover:hover) and (pointer:fine){.sb-item:hover{background:var(--rail-2);color:var(--rail-tx)}}
+.sb-item.active{background:var(--rail-2);color:var(--rail-tx);box-shadow:none}
+.sb-item.active .ic{color:var(--rail-acc)}
+.sb-item.active::before{background:var(--rail-acc);box-shadow:none;inset-inline-start:-12px;width:4px}
+.sb-pip{box-shadow:none;background:var(--mk-b)}
+.sb-cnt{background:var(--rail-2);color:var(--rail-tx);font-family:var(--font);font-variant-numeric:tabular-nums}
+.sb-foot{border-top-color:rgba(255,255,255,.1)}
+.now-card{background:var(--rail-2);border-color:transparent;color:var(--rail-tx)}
+.now-card .eyebrow{color:var(--rail-mut)}
+.now-card .now-s{color:var(--rail-mut)}
+:root:not([data-tone="light"]) .sb{border-inline-end:1px solid var(--border)}
+:root:not([data-tone="light"]) .sb-foot{border-top-color:var(--border)}
+.eyebrow{font-size:12px;letter-spacing:0;font-weight:600}
+.live{box-shadow:none;animation:none}
+
+/* כותרת עליונה */
+.hd{background:rgba(var(--s1-rgb),.92);border-bottom-color:var(--border)}
+.hd-sub,.hd-clock span,.hd-pn span{font-size:11.5px}
+.hd-btn{background:var(--s1);border-color:var(--border2)}
+.hd-clock b{font-family:var(--font);font-variant-numeric:tabular-nums;letter-spacing:0}
+.hd-av{background:var(--s3);border:0}
+
+/* כותרת "עכשיו": האות במרקר במקום הטבעת הזוהרת */
+.hero{background:var(--s1);border-color:var(--border)}
+:root[data-tone="light"] .hero{background:var(--s1)}
+.brk{display:none}
+.ring{border-radius:6px 22px 8px 24px / 20px 7px 22px 8px;background:var(--mk,var(--s3));border:0;box-shadow:none}
+.ring::before{content:none}
+.ring b{color:var(--mk-ink);text-shadow:none}
+.ring:not(.sh-a):not(.sh-b):not(.sh-c) b{color:var(--dim)}
+.hero-h{letter-spacing:-.015em}
+.tag{border-radius:var(--r-sm);font-size:12px}
+.tag.hol{background:var(--red-dim);border-color:var(--red-border);color:var(--hol-tx)}
+
+/* מספרים טבלאיים בכל מקום שהיה מונו */
+.num,.kpi-v,.tile b,.dist-v,.wk-n,.md-n,.ev-b b,.gt b,.ym .tt,.sh-mail,.onb-in,.onb-code,.sd-num .inp{font-family:var(--font);font-variant-numeric:tabular-nums}
+.kpi-l,.tile span{font-size:12px;color:var(--muted)}
+.kpi-f{font-size:12px}
+.trk i{background:var(--olive)}
+
+/* כפתורים */
+.btn-ok{box-shadow:none}
+@media(hover:hover) and (pointer:fine){.btn-ok:hover{background:var(--olive-2)}}
+.btn-gh{background:var(--s1);border-color:var(--border2)}
+@media(hover:hover) and (pointer:fine){.btn-gh:hover{background:var(--s3);border-color:var(--border2)}}
+.armed{box-shadow:none}
+.badge{border-radius:var(--r-sm);font-size:12px}
+.ph p,.ch .meta,.cp{font-size:12.5px}
+
+/* שבוע */
+.wk-d{background:var(--s1)}
+.wk-d.we{background:var(--wkd-bg)}
+.wk-d.we .wk-dn{color:var(--muted)}
+.wk-d.today{border-color:var(--text);box-shadow:inset 0 0 0 1px var(--text)}
+.wk-d.hol{background:var(--s1);border-color:var(--red-border)}
+.wk-d.hol.today{border-color:var(--text)}
+.wk-d.hol .wk-sh{background:var(--mk,var(--s3));border-color:transparent;color:var(--mk-ink)}
+.wk-d.hol .wk-n,.wk-d.hol .wk-lb,.wk-d.hol .wk-dn{color:var(--hol-tx)}
+.wk-dn{font-size:12px;color:var(--muted)}
+.wk-lb{font-size:11px;color:var(--hol-tx)}
+@media(hover:hover) and (pointer:fine){.wk-d:hover{transform:none;border-color:var(--border2)}}
+
+/* חגים */
+.ev-b{background:var(--red-dim);border-color:var(--red-border);color:var(--hol-tx)}
+.ev-b.hol{background:var(--red-dim);border-color:var(--red-border);color:var(--hol-tx)}
+.ev-b span{font-size:11px}
+.ev-t span,.ev-r span{font-size:12px}
+.dist-sub{font-size:12px}
+
+/* לוח חודשי */
+.mday{background:var(--s1);border-radius:var(--r-sm)}
+.mday.we{background:var(--wkd-bg)}
+.mday.we .md-n{color:var(--muted)}
+.mday.hol{background:var(--s1);box-shadow:inset 0 0 0 1px var(--red-border)}
+.mday.we.hol{background:var(--wkd-bg)}
+.mday.hol .md-sh{background:var(--mk,var(--s3));border-color:transparent;color:var(--mk-ink)}
+.mday.hol .md-n,.mday.hol .md-hl{color:var(--hol-tx)}
+.mday.holm{box-shadow:none}
+.mday.holm .md-hl{color:var(--gold)}
+.mday.today,.mday.today.hol{border-color:var(--text);box-shadow:inset 0 0 0 1px var(--text)}
+.mday.today .md-n{color:var(--text);font-weight:800}
+.mday.out{opacity:.4}
+.md-n{color:var(--text);font-weight:600}
+.md-sh{font-size:13px}
+.md-hl{font-size:11px;color:var(--hol-tx)}
+.md-tr{font-size:11px}
+.mdow,.legend{font-size:12px}
+.mdow.we{color:var(--muted)}
+
+/* מטריצה שנתית + טיוטה: שבצ״ק — כל תא משמרת צבוע במרקר שלה */
+.mx{background:var(--s1)}
+.ym th,.ym td{border-color:var(--border)}
+.ym thead th{background:var(--s3);color:var(--muted);font-size:10px}
+.ym thead th.we,.ym .yd.we,.ym .em.we,.ym .yh.we{background:var(--wkd-bg);color:var(--muted)}
+.ym .mn{font-size:11.5px}
+.ym .rl{font-size:10px;color:var(--muted)}
+.ym .yd{font-size:10px;color:var(--muted)}
+.ym .yd.hl{background:transparent;color:var(--hol-tx);font-weight:800}
+:root[data-tone="light"] .ym .yd.hl,:root[data-tone="light"] .ym .yh.hl{background:transparent}
+.ym .ys{font-size:11px;color:var(--mk-ink);font-weight:700}
+.ym .ys.sh-a,.ym .ys.sh-b,.ym .ys.sh-c{background:var(--mk)}
+.ym .ys.we{color:var(--mk-ink);font-weight:700;background:var(--mk,var(--wkd-bg))}
+.ym .ys.hl,.ym .ys.hlm{background:var(--mk,var(--s3));color:var(--mk-ink)}
+.ym .ys.hl{box-shadow:inset 0 0 0 2px var(--hol)}
+.ym .ys.hlm{box-shadow:inset 0 -2px 0 var(--gold)}
+.ym .ys.tr{box-shadow:inset 0 0 0 2px var(--indigo)}
+.ym .ys.td{box-shadow:inset 0 0 0 2px var(--text),inset 0 0 0 3px var(--s1)}
+.ym .yh{font-size:9.5px;color:var(--hol-tx)}
+.ym .yh.sm{font-size:9px}
+.ym .yh.xs{font-size:8.5px;letter-spacing:0}
+.ym .yh.hl{background:transparent;color:var(--hol-tx)}
+.ym .yh.trl{color:var(--indigo)}
+.ym .dc.chg{box-shadow:inset 0 -3px 0 var(--text)}
+.ym .dc.hl.chg{box-shadow:inset 0 0 0 2px var(--hol),inset 0 -4px 0 var(--text)}
+.ym .dc.gap{background:var(--s1);box-shadow:inset 0 0 0 1.5px var(--red);color:var(--red)}
+.ym .ys.bal{background-image:radial-gradient(circle,var(--mk-ink) 0 2px,transparent 2.6px)}
+.ym .ys.hl.bal{background-image:radial-gradient(circle,var(--mk-ink) 0 2px,transparent 2.6px)}
+@media(hover:hover) and (pointer:fine){.ym .dc:hover,.ym .ys[data-day]:hover{outline:2px solid var(--olive);outline-offset:-2px}}
+.legend i.lg-bal{background:var(--s3) radial-gradient(circle,var(--mk-ink) 0 2.5px,transparent 3px) no-repeat center}
+.legend i.lg-a{background:var(--mk-a)}.legend i.lg-b{background:var(--mk-b)}.legend i.lg-c{background:var(--mk-c)}
+.gt{background:var(--s2)}
+.hint{font-size:12px;color:var(--muted)}
+
+/* חלונות */
+.tile{background:var(--s1)}
+.tile span{color:var(--muted)}
+.empty{background:var(--s2)}
+
+/* סרגל תחתון בטלפון */
+.bn{background:rgba(var(--s1-rgb),.96)}
+.bn-it.active::before{box-shadow:none}
+
+/* ערכות כהות — המרקרים נשארים, הגיליונות כהים */
+:root:not([data-tone="light"]) .ym .ys.td{box-shadow:inset 0 0 0 2px var(--text),inset 0 0 0 3px var(--s1)}
+:root:not([data-tone="light"]) .hd{background:rgba(var(--bg-rgb),.86)}
+:root:not([data-tone="light"]) .bn{background:rgba(var(--bg-rgb),.94)}
 /* תנועה מופחתת — פחות ועדין יותר, לא אפס: בלי החלקות, הגדלות ותנועה מחזורית; נשארים מעברי שקיפות קצרים */
 @media(prefers-reduced-motion:reduce){
   .view.active{animation:none}
@@ -978,7 +1171,7 @@ p.onb-err{color:var(--red);font-weight:700;font-size:12.5px;margin:10px 0 0}
   :root[data-tone="light"]{--border:rgba(28,34,24,.32);--border2:rgba(28,34,24,.46)}
 }
 </style>
-<script>(function(){try{var t=localStorage.getItem('sidur-avoda-theme');if(!t||!/^(navy|teal|sand|paper|day)$/.test(t))return;var d=document.documentElement;d.setAttribute('data-theme',t);if(t==='paper'||t==='day'){d.setAttribute('data-tone','light');var cs=document.querySelector('meta[name="color-scheme"]');if(cs)cs.setAttribute('content','light')}var mc=document.querySelector('meta[name="theme-color"]');if(mc)mc.setAttribute('content',getComputedStyle(d).getPropertyValue('--bg').trim())}catch(e){}})()</script>
+<script>(function(){try{var t=localStorage.getItem('sidur-avoda-theme');if(!t||!/^(olive|navy|teal|sand|paper|day)$/.test(t))return;var d=document.documentElement;d.setAttribute('data-theme',t);if(t!=='paper'&&t!=='day'){d.removeAttribute('data-tone');var cs=document.querySelector('meta[name="color-scheme"]');if(cs)cs.setAttribute('content','dark')}var mc=document.querySelector('meta[name="theme-color"]');if(mc)mc.setAttribute('content',getComputedStyle(d).getPropertyValue('--bg').trim())}catch(e){}})()</script>
 </head>
 <body>
 <div class="sbar" aria-hidden="true"></div>
@@ -1148,14 +1341,15 @@ p.onb-err{color:var(--red);font-weight:700;font-size:12.5px;margin:10px 0 0}
     </div>
     <div class="ov-b">
       <div id="msetBody"></div>
-      <div class="th-box" style="margin-top:14px"><b class="th-t">ערכת צבעים</b><span class="th-g">כהות</span><div class="th-grid">
+      <div class="th-box" style="margin-top:14px"><b class="th-t">ערכת צבעים</b><span class="th-g">בהירות</span><div class="th-grid">
+        <button class="th-opt" data-theme-set="board"><span class="th-sw" style="background:linear-gradient(90deg,#ffe14a 0 34%,#ffb2d6 34% 67%,#a6e3a0 67%)"></span><span>לוח מודעות</span></button>
+        <button class="th-opt" data-theme-set="paper"><span class="th-sw" style="background:linear-gradient(90deg,#f6f5ef 0 34%,#566f24 34% 67%,#cea030 67%)"></span><span>נייר מפה</span></button>
+        <button class="th-opt" data-theme-set="day"><span class="th-sw" style="background:linear-gradient(90deg,#f7f9fb 0 34%,#1f5fbf 34% 67%,#e8b024 67%)"></span><span>יום בהיר</span></button>
+      </div><span class="th-g">כהות (ללילה)</span><div class="th-grid">
         <button class="th-opt" data-theme-set="olive"><span class="th-sw" style="background:linear-gradient(90deg,#161a13 0 34%,#8ba25a 34% 67%,#d9b04f 67%)"></span><span>זית טקטי</span></button>
         <button class="th-opt" data-theme-set="navy"><span class="th-sw" style="background:linear-gradient(90deg,#121925 0 34%,#4f8fd6 34% 67%,#e2be5a 67%)"></span><span>כחול פיקוד</span></button>
         <button class="th-opt" data-theme-set="teal"><span class="th-sw" style="background:linear-gradient(90deg,#15191d 0 34%,#2fb5a4 34% 67%,#e39d62 67%)"></span><span>גרפיט וטורקיז</span></button>
         <button class="th-opt" data-theme-set="sand"><span class="th-sw" style="background:linear-gradient(90deg,#1c1812 0 34%,#c9a86a 34% 67%,#aeb768 67%)"></span><span>חול מדבר</span></button>
-      </div><span class="th-g">בהירות</span><div class="th-grid">
-        <button class="th-opt" data-theme-set="paper"><span class="th-sw" style="background:linear-gradient(90deg,#f6f5ef 0 34%,#566f24 34% 67%,#cea030 67%)"></span><span>נייר מפה</span></button>
-        <button class="th-opt" data-theme-set="day"><span class="th-sw" style="background:linear-gradient(90deg,#f7f9fb 0 34%,#1f5fbf 34% 67%,#e8b024 67%)"></span><span>יום בהיר</span></button>
       </div><span class="th-n">ההחלפה מיידית ונשמרת במכשיר זה. קבצי הייצוא נשארים בהירים להדפסה.</span></div>
       <p class="fn">הסידור מגיע מהמנהל ומתעדכן לבד. הפתקים, המשמרת וקוד ההצטרפות נשמרים בטלפון, ועותק מוצפן שלהם נשמר בענן — רק עם קוד השחזור שלך אפשר לפתוח אותו.</p>
     </div>
@@ -1215,6 +1409,8 @@ const fmtDM=d=>d.getDate()+'.'+(d.getMonth()+1);
 const fmtFull=d=>d.getDate()+'.'+(d.getMonth()+1)+'.'+d.getFullYear();
 const dayName=d=>'יום '+DOW_FULL[d.getDay()];
 const sh1=nm=>nm?String(nm).replace('׳',''):'';
+// מרקר המשמרת: מחלקה קבועה לכל משמרת (צבע + האות עליו)
+const shk=nm=>({'א׳':' sh-a','ב׳':' sh-b','ג׳':' sh-c'})[nm]||'';
 const ico=id=>'<svg class="ic" aria-hidden="true"><use href="#'+id+'"/></svg>';
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const clampY=y=>Math.min(MAX_YEAR,Math.max(MIN_YEAR,y));
@@ -2232,7 +2428,7 @@ function renderChrome(){
   $$('.tyl').forEach(e=>{e.textContent=TARGET_YEAR});
   const ht=$('#hdTitle');if(ht&&VIEWS[curView])ht.textContent=VIEWS[curView].title;
   const jd=$('#jumpDate');if(jd){jd.min=MIN_YEAR+'-01-01';jd.max=MAX_YEAR+'-12-31'}
-  const av=$('#hdAv');if(av)av.textContent=my;
+  const av=$('#hdAv');if(av){av.textContent=my;av.className='hd-av'+shk(my)}
   const ps=$('#hdPs');if(ps)ps.textContent='משמרת '+my;
 }
 function tick(){
@@ -2316,7 +2512,7 @@ function renderOverview(){
   const wk0=addDays(TODAY,-TODAY.getDay());
   let h='<div class="bento">';
   h+=`<div class="card hero c-6"><span class="brk a"></span><span class="brk b"></span>
-    <div class="ring"><b>${sh1(now)||'—'}</b></div>
+    <div class="ring${shk(now)}"><b>${sh1(now)||'—'}</b></div>
     <div class="hero-i"><div class="eyebrow"><span class="live"></span>במשמרת עכשיו</div>
       <div class="hero-h">${now?'משמרת '+now:'ללא שיבוץ'}</div>
       <div class="hero-m">${dayName(TODAY)} · ${fmtFull(TODAY)}</div>
@@ -2333,7 +2529,7 @@ function renderOverview(){
   h+=`<div class="card c-12"><div class="ch"><span class="ibox olive">${ico('i-cal')}</span><h3>השבוע</h3><span class="meta num">${fmtDM(wk0)}–${fmtDM(addDays(wk0,6))}</span><div class="end"><button class="link" data-nav="month">ללוח החודשי${ico('i-chevl')}</button></div></div><div class="wk">`;
   for(let i=0;i<7;i++){
     const d=addDays(wk0,i),k=isoOf(d),nm=dutyFor(d),hl=HOL_MAP[holKey(d)],t=d.getTime()===TODAY.getTime(),tr=trainingsOn(k).length;
-    h+=`<button class="wk-d${i>=5?' we':''}${isHolDay(hl)?' hol':''}${t?' today':''}" data-day="${k}" aria-label="${dayName(d)} ${fmtDM(d)}, משמרת ${nm||'ללא'}${hl?', '+esc(holDayName(hl)):''}"><span class="wk-dn"><span class="f">${DOW_FULL[i]}</span><span class="s">${DOW_S[i]}</span></span><span class="wk-n">${d.getDate()}</span><span class="wk-sh">${sh1(nm)||'—'}</span>${hl?`<span class="wk-lb">${esc(holDayName(hl))}</span>`:''}${tr?'<i class="wk-tr"></i>':''}</button>`;
+    h+=`<button class="wk-d${i>=5?' we':''}${isHolDay(hl)?' hol':''}${t?' today':''}" data-day="${k}" aria-label="${dayName(d)} ${fmtDM(d)}, משמרת ${nm||'ללא'}${hl?', '+esc(holDayName(hl)):''}"><span class="wk-dn"><span class="f">${DOW_FULL[i]}</span><span class="s">${DOW_S[i]}</span></span><span class="wk-n">${d.getDate()}</span><span class="wk-sh${shk(nm)}">${sh1(nm)||'—'}</span>${hl?`<span class="wk-lb">${esc(holDayName(hl))}</span>`:''}${tr?'<i class="wk-tr"></i>':''}</button>`;
   }
   h+='</div></div>';
   h+=`<div class="card c-6"><div class="ch"><span class="ibox gold">${ico('i-flag')}</span><h3>חגים ומועדים קרובים</h3></div>`;
@@ -2365,14 +2561,14 @@ function renderMonth(){
     const nm=dutyFor(d),hl=HOL_MAP[holKey(d)],trs=trainingsOn(k),t=d.getTime()===TODAY.getTime();
     if(!out&&nm&&nm in cnt)cnt[nm]++;
     let c='mday';if(out)c+=' out';if(we)c+=' we';if(hl)c+=isHolDay(hl)?' hol':' holm';if(t)c+=' today';
-    g+=`<button class="${c}" data-day="${k}" aria-label="${dayName(d)} ${fmtFull(d)}, משמרת ${nm||'ללא'}${hl?', '+esc(holDayName(hl)):''}"><span class="md-top"><span class="md-n">${d.getDate()}</span>${nm?`<span class="md-sh">${sh1(nm)}</span>`:''}</span>${hl?`<span class="md-hl${hl.first||hl.lst?'':' cont'}">${esc(holDayName(hl))}</span>`:''}${trs.length?`<span class="md-tr">${ico('i-target')}${esc(trShort(trs[0]))}${trs.length>1?' +'+(trs.length-1):''}</span>`:''}</button>`;
+    g+=`<button class="${c}" data-day="${k}" aria-label="${dayName(d)} ${fmtFull(d)}, משמרת ${nm||'ללא'}${hl?', '+esc(holDayName(hl)):''}"><span class="md-top"><span class="md-n">${d.getDate()}</span>${nm?`<span class="md-sh${shk(nm)}">${sh1(nm)}</span>`:''}</span>${hl?`<span class="md-hl${hl.first||hl.lst?'':' cont'}">${esc(holDayName(hl))}</span>`:''}${trs.length?`<span class="md-tr">${ico('i-target')}${esc(trShort(trs[0]))}${trs.length>1?' +'+(trs.length-1):''}</span>`:''}</button>`;
   }
   const draft=memHasYear(calY)?'':`סידור ${calY} עוד לא פורסם`;
   v.innerHTML=`<div class="ph"><div><h1>${MONTHS[calM]} ${calY}</h1>${draft?`<p class="warn">${draft}</p>`:''}</div>
     <div class="nav-grp"><button class="nb" data-mnav="-1" ${atMin?'disabled':''} aria-label="החודש הקודם">${ico('i-chevr')}</button><button class="btn btn-gh btn-sm" data-mnav="0">היום</button><button class="nb" data-mnav="1" ${atMax?'disabled':''} aria-label="החודש הבא">${ico('i-chevl')}</button></div></div>
     <div class="card mcard"><div class="mgrid">${g}</div>
     <div class="msum">${SHIFT_NAMES.map(n=>`<span class="tag">משמרת ${n} <b class="num">${cnt[n]}</b></span>`).join('')}</div>
-    <div class="legend"><span><i style="background:rgba(var(--wkd-rgb),.5)"></i>סוף שבוע</span><span><i style="background:var(--hol);border-color:var(--hol)"></i>חג ומועד</span><span><i style="background:var(--indigo)"></i>אימון</span><span><i style="background:var(--olive-dim);border-color:var(--olive)"></i>היום</span></div></div>`;
+    <div class="legend"><span><i class="lg-a"></i>א׳</span><span><i class="lg-b"></i>ב׳</span><span><i class="lg-c"></i>ג׳</span><span><i style="background:var(--wkd-bg)"></i>סוף שבוע</span><span><i style="border:2px solid var(--hol)"></i>חג ומועד</span><span><i style="background:var(--indigo)"></i>אימון</span><span><i style="background:var(--olive-dim);border-color:var(--olive)"></i>היום</span></div></div>`;
 }
 
 /* ============================================================
@@ -2403,7 +2599,7 @@ function renderYear(){
       const hd=isHolDay(hl);
       r1+=`<td class="yd${wc?' we':''}${hd?' hl':''}">${d}</td>`;
       const bl=balM.get(k);
-      let c2='ys';if(hd)c2+=' hl';else if(hl)c2+=' hlm';else if(wc)c2+=' we';if(trs.length)c2+=' tr';if(k===todayK)c2+=' td';if(bl)c2+=' bal';
+      let c2='ys'+shk(nm);if(hd)c2+=' hl';else if(hl)c2+=' hlm';else if(wc)c2+=' we';if(trs.length)c2+=' tr';if(k===todayK)c2+=' td';if(bl)c2+=' bal';
       r2+=`<td class="${c2}" data-day="${k}" title="${fmtDM(dt)} · משמרת ${nm||'—'}${hl?' · '+esc(holDayName(hl))+(hl.com?' ('+COM_NAME[hl.com]+')':''):''}${bl?' · יום איזון':''}${trs.length?' · '+esc(trs.map(trLabel).join(', ')):''}">${sh1(nm)}</td>`;
       let lbl='',lc='',full='';
       if(hl&&(hl.first||(d===1&&hd))){lbl=holGridLabel(hl,dt);const hn=holDayName(hl);full=(lbl!==hn?lbl:hn)+(hl.com?' ('+COM_NAME[hl.com]+')':'')}else if(trs.length){lbl=trShort(trs[0]);lc=' trl';full=trs.map(trLabel).join(' · ')}
@@ -2423,7 +2619,7 @@ function renderYear(){
   v.innerHTML=`<div class="ph"><div><h1>שנת ${y}</h1></div><div class="nav-grp">${badge}<button class="btn btn-gh btn-sm" data-act="export-year">${ico('i-download')}ייצוא</button><button class="nb" data-ynav="-1" ${y<=MIN_YEAR?'disabled':''} aria-label="השנה הקודמת">${ico('i-chevr')}</button><button class="nb" data-ynav="1" ${y>=MAX_YEAR?'disabled':''} aria-label="השנה הבאה">${ico('i-chevl')}</button></div></div>
     <div class="hint">${ico('i-chevr')}<span>החלק לצדדים לכל ימי החודש</span>${ico('i-chevl')}</div>
     <div class="mx"><table class="ym"><thead>${tableHead(cols)}</thead><tbody>${body}</tbody></table></div>
-    <div class="legend"><span><i style="background:rgba(var(--wkd-rgb),.5)"></i>סוף שבוע</span><span><i style="background:var(--hol);border-color:var(--hol)"></i>חג ומועד</span>${balM.size?'<span><i class="lg-bal"></i>יום איזון</span>':''}<span><i style="border-color:var(--indigo)"></i>אימון</span><span><i style="border-color:var(--olive);border-width:2px"></i>היום</span></div>
+    <div class="legend"><span><i class="lg-a"></i>א׳</span><span><i class="lg-b"></i>ב׳</span><span><i class="lg-c"></i>ג׳</span><span><i style="background:var(--wkd-bg)"></i>סוף שבוע</span><span><i style="border:2px solid var(--hol)"></i>חג ומועד</span>${balM.size?'<span><i class="lg-bal"></i>יום איזון</span>':''}<span><i style="border-color:var(--indigo)"></i>אימון</span><span><i style="border-color:var(--text);border-width:2px"></i>היום</span></div>
     <div class="gt"><span>סה״כ ${y}:</span><span>א׳ <b>${tot['א׳']}</b></span><span>ב׳ <b>${tot['ב׳']}</b></span><span>ג׳ <b>${tot['ג׳']}</b></span><span class="${sp>1?'st-bad':'st-ok'}">פער <b>${sp}</b></span><span>סך הכל <b>${sum}</b> ימים</span></div>
     <div class="gt gt2"><span>סופי שבוע ${y}:</span><span>א׳ <b>${wc[0]}</b></span><span>ב׳ <b>${wc[1]}</b></span><span>ג׳ <b>${wc[2]}</b></span><span class="${wsp>1?'st-bad':'st-ok'}">פער <b>${wsp}</b></span><span class="${wn?'st-warn':'st-ok'}"${wn?` title="${esc(wi.consec.map(c=>wkConsecText(y,c)).join(' · '))}"`:''}>${wn?(wn===1?'סוף שבוע אחד ברצף':wn+' סופי שבוע ברצף'):'בלי סוף שבוע ברצף'}</span></div>`;
 }
@@ -2478,7 +2674,7 @@ function renderDay(){
   const d=pd(_dayIso),nm=dutyFor(d),hl=HOL_MAP[holKey(d)],trs=trainingsOn(_dayIso),w=d.getDay();
   $('#dayTitle').textContent=dayName(d)+' · '+fmtFull(d);
   $('#daySub').textContent=whenTxt(d);
-  let h=`<div class="dy"><div class="ring sm"><b>${sh1(nm)||'—'}</b></div><div><div class="eyebrow">במשמרת</div><div class="dy-h">${nm?'משמרת '+nm:'ללא שיבוץ'}</div><div class="dy-s">${dayName(d)}${w===5||w===6?' · סוף שבוע':''}</div></div></div>`;
+  let h=`<div class="dy"><div class="ring sm${shk(nm)}"><b>${sh1(nm)||'—'}</b></div><div><div class="eyebrow">במשמרת</div><div class="dy-h">${nm?'משמרת '+nm:'ללא שיבוץ'}</div><div class="dy-s">${dayName(d)}${w===5||w===6?' · סוף שבוע':''}</div></div></div>`;
   if(isDraftDate(d))h+=`<div class="note amber">${ico('i-info')}<div><b>סידור ${d.getFullYear()} טרם אושר</b><span>המשמרת מוצגת לפי הנוסחה ועשויה להשתנות</span></div></div>`;
   const bl=balanceDaysOf(d.getFullYear(),'view').get(_dayIso);
   if(bl)h+=`<div class="note steel">${ico('i-scale')}<div><b>יום איזון</b><span>הועבר ממשמרת ${bl.from} למשמרת ${bl.to} כדי לשמור על הפרש של יום אחד לכל היותר בסה״כ השנתי</span></div></div>`;
@@ -3867,18 +4063,18 @@ document.addEventListener('input',e=>{const t=e.target;if(!t)return;if(t.id==='n
 /* ============================================================
    ערכות צבעים
    ============================================================ */
-const THEMES={olive:'זית טקטי',navy:'כחול פיקוד',teal:'גרפיט וטורקיז',sand:'חול מדבר',paper:'נייר מפה',day:'יום בהיר'},LIGHT_THEMES={paper:1,day:1},THEME_KEY='sidur-avoda-theme';
-function curTheme(){try{const t=document.documentElement.getAttribute('data-theme');return THEMES[t]?t:'olive'}catch(e){return 'olive'}}
+const THEMES={board:'לוח מודעות',paper:'נייר מפה',day:'יום בהיר',olive:'זית טקטי',navy:'כחול פיקוד',teal:'גרפיט וטורקיז',sand:'חול מדבר'},LIGHT_THEMES={board:1,paper:1,day:1},THEME_KEY='sidur-avoda-theme';
+function curTheme(){try{const t=document.documentElement.getAttribute('data-theme');return THEMES[t]?t:'board'}catch(e){return 'board'}}
 function applyTheme(t){
-  if(!THEMES[t])t='olive';
+  if(!THEMES[t])t='board';
   try{
     const de=document.documentElement;
-    if(t==='olive')de.removeAttribute('data-theme');else de.setAttribute('data-theme',t);
+    if(t==='board')de.removeAttribute('data-theme');else de.setAttribute('data-theme',t);
     if(LIGHT_THEMES[t])de.setAttribute('data-tone','light');else de.removeAttribute('data-tone');
     const cs=document.querySelector('meta[name="color-scheme"]');
     if(cs&&cs.setAttribute)cs.setAttribute('content',LIGHT_THEMES[t]?'light':'dark');
     const m=document.querySelector('meta[name="theme-color"]');
-    if(m&&m.setAttribute)m.setAttribute('content',getComputedStyle(de).getPropertyValue('--bg').trim()||'#090b08');
+    if(m&&m.setAttribute)m.setAttribute('content',getComputedStyle(de).getPropertyValue('--bg').trim()||'#e9ecef');
   }catch(e){}
   $$('[data-theme-set]').forEach(b=>b.classList.toggle('on',b.dataset.themeSet===t));
 }
