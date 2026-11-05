@@ -1180,6 +1180,8 @@ input,textarea{caret-color:var(--olive)}
 .ym .yl.yd1::after{content:'';position:absolute;top:4px;inset-inline-start:calc(50% - 3px);width:6px;height:6px;border-radius:50%;background:currentColor}
 .ev-r small{display:block;font-size:12px;color:var(--muted);margin-top:2px}
 .kpi-f{flex-wrap:wrap;gap:4px 10px}
+.mkw.mk,.ev-r .mkw{color:var(--mk-ink)}
+.legend i.lg-dot{border:0;background:radial-gradient(circle,var(--hol) 0 3px,transparent 3.5px)}
 /* כרטיס מתקפל */
 .fold>summary{list-style:none;cursor:pointer;margin-bottom:0}
 .fold>summary::-webkit-details-marker{display:none}
@@ -2924,7 +2926,7 @@ function renderYear(){
   v.innerHTML=`<div class="ph"><div><h1>שנת ${y}</h1></div><div class="nav-grp">${badge}<button class="btn btn-gh btn-sm" data-act="export-year">${ico('i-download')}ייצוא</button><button class="nb" data-ynav="-1" ${y<=MIN_YEAR?'disabled':''} aria-label="השנה הקודמת">${ico('i-chevr')}</button><button class="nb" data-ynav="1" ${y>=MAX_YEAR?'disabled':''} aria-label="השנה הבאה">${ico('i-chevl')}</button></div></div>
     <div class="hint">${ico('i-chevr')}<span>החלק לצדדים לכל ימי החודש</span>${ico('i-chevl')}</div>
     <div class="mx"><table class="ym"><thead>${tableHead(cols)}</thead><tbody>${body}</tbody></table></div>
-    <div class="legend"><span><i class="lg-a"></i>א׳</span><span><i class="lg-b"></i>ב׳</span><span><i class="lg-c"></i>ג׳</span><span><i style="background:var(--wkd-bg)"></i>סוף שבוע</span><span><i style="border:2px solid var(--hol)"></i>חג ומועד</span>${balM.size?'<span><i class="lg-bal"></i>יום איזון</span>':''}<span><i style="border-color:var(--indigo)"></i>אימון</span><span><i style="border-color:var(--text);border-width:2px"></i>היום</span></div>
+    <div class="legend"><span><i class="lg-a"></i>א׳</span><span><i class="lg-b"></i>ב׳</span><span><i class="lg-c"></i>ג׳</span><span><i style="background:var(--wkd-bg)"></i>סוף שבוע</span><span><i style="border:2px solid var(--hol)"></i>חג ומועד</span><span><i class="lg-dot"></i>חג נוסף — השם בחלון היום</span>${balM.size?'<span><i class="lg-bal"></i>יום איזון</span>':''}<span><i style="border-color:var(--indigo)"></i>אימון</span><span><i style="border-color:var(--text);border-width:2px"></i>היום</span></div>
     <div class="gt"><span>סה״כ ${y}:</span><span>${mkw('א׳')} <b>${tot['א׳']}</b></span><span>${mkw('ב׳')} <b>${tot['ב׳']}</b></span><span>${mkw('ג׳')} <b>${tot['ג׳']}</b></span><span class="${sp>1?'st-bad':'st-ok'}">פער <b>${sp}</b></span><span>סך הכל <b>${sum}</b> ימים</span></div>
     <div class="gt gt2"><span>סופי שבוע ${y}:</span><span>${mkw('א׳')} <b>${wc[0]}</b></span><span>${mkw('ב׳')} <b>${wc[1]}</b></span><span>${mkw('ג׳')} <b>${wc[2]}</b></span><span class="${wsp>1?'st-bad':'st-ok'}">פער <b>${wsp}</b></span><span class="${wn?'st-warn':'st-ok'}"${wn?` title="${esc(wi.consec.map(c=>wkConsecText(y,c)).join(' · '))}"`:''}>${wn?(wn===1?'סוף שבוע אחד ברצף':wn+' סופי שבוע ברצף'):'בלי סוף שבוע ברצף'}</span></div>`;
 }
@@ -3064,7 +3066,7 @@ function renderNext(keep){
   h+=`<div class="card c-12"><div class="ch"><span class="ibox olive">${ico('i-cal')}</span><h3>טיוטת ${TARGET_YEAR}</h3><span class="meta">לחיצה על יום פותחת בחירת משמרת · כל שינוי אפשר לבטל</span><div class="end"><button class="btn btn-gh btn-sm" data-act="export-draft">${ico('i-download')}ייצוא</button></div></div>
     <div class="hint">${ico('i-chevr')}<span>החלק לצדדים לכל ימי החודש</span>${ico('i-chevl')}</div>
     <div class="mx" id="dwScroll"><table class="ym"><thead>${tableHead(cols)}</thead><tbody>${body}</tbody></table></div>
-    <div class="legend"><span><i class="lg-a"></i>א׳</span><span><i class="lg-b"></i>ב׳</span><span><i class="lg-c"></i>ג׳</span><span><i style="background:var(--wkd-bg)"></i>סוף שבוע</span><span><i style="border:2px solid var(--hol)"></i>חג ומועד</span><span><i class="lg-bal"></i>יום איזון</span><span><i style="border-color:var(--border2);box-shadow:inset 0 -3px 0 var(--text)"></i>שונה מהנוסחה</span><span><i style="border:1.5px solid var(--red)"></i>ללא משמרת</span></div>
+    <div class="legend"><span><i class="lg-a"></i>א׳</span><span><i class="lg-b"></i>ב׳</span><span><i class="lg-c"></i>ג׳</span><span><i style="background:var(--wkd-bg)"></i>סוף שבוע</span><span><i style="border:2px solid var(--hol)"></i>חג ומועד</span><span><i class="lg-dot"></i>חג נוסף — השם בחלון היום</span><span><i class="lg-bal"></i>יום איזון</span><span><i style="border-color:var(--border2);box-shadow:inset 0 -3px 0 var(--text)"></i>שונה מהנוסחה</span><span><i style="border:1.5px solid var(--red)"></i>ללא משמרת</span></div>
     <div class="gt"><span>סה״כ טיוטה:</span><span>${mkw('א׳')} <b>${tot['א׳']}</b></span><span>${mkw('ב׳')} <b>${tot['ב׳']}</b></span><span>${mkw('ג׳')} <b>${tot['ג׳']}</b></span><span class="${sp>1?'st-bad':'st-ok'}">פער <b>${sp}</b>${sp>1?' — מעל המותר':''}</span></div></div>`;
   h+=foldCard(totalsCard(ds),false);
   h+=foldCard(`<div class="card c-12"><div class="ch"><span class="ibox gold">${ico('i-flag')}</span><h3>חגים בטיוטה — בדיקת הוגנות</h3><div class="end leg-in"><span class="st-ok">${ico('i-check')}הוגן</span><span class="st-warn">${ico('i-alert')}חזרה אחרי שנתיים</span><span class="st-bad">${ico('i-x')}שנתיים ברצף</span></div></div>
