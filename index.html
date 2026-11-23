@@ -1761,14 +1761,33 @@ function applyPicks(y,a,rc,fz){
 // סוף שבוע = שישי ושבת יחד, ושייך לשנה של יום השישי. חג שנופל בשישי-שבת נספר כסוף שבוע של המשמרת שעושה אותו.
 // מטרה: מספר סופי שבוע שווה לכל משמרת (הפרש של אחד לכל היותר — את העודף מקבלת המשמרת שעשתה הכי מעט סופי שבוע
 // ב־3 השנים האחרונות), ובלי שני סופי שבוע ברצף לאותה משמרת — ובמיוחד לא לפני או אחרי חג שנופל בסוף שבוע.
+// חג של יומיים ומעלה (בלוק חג — לא חגי העדות) שנופל בימי החול של השבוע (ראשון עד חמישי) נחשב כמו שבת: המשמרת שעושה
+// אותו לא עושה גם את סוף השבוע של אותו שבוע. בספירת סופי השבוע הוא לא נספר.
 const _wkL={},_wkT={};
+// עד גרסת נתונים 6 לא היה הכלל של חג ושבת באותו שבוע. _rev6 מחזיר את הכללים של אז — רק לזיהוי טיוטה ישנה במעבר נתונים.
+let _rev6=false;
+function legacyRev6(on){_rev6=!!on;bumpData()}
+// בלוקי החג (יומיים ומעלה) בימים ראשון–חמישי של השבוע שסוף השבוע שלו מתחיל ביום f. בלוק שכולל את השישי או השבת
+// עצמם לא נכלל — הוא כבר נספר כסוף השבוע. d: יום מהבלוק בתוך השבוע (כל ימי הבלוק אצל אותה משמרת)
+function holWeekBlocks(y,f){
+  if(_rev6||_rev5)return [];
+  const out=[],seen=new Set(),same=(i,h)=>{const x=HOL_MAP[holKey(dayAt(y,i))];return!!x&&x.name===h.name&&x.startIso===h.startIso};
+  for(let i=Math.max(0,f-5);i<f;i++){
+    const h=HOL_MAP[holKey(dayAt(y,i))];
+    if(!h||h.minor||h.com||h.dur<48)continue;
+    const key=h.name+'|'+h.startIso;if(seen.has(key))continue;seen.add(key);
+    if(same(f,h)||same(f+1,h))continue;
+    out.push({d:i,name:h.name});
+  }
+  return out;
+}
 function wkList(y){
   const c=_wkL[y];if(c&&c.dv===_dv)return c.v;
   const N=daysIn(y),out=[];
   for(let f=(12-new Date(y,0,1).getDay())%7;f<N;f+=7){
     let hol=null,blk=false;
     for(const i of [f,f+1]){const h=HOL_MAP[holKey(dayAt(y,i))];if(h&&!h.minor){blk=true;if(FAIR_HOLS.includes(h.name))hol=h.name}}
-    out.push({f,hol,fixed:blk||f+2>=N}); // בלוק חג, או סוף שבוע שנמשך לשנה הבאה — לא זז
+    out.push({f,hol,fixed:blk||f+2>=N,hw:holWeekBlocks(y,f)}); // בלוק חג, או סוף שבוע שנמשך לשנה הבאה — לא זז · hw: חגים באותו שבוע
   }
   _wkL[y]={dv:_dv,v:out};return out;
 }
@@ -1789,11 +1808,12 @@ function wkCtx(y){
   for(const e of (r===0?[[0,0,0]]:r===1?[[1,0,0],[0,1,0],[0,0,1]]:[[1,1,0],[1,0,1],[0,1,1]])){const s=e.map((x,n)=>hist[n]+q+x);best=Math.min(best,Math.max(...s)-Math.min(...s))}
   return{y,L,prev:pv?SHIFT_NAMES.indexOf(pv):-1,hist,years,best};
 }
-// ספירה ורצפים לפי בעלי סופי השבוע (ownerAt: אינדקס יום שישי ← משמרת)
+// ספירה ורצפים לפי בעלי סופי השבוע (ownerAt: אינדקס יום ← משמרת) · holWeek: משמרת שעושה חג ואת סוף השבוע של אותו שבוע
 function wkInfo(wc,ownerAt){
-  const cnt=[0,0,0],consec=[];let ps=wc.prev;
-  wc.L.forEach((w,j)=>{const s=ownerAt(w.f);if(s>=0){cnt[s]++;if(s===ps)consec.push({j,f:w.f,s,hol:w.hol||(j?wc.L[j-1].hol:null)})}ps=s});
-  return{cnt,consec};
+  const cnt=[0,0,0],consec=[],holWeek=[];let ps=wc.prev;
+  wc.L.forEach((w,j)=>{const s=ownerAt(w.f);if(s>=0){cnt[s]++;if(s===ps)consec.push({j,f:w.f,s,hol:w.hol||(j?wc.L[j-1].hol:null)});
+    for(const b of w.hw||[])if(ownerAt(b.d)===s){holWeek.push({j,f:w.f,s,hol:b.name,d:b.d});break}}ps=s});
+  return{cnt,consec,holWeek};
 }
 // בחירת המשמרת לכל סוף שבוע (תכנון דינמי על כל השנה): סוף שבוע שעובר למשמרת אחרת עולה 4, יום חמישי/ראשון
 // שעובר יחד איתו 3, שני סופי שבוע ברצף 60 (150 כשאחד מהם חג — יותר מחזרה על חג אחרי שנתיים), כל סוף שבוע פער מעל
@@ -1802,7 +1822,8 @@ function wkInfo(wc,ownerAt){
 // עולה כמו רצף: 10 אם את היום הסמוך אפשר להעביר, 400 אם לא. בלוקי חג ובחירות ידניות לא זזים.
 // עד 4 ימים בשבוע: סוף שבוע לא עובר למשמרת שתעבור בכך 4 ימים באותו שבוע, וסוף שבוע שנשאר בשבוע עמוס שאי אפשר
 // להקל בו בימי חול (למשל בלוק חג באמצע השבוע) עולה 400 — כך הוא עובר למשמרת אחרת.
-const WK_MOVE=4,WK_DAY=3,WK_CONSEC=60,WK_CONSEC_HOL=150,WK_SPREAD=100,WK_HIST=6,WK_RUN=10,WK_RUN_HARD=400,WK_B=5;
+// חג ושבת באותו שבוע: סוף שבוע אצל משמרת שעושה חג של יומיים ומעלה באותו שבוע (ראשון–חמישי) עולה 400 — כמו שבת נוספת.
+const WK_MOVE=4,WK_DAY=3,WK_CONSEC=60,WK_CONSEC_HOL=150,WK_SPREAD=100,WK_HIST=6,WK_RUN=10,WK_RUN_HARD=400,WK_HOL_WEEK=400,WK_B=5;
 function fixWeekends(a,rc,fz,wc){
   const L=wc.L,W=L.length,N=rc.N,base=[0,0,0],opts=[];
   const own=d=>d<0?rc.prev:d<N?a[d]:-1,wdOk=d=>d>=1&&d<=N-2&&rc.blk[d]===NOBLK&&!fz[d];
@@ -1828,6 +1849,9 @@ function fixWeekends(a,rc,fz,wc){
       }
       if(ok&&weekChOk(a,rc,ch))o.push({T,cost,ch});
     }
+    // חג של יומיים ומעלה באותו שבוע נחשב כמו שבת: המשמרת שעושה אותו לא מקבלת גם את סוף השבוע (בלוקי חג לא זזים).
+    // גם סוף שבוע שהוא עצמו בלוק חג (לא זז) נספר — כך מנוע ההוגנות לא נותן שני חגים באותו שבוע לאותה משמרת.
+    if(L[j].hw.length)for(const x of o)if(x.T>=0&&L[j].hw.some(b=>a[b.d]===x.T))x.cost+=WK_HOL_WEEK;
     opts.push(o);
   }
   // מצב: המשמרת של סוף השבוע הקודם (3 = אין) + סטייה מספירת הסבב לכל משמרת (עד WK_B לכל כיוון)
@@ -1868,7 +1892,8 @@ function fixWeekends(a,rc,fz,wc){
     // הסיבה לכל העברה: המשמרת המקורית עשתה את סוף השבוע הקודם / תעשה את הבא (לרוב חג), רצף עבודה, או איזון
     for(const m of moves){
       const j=m.j,pv=j?a[L[j-1].f]:wc.prev,nx=j+1<W?a[L[j+1].f]:-1;
-      m.why=pv===m.S?{k:j?'prev':'prevYear',hol:j?L[j-1].hol:null}:nx===m.S?{k:'next',hol:L[j+1].hol}:{k:m.run?'run':'count',hol:null};
+      const hw=L[j].hw.find(b=>a[b.d]===m.S);
+      m.why=hw?{k:'holweek',hol:hw.name}:pv===m.S?{k:j?'prev':'prevYear',hol:j?L[j-1].hol:null}:nx===m.S?{k:'next',hol:L[j+1].hol}:{k:m.run?'run':'count',hol:null};
     }
   }
   for(const w of L){fz[w.f]=1;if(w.f+1<N)fz[w.f+1]=1}
@@ -1881,7 +1906,7 @@ function planOf(y){
   for(let i=0;i<a.length;i++)if(a[i]>=0)cnt[a[i]]++;
   const past=pastTotals(y),f=balanceTarget(cnt,SHIFT_NAMES.map(n=>past.sum[n]));
   const{bal:balI,rf,wf}=balanceAndRuns(a,rc,fz,balanceSlots(y),f),bal=balToIso(y,balI);
-  return(_plans[y]={dv:_dv,map:arrToMap(y,a),bal,past,f,picks:pk.list,runFix:rf.fixes,runLeft:rf.left,weekFix:wf.fixes,weekLeft:wf.left,wk:{moves:wk.moves,cnt:wk.cnt,consec:wk.consec,hist:wc.hist,years:wc.years}});
+  return(_plans[y]={dv:_dv,map:arrToMap(y,a),bal,past,f,picks:pk.list,runFix:rf.fixes,runLeft:rf.left,weekFix:wf.fixes,weekLeft:wf.left,wk:{moves:wk.moves,cnt:wk.cnt,consec:wk.consec,holWeek:wk.holWeek,hist:wc.hist,years:wc.years}});
 }
 // טיוטה מהנוסחה — בלוק חג משובץ כולו למשמרת שפותחת אותו, ואחר כך ימי איזון
 function genDraft(){return Object.assign({},planOf(TARGET_YEAR).map)}
@@ -1967,7 +1992,7 @@ function evalPlan(segs,nSwaps,ctx,lbOnly){
   const sp=Math.max(c[0],c[1],c[2])-Math.min(c[0],c[1],c[2]),reached=c[0]===f[0]&&c[1]===f[1]&&c[2]===f[2];
   pen+=bal.length*12+(reached&&sp<=1?0:100000);
   const cum={};SHIFT_NAMES.forEach((n,k)=>cum[n]=ctx.past[k]+c[k]);
-  return{pen,counts,rows,a,balI:bal,picks:pk.list,runFix:rf.fixes,runLeft:rf.left,weekFix:wf.fixes,weekLeft:wf.left,wk:{moves:wk.moves,cnt:wk.cnt,consec:wk.consec,hist:ctx.wk.hist,years:ctx.wk.years},tot:{'א׳':c[0],'ב׳':c[1],'ג׳':c[2]},sp,reached,cum,cumSp:spreadOf(cum)};
+  return{pen,counts,rows,a,balI:bal,picks:pk.list,runFix:rf.fixes,runLeft:rf.left,weekFix:wf.fixes,weekLeft:wf.left,wk:{moves:wk.moves,cnt:wk.cnt,consec:wk.consec,holWeek:wk.holWeek,hist:ctx.wk.hist,years:ctx.wk.years},tot:{'א׳':c[0],'ב׳':c[1],'ג׳':c[2]},sp,reached,cum,cumSp:spreadOf(cum)};
 }
 function engineCtx(bp){
   const y=TARGET_YEAR,N=daysIn(y),anchor=contAnchor(),j1=new Date(y,0,1);
@@ -1979,7 +2004,7 @@ function engineCtx(bp){
   const pt=pastTotals(y);
   return{N,bsT,dd,wd,pat,hIdx,holDay,rc:runCtx(y),wk:wkCtx(y),hh:holHistory(),slots:balanceSlots(y),past:SHIFT_NAMES.map(n=>pt.sum[n]),pastYears:pt.years};
 }
-function optimize(){
+function optimizeCore(){
   const bp=baseSched().pattern,ctx=engineCtx(bp),sundays=firstSundaysTarget(),pairs=[['א׳','ב׳'],['א׳','ג׳'],['ב׳','ג׳']],singles=[];
   for(const d of sundays)for(const p of pairs)singles.push({date:d,pair:p});
   const cands=[[]];singles.forEach(x=>cands.push([x]));
@@ -2000,6 +2025,26 @@ function optimize(){
   best.bal=balToIso(TARGET_YEAR,best.balI);
   return best;
 }
+// המנוע: החלפות מקצב. כשנשארת משמרת עם חג ושבת באותו שבוע (למשל שני בלוקי חג סמוכים שהסבב נותן לאותה משמרת),
+// נבחנת גם העברה של אחד החגים האלה למשמרת אחרת — כמו בחירה ידנית. התוצאה נבחרת רק אם הניקוד הכולל טוב יותר,
+// ובהחלת התוכנית הבחירה נשמרת (autoPick). חג שנבחר ידנית לא משתנה.
+function optimize(){
+  let top=optimizeCore();
+  if(!top.wk.holWeek||!top.wk.holWeek.length)return top;
+  const L=wkList(TARGET_YEAR),tried=new Set(),base=top;
+  for(const c of base.wk.holWeek){
+    for(const n of [c.hol,L[c.j].hol]){
+      if(!n||!FAIR_HOLS.includes(n)||HOL_LOCKS[n])continue;
+      for(const sh of SHIFT_NAMES){
+        if(sh===SHIFT_NAMES[c.s]||tried.has(n+'|'+sh))continue;tried.add(n+'|'+sh);
+        HOL_LOCKS[n]=sh;bumpData();
+        let r;try{r=optimizeCore()}finally{delete HOL_LOCKS[n];bumpData()}
+        if(r.pen<top.pen){r.autoPick={name:n,shift:sh,why:wkHolText(TARGET_YEAR,c)};r.evals+=top.evals;top=r}
+      }
+    }
+  }
+  return top;
+}
 function validatePlan(plan){
   let checked=0,gaps=0;const issues=[];
   for(const k in plan.map){checked++;if(!plan.map[k])gaps++}
@@ -2008,6 +2053,7 @@ function validatePlan(plan){
   if(plan.runLeft)issues.push(plan.runLeft+' רצפי עבודה שלא ניתן היה לפרק');
   if(plan.weekLeft)issues.push(plan.weekLeft===1?'שבוע אחד שבו משמרת עובדת יותר מ־4 ימים':plan.weekLeft+' שבועות שבהם משמרת עובדת יותר מ־4 ימים');
   if(plan.wk){const c=plan.wk.cnt,s=Math.max(...c)-Math.min(...c);if(s>1)issues.push('סופי שבוע לא מאוזנים — פער של '+s)}
+  if(plan.wk&&plan.wk.holWeek&&plan.wk.holWeek.length){const n=plan.wk.holWeek.length;issues.push(n===1?'משמרת עם חג ושבת באותו שבוע':n+' פעמים משמרת עם חג ושבת באותו שבוע')}
   plan.rows.forEach(x=>{if(x.nu===x.p1)issues.push(x.h.name+': משמרת '+x.nu+' שנתיים ברצף')});
   return{ok:!issues.length,checked,gaps,issues};
 }
@@ -2028,6 +2074,11 @@ function wkConsecText(y,c){
   const L=wkList(y),cur=L[c.j],pv=c.j>0?L[c.j-1]:null;
   return 'משמרת '+SHIFT_NAMES[c.s]+': '+wkDates(y,c.f-7)+(pv&&pv.hol?' ('+pv.hol+')':'')+' ו־'+wkDates(y,c.f)+(cur&&cur.hol?' ('+cur.hol+')':'');
 }
+// תיאור חג ושבת באותו שבוע: "משמרת א׳: ראש השנה 11–13.9 וסוף השבוע 18–19.9"
+function wkHolText(y,c){
+  const h=HOL_MAP[holKey(dayAt(y,c.d))],s=h?pd(h.startIso):dayAt(y,c.d),n=h?Math.max(1,Math.round(h.dur/24)):1;
+  return 'משמרת '+SHIFT_NAMES[c.s]+': '+c.hol+' '+fmtDM(s)+(n>1?'–'+fmtDM(addDays(s,n-1)):'')+' וסוף השבוע '+wkDates(y,c.f);
+}
 
 /* ============================================================
    שמירה במכשיר
@@ -2038,7 +2089,8 @@ const STORE_KEY='sidur-avoda-v1';
 // 2 = סידורי 2024–2026 אומתו יום-יום מול הסידורים המקוריים · 3 = בחירה ידנית של משמרת לחג נכנסת לבסיס הטיוטה
 // 4 = הבסיס שובר רצפי עבודה (יומיים ברצף שלא בשישי-שבת ולא בחג) · 5 = סופי שבוע מאוזנים ובלי סוף שבוע ברצף לאותה משמרת
 // 6 = עצמאות בלוק של 48 שעות (ערב החג והחג אצל אותה משמרת) · לכל משמרת עד 4 ימי עבודה בשבוע (ראשון עד שבת)
-const DATA_REV=6;let _migNote=false,_migSave=false,_migAtz=false;
+// 7 = חג של יומיים ומעלה באמצע השבוע נחשב כמו שבת: המשמרת שעושה אותו לא עושה את סוף השבוע של אותו שבוע (בספירה לא נספר)
+const DATA_REV=7;let _migNote=false,_migSave=false,_migAtz=false;
 let _saveT=null,_savedAt=null;
 // at: זמן השמירה. נתונים שהגיעו מהסנכרון נשמרים עם הזמן שלהם, כדי שלא ייראו כשינוי חדש של המכשיר הזה.
 function snapshot(at){
@@ -2104,10 +2156,13 @@ function migrateVerified(rev){
     // גרסה 5: התוכנית המלאה — נוסחה, בחירות ידניות, סופי שבוע, ימי איזון ופירוק רצפים
     if(!wasBase&&rev>=5)wasBase=diffCount(m,planOf(y).map)===0;
     // טיוטה שנערכה ידנית: הימים שנקבעו בה מחושבים מול הבסיס הישן (כשלא נשמרו)
-    if(!wasBase)draftPins();
     legacyRev5(false);
+    // גרסה 6: אותה תוכנית, עוד בלי הכלל של חג ושבת באותו שבוע
+    if(!wasBase&&rev>=6){legacyRev6(true);wasBase=diffCount(m,planOf(y).map)===0;if(!wasBase)draftPins();legacyRev6(false)}
+    if(!wasBase&&rev<6){legacyRev5(true);draftPins();legacyRev5(false)}
     if(wasBase)newDraft();else draftRulesFix();
-    _migAtz=diffCount(m0,curDraft())>0;
+    // ההודעה אחרי המעבר: עצמאות (מגרסה ישנה מ־6) או הכלל של חג ושבת באותו שבוע (מגרסה 6)
+    _migAtz=diffCount(m0,curDraft())>0?(rev<6?'atz':'hw'):false;
   }
   bumpData();if(rev<2)_migNote=true;else _migSave=true;
 }
@@ -2478,13 +2533,13 @@ function renderYear(){
   
   const sum=tot['א׳']+tot['ב׳']+tot['ג׳'];
   const sp=spreadOf(tot);
-  const wi=wkInfo(wkCtx(y),f=>SHIFT_NAMES.indexOf(dutyFor(dayAt(y,f)))),wc=wi.cnt,wsp=Math.max(...wc)-Math.min(...wc),wn=wi.consec.length;
+  const wi=wkInfo(wkCtx(y),f=>SHIFT_NAMES.indexOf(dutyFor(dayAt(y,f)))),wc=wi.cnt,wsp=Math.max(...wc)-Math.min(...wc),wn=wi.consec.length,hn=wi.holWeek.length;
   v.innerHTML=`<div class="ph"><div><h1>שנת ${y}</h1></div><div class="nav-grp">${badge}<button class="btn btn-gh btn-sm" data-act="export-year">${ico('i-download')}ייצוא</button><button class="nb" data-ynav="-1" ${y<=MIN_YEAR?'disabled':''} aria-label="השנה הקודמת">${ico('i-chevr')}</button><button class="nb" data-ynav="1" ${y>=MAX_YEAR?'disabled':''} aria-label="השנה הבאה">${ico('i-chevl')}</button></div></div>
     <div class="hint">${ico('i-chevr')}<span>החלק לצדדים לכל ימי החודש</span>${ico('i-chevl')}</div>
     <div class="mx"><table class="ym"><thead>${tableHead(cols)}</thead><tbody>${body}</tbody></table></div>
     <div class="legend"><span><i style="background:rgba(var(--wkd-rgb),.5)"></i>סוף שבוע</span><span><i style="background:var(--hol);border-color:var(--hol)"></i>חג ומועד</span>${balM.size?'<span><i class="lg-bal"></i>יום איזון</span>':''}<span><i style="border-color:var(--indigo)"></i>אימון</span><span><i style="border-color:var(--olive);border-width:2px"></i>היום</span></div>
     <div class="gt"><span>סה״כ ${y}:</span><span>א׳ <b>${tot['א׳']}</b></span><span>ב׳ <b>${tot['ב׳']}</b></span><span>ג׳ <b>${tot['ג׳']}</b></span><span class="${sp>1?'st-bad':'st-ok'}">פער <b>${sp}</b></span><span>סך הכל <b>${sum}</b> ימים</span></div>
-    <div class="gt gt2"><span>סופי שבוע ${y}:</span><span>א׳ <b>${wc[0]}</b></span><span>ב׳ <b>${wc[1]}</b></span><span>ג׳ <b>${wc[2]}</b></span><span class="${wsp>1?'st-bad':'st-ok'}">פער <b>${wsp}</b></span><span class="${wn?'st-warn':'st-ok'}"${wn?` title="${esc(wi.consec.map(c=>wkConsecText(y,c)).join(' · '))}"`:''}>${wn?(wn===1?'סוף שבוע אחד ברצף':wn+' סופי שבוע ברצף'):'בלי סוף שבוע ברצף'}</span></div>`;
+    <div class="gt gt2"><span>סופי שבוע ${y}:</span><span>א׳ <b>${wc[0]}</b></span><span>ב׳ <b>${wc[1]}</b></span><span>ג׳ <b>${wc[2]}</b></span><span class="${wsp>1?'st-bad':'st-ok'}">פער <b>${wsp}</b></span><span class="${wn?'st-warn':'st-ok'}"${wn?` title="${esc(wi.consec.map(c=>wkConsecText(y,c)).join(' · '))}"`:''}>${wn?(wn===1?'סוף שבוע אחד ברצף':wn+' סופי שבוע ברצף'):'בלי סוף שבוע ברצף'}</span>${hn?`<span class="st-warn" title="${esc(wi.holWeek.map(c=>wkHolText(y,c)).join(' · '))}">${hn===1?'חג ושבת באותו שבוע':hn+' פעמים חג ושבת באותו שבוע'}</span>`:''}</div>`;
 }
 
 
@@ -2584,6 +2639,7 @@ function renderNext(keep){
     ${ds.gaps?`<div class="note red" style="margin:12px 0 0">${ico('i-alert')}<div><b>${ds.gaps} ימים ללא משמרת</b><span>יש להשלים לפני אישור</span></div></div>`:''}
     ${ds.runs?`<div class="note amber" style="margin:12px 0 0">${ico('i-alert')}<div><b>${ds.runs===1?'רצף עבודה אחד':ds.runs+' רצפי עבודה'} בטיוטה</b><span>משמרת עובדת יומיים ברצף שלא בשישי-שבת ולא בחג. הפעלת המנוע מתקנת את זה.</span></div></div>`:''}
     ${ds.wk.consec.length?`<div class="note amber" style="margin:12px 0 0">${ico('i-alert')}<div><b>${ds.wk.consec.length===1?'משמרת עם שני סופי שבוע ברצף':ds.wk.consec.length+' פעמים משמרת עם שני סופי שבוע ברצף'}</b><span>${esc(ds.wk.consec.map(c=>wkConsecText(TARGET_YEAR,c)).join(' · '))}</span></div></div>`:''}
+    ${ds.wk.holWeek.length?`<div class="note amber" style="margin:12px 0 0">${ico('i-alert')}<div><b>${ds.wk.holWeek.length===1?'משמרת עם חג ושבת באותו שבוע':ds.wk.holWeek.length+' פעמים משמרת עם חג ושבת באותו שבוע'}</b><span>${esc(ds.wk.holWeek.map(c=>wkHolText(TARGET_YEAR,c)).join(' · '))} — חג של יומיים ומעלה נחשב כמו שבת. הפעלת המנוע מתקנת את זה, ובטיוטה שנערכה ידנית — בצ׳אט: "תאזן סופי שבוע".</span></div></div>`:''}
     ${ds.wkOver.length?`<div class="note amber" style="margin:12px 0 0">${ico('i-alert')}<div><b>${ds.wkOver.length===1?'שבוע אחד עם יותר מ־4 ימי עבודה למשמרת':ds.wkOver.length+' שבועות עם יותר מ־4 ימי עבודה למשמרת'}</b><span>${esc(ds.wkOver.map(o=>'משמרת '+o.S+': '+o.range+' ('+o.n+' ימים)').join(' · '))} — המותר: עד 4 ימים בשבוע (ראשון עד שבת). בצ׳אט: "תתקן שבועות עמוסים".</span></div></div>`:''}
     <div class="row-btns" style="margin-top:14px"><button class="btn btn-ok" id="dwApprove" data-act="draft-approve" ${appr&&!pend?'disabled':''}>${ico('i-check')}${appr&&!pend?'אושר':'אישור והחלה על הלוח'}</button><button class="btn btn-gh" id="dwReset" data-act="draft-reset">${ico('i-undo')}איפוס לפי הנוסחה</button></div></div>`;
   h+=`<div class="card c-5"><div class="ch"><span class="ibox amber">${ico('i-zap')}</span><h3>מנוע הוגנות</h3></div>
@@ -2673,7 +2729,7 @@ function runGenerator(){
   const viol=r.rows.filter(x=>x.nu===x.p1).length,warns=r.rows.filter(x=>x.nu!==x.p1&&x.nu===x.p2).length;
   $('#genTitle').textContent='מנוע הוגנות — סידור '+TARGET_YEAR;
   $('#genSub').textContent='נבחנו '+r.evals+' תרחישים · '+r.swaps.length+' החלפות מקצב · '+r.bal.length+' ימי איזון · '+viol+' הפרות · '+warns+' אזהרות';
-  let h=vd.ok?`<div class="vb ok">${ico('i-check')}<div><b>התוכנית תקינה</b><span>נבדקו ${vd.checked} ימים · כל יום משובץ · פער ${r.sp} בין המשמרות · כלל ההוגנות נשמר · בלי רצפי עבודה · עד 4 ימים בשבוע לכל משמרת · סופי שבוע מאוזנים</span></div></div>`
+  let h=vd.ok?`<div class="vb ok">${ico('i-check')}<div><b>התוכנית תקינה</b><span>נבדקו ${vd.checked} ימים · כל יום משובץ · פער ${r.sp} בין המשמרות · כלל ההוגנות נשמר · בלי רצפי עבודה · עד 4 ימים בשבוע לכל משמרת · סופי שבוע מאוזנים · בלי חג ושבת באותו שבוע</span></div></div>`
     :`<div class="vb bad">${ico('i-alert')}<div><b>נמצאו ${vd.issues.length} בעיות</b><span>${esc(vd.issues.join(' · '))}</span></div></div>`;
   const mx=k=>Math.max(1,...SHIFT_NAMES.map(n=>L[n][k]));
   h+=`<div class="ld"><div class="ld-h">${ico('i-scale')}חלוקת עומס בין המשמרות</div><div class="ld-g">`+SHIFT_NAMES.map(n=>`<div class="ld-s"><b>משמרת ${n}</b>${ldm('ימי חג',L[n].hol,mx('hol'),'var(--gold)')}${ldm('סופי שבוע',L[n].wk,mx('wk'),'var(--amber)')}${ldm('סך ימים',L[n].total,mx('total'),'var(--olive)')}</div>`).join('')+'</div></div>';
@@ -2695,6 +2751,7 @@ function runGenerator(){
   h+=fairTable(r.rows.map(x=>({h:x.h,p1:x.p1,p2:x.p2,p3:x.p3,nu:x.nu,pick:x.pick,st:fairSt(x.nu,x.p1,x.p2)})),true);
   h+=histNote();
   h+='<p class="fn">משמרת שנבחרה ידנית ולא יוצאת בסבב מקבלת את ימי החג ומחזירה למשמרת שהייתה בסבב את אותו מספר ימים סמוכים — סה״כ הימים לא משתנה. החגים המוסלמיים לא נכללים בבדיקת ההוגנות.</p>';
+  if(r.autoPick)h=`<div class="note amber" style="margin:0 0 12px">${ico('i-zap')}<div><b>המנוע בחר: ${esc(r.autoPick.name)} למשמרת ${esc(r.autoPick.shift)}</b><span>בסבב יצא: ${esc(r.autoPick.why)} — חג של יומיים ומעלה נחשב כמו שבת. בהחלת התוכנית זה נשמר כבחירה ידנית, ואפשר לשנות אותה בטבלת החגים.</span></div></div>`+h;
   $('#genBody').innerHTML=h;
   disarm('gen-apply');disarm('gen-reset');disarm('hist-reset');
   openModal('genOv');
@@ -2707,6 +2764,7 @@ function applyGen(btn){
   SCHEDULES=SCHEDULES.filter(v=>v._eff<j); // תוכנית קודמת מוחלפת, לא נערמת
   g.segs.forEach((s,i)=>SCHEDULES.push({id:'סידור '+TARGET_YEAR+(i?' · החלפת מקצב '+i:''),pattern:g.bp,my,_eff:strip(s.eff),_anchor:strip(s.anchor),shifts:SHIFT_NAMES.map(n=>({name:n,off:s.offs[n]}))}));
   SCHEDULES.sort((a,b)=>a._eff-b._eff);
+  if(g.autoPick)HOL_LOCKS[g.autoPick.name]=g.autoPick.shift; // בחירה שהמנוע עשה (חג ושבת באותו שבוע) נשמרת כבחירה ידנית
   bumpData();newDraft();pendingGen=null;
   saveState();closeModal('genOv');refresh();
   toast('תוכנית ההוגנות הוחלה על טיוטת '+TARGET_YEAR+(g.swaps.length?' · '+g.swaps.length+' החלפות מקצב':''));
@@ -2729,6 +2787,7 @@ function wkMoveText(m){
   t+=w.k==='prev'?' — '+S+' עשתה את '+(w.hol?w.hol+' בסוף השבוע הקודם':'סוף השבוע הקודם')
     :w.k==='prevYear'?' — '+S+' עשתה את סוף השבוע האחרון של '+(y-1)
     :w.k==='next'?' — '+S+' עושה את '+(w.hol?w.hol+' בסוף השבוע הבא':'סוף השבוע הבא')
+    :w.k==='holweek'?' — '+S+' עושה את '+w.hol+' באותו שבוע (חג של יומיים ומעלה נחשב כמו שבת)'
     :w.k==='run'?' — מונע רצף עבודה':' — איזון סופי השבוע';
   if(m.ch.length>2)t+=' · '+m.ch.slice(2).map(([d,f,to])=>{const x=dayAt(y,d);return DOW_FULL[x.getDay()]+' '+fmtDM(x)+' ל'+SHIFT_NAMES[to]}).join(' · ');
   return t;
@@ -2736,10 +2795,12 @@ function wkMoveText(m){
 // סופי שבוע בחלון המנוע: ספירה, היסטוריה, העברות, ורצפים שלא ניתן היה למנוע
 function wkBox(wk){
   if(!wk)return '';
-  const c=wk.cnt,sp=Math.max(...c)-Math.min(...c),T=TARGET_YEAR,W=c[0]+c[1]+c[2],n=wk.consec.length;
-  let h=`<div class="sw${n||sp>1?' warn':wk.moves.length?'':' ok'}">${ico('i-cal')}<div><b>סופי שבוע ${T}: א׳ ${c[0]} · ב׳ ${c[1]} · ג׳ ${c[2]} — פער ${sp}</b>`;
+  const c=wk.cnt,sp=Math.max(...c)-Math.min(...c),T=TARGET_YEAR,W=c[0]+c[1]+c[2],n=wk.consec.length,hw=wk.holWeek||[];
+  let h=`<div class="sw${n||hw.length||sp>1?' warn':wk.moves.length?'':' ok'}">${ico('i-cal')}<div><b>סופי שבוע ${T}: א׳ ${c[0]} · ב׳ ${c[1]} · ג׳ ${c[2]} — פער ${sp}</b>`;
   h+=`<span>שישי-שבת נספר כסוף שבוע אחד, כולל חג שנופל בסוף שבוע. ${n?(n===1?'נשאר רצף אחד':'נשארו '+n+' רצפים')+' — כדי לשמור על הוגנות החגים ועל הבחירות הידניות:':'אף משמרת לא עושה שני סופי שבוע ברצף — גם לא לפני או אחרי חג.'}</span>`;
   if(n)h+=`<span class="bal-l wrap">${wk.consec.map(x=>`<i>${esc(wkConsecText(T,x))}</i>`).join('')}</span>`;
+  h+=`<span>חג של יומיים ומעלה באמצע השבוע נחשב כמו שבת: המשמרת שעושה אותו לא מקבלת את סוף השבוע של אותו שבוע (בספירת סופי השבוע הוא לא נספר). ${hw.length?(hw.length===1?'נשאר מקרה אחד':'נשארו '+hw.length+' מקרים')+':':'אין משמרת עם חג ושבת באותו שבוע.'}</span>`;
+  if(hw.length)h+=`<span class="bal-l wrap">${hw.map(x=>`<i>${esc(wkHolText(T,x))}</i>`).join('')}</span>`;
   if(wk.years&&wk.years.length)h+=`<span>${wk.years[0]}–${wk.years[wk.years.length-1]}: א׳ ${wk.hist[0]} · ב׳ ${wk.hist[1]} · ג׳ ${wk.hist[2]}${W%3?' — סוף השבוע העודף הולך למשמרת שעשתה פחות':''}</span>`;
   if(wk.moves.length)h+=`<span class="bal-l wrap">${wk.moves.map(m=>`<i>${esc(wkMoveText(m))}</i>`).join('')}</span>`;
   return h+'</div></div>';
@@ -3406,7 +3467,7 @@ function chatSettle(x,f){
   fixRuns(a,rc,fz,true);
   const w1=wkInfo(wc,i=>a[i]);
   const wkRun=badPairs(a,rc).some(i=>[i,i+1].some(j=>j>=0&&j<x.N&&(rc.wd[j]===5||rc.wd[j]===6)));
-  if(wkRun||w1.consec.length>x.wk0.consec.length||sp(w1.cnt)>Math.max(1,sp(x.wk0.cnt))){fixWeekends(a,rc,fz,wc);fixRuns(a,rc,fz,true)}
+  if(wkRun||w1.consec.length>x.wk0.consec.length||w1.holWeek.length>x.wk0.holWeek.length||sp(w1.cnt)>Math.max(1,sp(x.wk0.cnt))){fixWeekends(a,rc,fz,wc);fixRuns(a,rc,fz,true)}
   fixWeeks(a,rc,fz);
   const c=cntOf(a);
   if(!f){f=x.c0;if(f[0]+f[1]+f[2]!==c[0]+c[1]+c[2]){const pt=pastTotals(x.y);f=balanceTarget(c,SHIFT_NAMES.map(n=>pt.sum[n]))}}
@@ -3563,8 +3624,9 @@ function actBlock(x,S,d1,d2,P){
 // סופי שבוע ברצף שנוצרו בפעולה ולא ניתן היה למנוע (בלוק חג, בחירה ידנית או יום שנקבע)
 function chatWkNote(x){
   if(x.noWkNote)return '';
-  const k0=new Set(x.wk0.consec.map(c=>c.f+':'+c.s)),nw=wkInfo(wkCtx(x.y),i=>x.a[i]).consec.filter(c=>!k0.has(c.f+':'+c.s));
-  return nw.length?' שים לב: סופי שבוע ברצף — '+nw.map(c=>wkConsecText(x.y,c)).join(' · ')+'.':'';
+  const i1=wkInfo(wkCtx(x.y),i=>x.a[i]),k0=new Set(x.wk0.consec.map(c=>c.f+':'+c.s)),nw=i1.consec.filter(c=>!k0.has(c.f+':'+c.s));
+  const h0=new Set(x.wk0.holWeek.map(c=>c.f+':'+c.s)),nh=i1.holWeek.filter(c=>!h0.has(c.f+':'+c.s));
+  return (nw.length?' שים לב: סופי שבוע ברצף — '+nw.map(c=>wkConsecText(x.y,c)).join(' · ')+'.':'')+(nh.length?' שים לב: חג ושבת באותו שבוע — '+nh.map(c=>wkHolText(x.y,c)).join(' · ')+'.':'');
 }
 // רצפים חדשים שנשארו אחרי פעולה (בין יום שנקבע לבין יום חג או יום שנערך ידנית)
 function chatRunNote(x){
@@ -3610,7 +3672,7 @@ function actWeekends(x){
   const wk=fixWeekends(a,rc,fz,wc);chatSettle(x);
   const i1=wkInfo(wc,f=>a[f]),sp=Math.max(...i1.cnt)-Math.min(...i1.cnt);
   const same=!wk.moves.length&&i0.cnt.join()===i1.cnt.join();
-  return{t:(same?'סופי השבוע כבר מאוזנים':'סופי שבוע')+': א׳ '+i1.cnt[0]+' · ב׳ '+i1.cnt[1]+' · ג׳ '+i1.cnt[2]+' (פער '+sp+')'+(wk.moves.length?' · '+(wk.moves.length===1?'סוף שבוע אחד עבר':wk.moves.length+' סופי שבוע עברו'):'')+'.'+(i1.consec.length?' '+(i1.consec.length===1?'נשאר רצף אחד':'נשארו '+i1.consec.length+' רצפים')+': '+i1.consec.map(c=>wkConsecText(y,c)).join(' · ')+'.':' אף משמרת לא עושה שני סופי שבוע ברצף.')};
+  return{t:(same?'סופי השבוע כבר מאוזנים':'סופי שבוע')+': א׳ '+i1.cnt[0]+' · ב׳ '+i1.cnt[1]+' · ג׳ '+i1.cnt[2]+' (פער '+sp+')'+(wk.moves.length?' · '+(wk.moves.length===1?'סוף שבוע אחד עבר':wk.moves.length+' סופי שבוע עברו'):'')+'.'+(i1.consec.length?' '+(i1.consec.length===1?'נשאר רצף אחד':'נשארו '+i1.consec.length+' רצפים')+': '+i1.consec.map(c=>wkConsecText(y,c)).join(' · ')+'.':' אף משמרת לא עושה שני סופי שבוע ברצף.')+(i1.holWeek.length?' חג ושבת באותו שבוע: '+i1.holWeek.map(c=>wkHolText(y,c)).join(' · ')+' (בלוק חג או יום שנקבע ידנית).':'')};
 }
 function chatUndo(id,quiet){
   const e=id?CHAT.undo.find(u=>u.id===id):[...CHAT.undo].reverse().find(u=>!u.done&&u.y===TARGET_YEAR);
@@ -3636,10 +3698,11 @@ function chatDiag(){
   L.push(runs.length?'רצפי עבודה: '+runs.join(' · ')+'.':'אין רצפי עבודה.');
   L.push(ds.wkOver.length?'יותר מ־4 ימי עבודה בשבוע: '+ds.wkOver.map(o=>'משמרת '+o.S+' '+o.range+' ('+o.n+' ימים)').join(' · ')+'.':'אף משמרת לא עובדת יותר מ־4 ימים בשבוע.');
   L.push('סופי שבוע: א׳ '+w.cnt[0]+' · ב׳ '+w.cnt[1]+' · ג׳ '+w.cnt[2]+' — פער '+ws+'.'+(w.consec.length?' ברצף: '+w.consec.map(c=>wkConsecText(y,c)).join(' · ')+'.':''));
+  L.push(w.holWeek.length?'חג ושבת באותו שבוע: '+w.holWeek.map(c=>wkHolText(y,c)).join(' · ')+'.':'אף משמרת לא עושה חג ושבת באותו שבוע.');
   const bad=fr.filter(z=>z.st==='bad'),warn=fr.filter(z=>z.st==='warn');
   if(bad.length)L.push('חג שנתיים ברצף: '+bad.map(z=>z.h.name+' (משמרת '+z.nu+')').join(', ')+'.');
   if(warn.length)L.push('חג שחוזר אחרי שנתיים: '+warn.map(z=>z.h.name+' (משמרת '+z.nu+')').join(', ')+'.');
-  const ok=!ds.gaps&&ds.spread<=1&&!runs.length&&!ds.wkOver.length&&!w.consec.length&&ws<=1&&!bad.length;
+  const ok=!ds.gaps&&ds.spread<=1&&!runs.length&&!ds.wkOver.length&&!w.consec.length&&!w.holWeek.length&&ws<=1&&!bad.length;
   return{t:(ok?'לא מצאתי בעיות'+(warn.length?' חוץ מהערה אחת על החגים':'')+'.\n':'')+L.join('\n')};
 }
 function chatQDays(i0,i1){
@@ -3662,7 +3725,7 @@ function chatQCount(month,wk){
 }
 function chatStatus(){
   const ds=draftStats(),w=ds.wk;
-  return 'סה״כ: א׳ '+ds.cnt['א׳']+' · ב׳ '+ds.cnt['ב׳']+' · ג׳ '+ds.cnt['ג׳']+' (פער '+ds.spread+') · סופי שבוע '+w.cnt.join('/')+' · '+(ds.runs?(ds.runs===1?'רצף אחד':ds.runs+' רצפים'):'בלי רצפים')+(ds.wkOver.length?' · '+ds.wkOver.length+' שבועות מעל 4 ימים':'')+(w.consec.length?' · '+w.consec.length+' סופי שבוע ברצף':'');
+  return 'סה״כ: א׳ '+ds.cnt['א׳']+' · ב׳ '+ds.cnt['ב׳']+' · ג׳ '+ds.cnt['ג׳']+' (פער '+ds.spread+') · סופי שבוע '+w.cnt.join('/')+' · '+(ds.runs?(ds.runs===1?'רצף אחד':ds.runs+' רצפים'):'בלי רצפים')+(ds.wkOver.length?' · '+ds.wkOver.length+' שבועות מעל 4 ימים':'')+(w.consec.length?' · '+w.consec.length+' סופי שבוע ברצף':'')+(w.holWeek.length?' · '+w.holWeek.length+' חג ושבת באותו שבוע':'');
 }
 
 // ---- פקודות מובנות בעברית ----
@@ -3797,7 +3860,7 @@ function aiSystemFixed(){
     '1. A holiday block (erev chag + the holiday days + an adjacent Shabbat; Independence Day = its eve, Memorial Day, + the day itself, 48 hours) is done entirely by one shift. Fairness: a shift should not do the same holiday two years in a row, and preferably not one it did two years ago.',
     '2. Yearly totals: the shifts differ by at most one day.',
     '3. No work runs: a shift never works two consecutive days, except Friday+Saturday or days of the same holiday block.',
-    '4. Weekends (Friday+Saturday, always the same shift) are split as evenly as possible; a shift doing a holiday weekend should not also do the weekend right before or after it.',
+    '4. Weekends (Friday+Saturday, always the same shift) are split as evenly as possible; a shift doing a holiday weekend should not also do the weekend right before or after it. A holiday block of two days or more that falls on weekdays (Sunday to Thursday) counts like a Shabbat: the shift doing it should not also do the weekend of the same week. Such a holiday is not counted as a weekend in the weekend totals.',
     '5. A shift works at most 4 days in any week (Sunday to Saturday), holiday days included.',
     'When you change days, the app gives compensation days back nearby (directly or through the third shift), breaks any run it creates, relieves any week over 4 days and keeps the totals balanced. Each tool result lists exactly what changed.',
     '',
@@ -3816,7 +3879,7 @@ function aiSystemState(){
     'Today: '+fmtFull(TODAY)+'. Target year: '+y+'.'+(isApproved()?' A version of '+y+' is already approved; draft changes reach the calendar only after he approves the draft again in the workspace.':''),
     'Draft state:',
     '- Day totals: א׳ '+ds.cnt['א׳']+', ב׳ '+ds.cnt['ב׳']+', ג׳ '+ds.cnt['ג׳']+' (gap '+ds.spread+')',
-    '- Weekends: א׳ '+w.cnt[0]+', ב׳ '+w.cnt[1]+', ג׳ '+w.cnt[2]+(w.consec.length?'; consecutive weekends: '+w.consec.map(c=>wkConsecText(y,c)).join('; '):'; no consecutive weekends'),
+    '- Weekends: א׳ '+w.cnt[0]+', ב׳ '+w.cnt[1]+', ג׳ '+w.cnt[2]+(w.consec.length?'; consecutive weekends: '+w.consec.map(c=>wkConsecText(y,c)).join('; '):'; no consecutive weekends')+(w.holWeek.length?'; holiday and weekend in the same week: '+w.holWeek.map(c=>wkHolText(y,c)).join('; '):'; no holiday and weekend in the same week'),
     '- Work runs: '+(runs.length?runs.join('; '):'none'),
     '- Weeks with a shift over 4 days: '+(ds.wkOver.length?ds.wkOver.map(o=>o.S+' '+o.range+' ('+o.n+' days)').join('; '):'none'),
     '- Empty days: '+ds.gaps+'; days edited by hand vs. the base plan: '+ds.edits,
@@ -5160,7 +5223,7 @@ function init(){
   loadState();
   chatLoad();
   if(_migNote){_migNote=false;_migSave=false;persistNow();setTimeout(()=>toast('נתוני 2024–2026 עודכנו לפי הסידורים המאומתים — כדאי להריץ שוב את מנוע ההוגנות',7000),700)}
-  else if(_migSave){_migSave=false;persistNow();if(_migAtz)setTimeout(()=>toast('עצמאות הוא עכשיו בלוק של 48 שעות — ערב החג והחג אצל אותה משמרת. הטיוטה עודכנה.',6500),700)}
+  else if(_migSave){_migSave=false;persistNow();const mk=_migAtz;if(mk)setTimeout(()=>toast(mk==='hw'?'כלל חדש: חג של יומיים ומעלה נחשב כמו שבת — המשמרת שעושה אותו לא עושה את סוף השבוע של אותו שבוע. הטיוטה עודכנה.':'עצמאות הוא עכשיו בלוק של 48 שעות — ערב החג והחג אצל אותה משמרת. הטיוטה עודכנה.',6500),700)}
   _migAtz=false;
   sortTr();
   shLoad();
